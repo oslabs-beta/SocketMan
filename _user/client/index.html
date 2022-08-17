@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Website :)</title>
+    <style>
+      body {
+        margin: 20px;
+        padding-bottom: 3rem;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+
+      #form {
+        background: rgba(0, 0, 0, 0.15);
+        padding: 0.25rem;
+        position: fixed;
+        /* bottom: 0;
+        left: 0;
+        right: 0; */
+        display: flex;
+        height: 3rem;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #input:focus {
+        outline: none;
+      }
+      #form > button {
+        background: #333;
+        border: none;
+        padding: 0 1rem;
+        margin: 0.25rem;
+        border-radius: 3px;
+        outline: none;
+        color: #fff;
+      }
+
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 0.5rem 1rem;
+      }
+      #messages > li:nth-child(odd) {
+        background: #efefef;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="header">USER Interface</h1>
+    <h3>
+      This interface is just to simulate websocket traffic, right? So I don't
+      see why we can't just have buttons that trigger different events?
+    </h3>
+    <h3>
+      Equally, we shouldn't need to style this or use React or anything extra
+      like that
+    </h3>
+
+    <ul id="messages"></ul>
+    <button id="event1">Event 1</button>
+    <button id="event2">Event 2</button>
+    <button id="event3">Event 3</button>
+
+    <!-- This acts as an import on client side! -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+
+      var messages = document.getElementById('messages');
+      var header = document.getElementById('header');
+      var event1Btn = document.getElementById('event1');
+      var event2Btn = document.getElementById('event2');
+      var event3Btn = document.getElementById('event3');
+
+      event1Btn.addEventListener('click', () => {
+        socket.emit('test-event', 'hello world!');
+      });
+
+      event2Btn.addEventListener('click', () => {
+        socket.emit('change-color', [1, 2, 3], (color) => {
+          console.log('client side fn triggered!');
+          console.log(color);
+          event2Btn.style.backgroundColor = color;
+        });
+      });
+
+      event3Btn.addEventListener('click', () => {
+        console.log('sending to server');
+        socket.emit('event-3', 'payload that is never read');
+      });
+
+      socket.on('connect', () => {
+        header.textContent += '--> ' + socket.id;
+        socket.on('event-response', (arg) => {
+          console.log(arg);
+        });
+        socket.on('receive message', function (msg) {
+          var item = document.createElement('li');
+          item.textContent = `${new Date().toLocaleString()} --- ${
+            socket.id
+          } ---${socket.id} --- ${JSON.stringify(msg)}`;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </body>
+</html>

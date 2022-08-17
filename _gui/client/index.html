@@ -110,6 +110,7 @@
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        console.log(io);
         console.log({ payload: payload.value, eventType: eventType.value });
         if (eventType.value) {
           socket.emit(eventType.value, payload.value);

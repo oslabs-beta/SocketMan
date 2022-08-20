@@ -91,9 +91,6 @@
           alert('fail');
         }, 3000);
 
-        // https://stackoverflow.com/questions/29511404/connect-to-socket-io-server-with-specific-path-and-namespace
-        // const userSocket = io("https://example.com/users"); // the "users" namespace
-
         socket.on('connect', () => {
           clearTimeout(connectionTimeout);
           alert('connected!');

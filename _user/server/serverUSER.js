@@ -27,6 +27,11 @@ io.on('connection', (socket) => {
   socket.on('test-event', (payload) => {
     console.log('test received', payload);
   });
+
+  // socket.onAny((payload) => {
+  //   console.log('any==>', payload);
+  // });
+
   socket.on('change-color', (array, callback) => {
     console.log(array);
 

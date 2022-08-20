@@ -19,7 +19,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
+const adminNamespace = io.of('/admin');
 io.on('connection', (socket) => {
+  // consider this middleware. this will catch all events and then continue through other "specific" listeners
+  socket.onAny((...args) => {
+    // this will listen to any event Not sent from GUI
+    console.log('received event!');
+    // "forwards" the info to our GUI
+    adminNamespace.emit('event_received', socket.id, args, new Date());
+  });
+
+  socket.onAnyOutgoing((...args) => {
+    console.log('sent event!');
+    adminNamespace.emit('event_sent', socket.id, args, new Date());
+  });
+
   socket.on('send message', (msg) => {
     console.log(msg);
     io.emit('receive message', msg);

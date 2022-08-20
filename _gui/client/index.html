@@ -80,8 +80,8 @@
       connectBtn.addEventListener('click', () => {
         socket.close();
         const connectTo = connect.value;
-        console.log(connectTo || 'http://localhost:3333');
-        socket = io(connectTo || 'http://localhost:3333', {
+        console.log(connectTo || 'http://localhost:3333/admin');
+        socket = io(connectTo || 'http://localhost:3333/admin', {
           path: '/socket.io',
         });
 
@@ -94,7 +94,13 @@
         socket.on('connect', () => {
           clearTimeout(connectionTimeout);
           alert('connected!');
-
+          console.log('namespace is =>', socket.nsp)
+          socket.on('event_received', (...args)=>{
+            console.log(args)
+          })
+          socket.on('event_sent', (...args)=>{
+            console.log(args)
+          })
           // this would be a listener that was added manually
           socket.on('receive message', function (msg) {
             // for (key in socket) console.log(key, ': ', socket[key]);

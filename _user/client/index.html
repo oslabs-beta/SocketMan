@@ -114,6 +114,10 @@
           window.scrollTo(0, document.body.scrollHeight);
         });
       });
+
+      socket.onAny((...payload) => {
+        console.log('any==>', payload);
+      });
     </script>
   </body>
 </html>

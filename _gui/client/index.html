@@ -93,14 +93,15 @@
 
         socket.on('connect', () => {
           clearTimeout(connectionTimeout);
+          console.log('socket==>', socket);
           alert('connected!');
-          console.log('namespace is =>', socket.nsp)
-          socket.on('event_received', (...args)=>{
-            console.log(args)
-          })
-          socket.on('event_sent', (...args)=>{
-            console.log(args)
-          })
+          console.log('namespace is =>', socket.nsp);
+          socket.on('event_received', (...args) => {
+            console.log(args);
+          });
+          socket.on('event_sent', (...args) => {
+            console.log(args);
+          });
           // this would be a listener that was added manually
           socket.on('receive message', function (msg) {
             // for (key in socket) console.log(key, ': ', socket[key]);
@@ -112,11 +113,18 @@
             window.scrollTo(0, document.body.scrollHeight);
           });
         });
+
+        socket.on('event-response', (ack) => {
+          console.log('client side catch-all response==>', ack);
+        });
+      });
+      socket.onAny((...payload) => {
+        console.log('any==>', payload);
       });
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        console.log(io);
+        console.log('io==>', io);
         console.log({ payload: payload.value, eventType: eventType.value });
         if (eventType.value) {
           socket.emit(eventType.value, payload.value);

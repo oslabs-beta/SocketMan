@@ -13,6 +13,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.22.2",
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-node": "^1.0.0-next.86",
 		"@sveltejs/kit": "next",
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
@@ -25,6 +26,9 @@
 	"type": "module",
 	"dependencies": {
 		"@fontsource/fira-mono": "^4.5.0",
-		"cookie": "^0.4.1"
+		"cookie": "^0.4.1",
+		"express": "^4.18.1",
+		"socket.io": "^4.5.1",
+		"socket.io-client": "^4.5.1"
 	}
 }

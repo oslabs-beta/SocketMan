@@ -4,6 +4,51 @@
 
 
 
+<!-- let messages = [];
+
+	onMount(() => {
+		io.on('message', (message) => {
+			// Listen to the message event
+			messages = [...messages, message];
+		});
+		io.on('name', (name) => {
+			// Another listener for the name:
+			username = name; // Update the name so it can be displayed
+		});
+	});
+
+	function sendMessage() {
+		const message = textfield.trim();
+		if (!message) return;
+
+		textfield = '';
+		io.emit('message', message); // Send the message
+	}
+</script>
+
+<div class="h-screen w-screen bg-zinc-800">
+	<div class="h-full w-full max-w-md mx-auto bg-zinc-500 flex flex-col">
+		<header
+			class="px-6 py-4 border-b border-zinc-800 bg-zinc-700 text-white shrink-0 flex items-center justify-between"
+		>
+			<span class="font-bold text-xl">My Chat app</span>
+			<span>{username}</span>
+		</header>
+
+		<div class="h-full w-full p-4">
+			{#each messages as message}
+				<div class="bg-zinc-300 rounded-xl rounded-tl-none px-4 py-3 my-4 w-fit">
+					<span class="flex items-center space-between gap-4">
+						<b>{message.from}</b>
+						<i>{message.time}</i>
+					</span>
+					{message.message}
+				</div>
+			{/each}
+		</div> -->
+
+
+
            <!-- this would be a listener that was added manually
           socket.on('receive message', function (msg) {
             // for (key in socket) console.log(key, ': ', socket[key]);
@@ -80,19 +125,6 @@
 	  </style>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script >
     //import { io } from "../lib/realtime";
     import { onMount, afterUpdate } from "svelte";
@@ -115,8 +147,8 @@
       if(socket){
       socket.close()}
         
-        console.log(connectTo || 'http://localhost:3333');
-        socket = ioClient(connectTo || 'http://localhost:3333', {
+        console.log(connectTo || 'http://localhost:3333/admin');
+        socket = ioClient(connectTo || 'http://localhost:3333/admin', {
           //path: '/socket.io',
         });
        
@@ -133,8 +165,15 @@
          clearTimeout(connectionTimeout);
          alert('connected!');
          console.log('connected!')
-         
+         console.log('namespace is =>', socket.nsp);    
    })}
+
+   socket.on('event_received', (...args) => {
+            console.log(args);
+          });
+          socket.on('event_sent', (...args) => {
+            console.log(args);
+          });
      
     }
 

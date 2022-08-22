@@ -7,11 +7,6 @@ const config = {
 	kit: {
 		adapter: adapter()
 	},
-	// resolve: {
-	// 	alias: {
-	// 		'xmlhttprequest-ssl': './node_modules/engine.io-client/lib/xmlhttprequest.js'
-	// 	}
-	// },
 
 	plugins: [
 		sveltekit(),

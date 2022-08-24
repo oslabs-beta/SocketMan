@@ -20,8 +20,17 @@ app.get('/', (req, res) => {
 });
 
 const adminNamespace = io.of('/admin');
+
+// listen to all events sent from admin
+adminNamespace.on('connection', (socket) => {
+  socket.onAny((...args) => {
+    console.log('received from admin==>', args);
+  });
+});
+
 io.on('connection', (socket) => {
   // consider this middleware. this will catch all events and then continue through other "specific" listeners
+
   socket.onAny((...args) => {
     // this will listen to any event Not sent from GUI
     console.log('received event!');
@@ -41,6 +50,11 @@ io.on('connection', (socket) => {
   socket.on('test-event', (payload) => {
     console.log('test received', payload);
   });
+
+  // socket.onAny((payload) => {
+  //   console.log('any==>', payload);
+  // });
+
   socket.on('change-color', (array, callback) => {
     console.log(array);
 

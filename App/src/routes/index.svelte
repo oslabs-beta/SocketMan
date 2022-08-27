@@ -119,15 +119,13 @@
          console.log('namespace is =>', socket.nsp);    
         })}
 	//this is how we seperate outgoing and incoming events
-        socket.on('event_received', (...args) => {
-			//args is an array : [socketID, ['event-name', payload], timestamp]
-			 const newEvent = args
+        socket.on('event_received', (newEvent) => {
+			//args is an object : {}
 			 console.log('event is =>', newEvent);
 			 //store each event within either incoming or outgoing array, but w/in array, we use another object to store info
 			 eventsIncoming = [...eventsIncoming, newEvent]
           });
-          socket.on('event_sent', (...args) => {
-			const newEvent = args
+          socket.on('event_sent', (newEvent) => {
 			eventsOutgoing = [...eventsOutgoing, newEvent]
           });
     }

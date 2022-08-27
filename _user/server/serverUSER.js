@@ -1,10 +1,10 @@
 /*
-
 This is the USER'S server. 
 The server that we are trying to monitor for traffic.
 
 */
 const path = require('path');
+const { allowedNodeEnvironmentFlags } = require('process');
 const app = require('express')();
 const http = require('http').Server(app);
 
@@ -20,6 +20,17 @@ app.get('/', (req, res) => {
 });
 
 const adminNamespace = io.of('/admin');
+//function that takes event array and turns into object for frontend
+const createEventObj = (socketID, event) => {
+  //event : ['eventname, payload, cb]
+  const obj = {};
+  obj.socketID = socketID;
+  obj.eventName = event[0];
+  obj.payload = event[1];
+  obj.cb = event[2];
+  obj.date = new Date();
+  return obj;
+};
 
 // listen to all events sent from admin
 adminNamespace.on('connection', (socket) => {
@@ -30,17 +41,19 @@ adminNamespace.on('connection', (socket) => {
 
 io.on('connection', (socket) => {
   // consider this middleware. this will catch all events and then continue through other "specific" listeners
-
   socket.onAny((...args) => {
     // this will listen to any event Not sent from GUI
-    console.log('received event!');
+    // console.log('received event!');
     // "forwards" the info to our GUI
-    adminNamespace.emit('event_received', socket.id, args, new Date());
+    //change data structure of args from arr into object
+    const eventObj = createEventObj(socket.id, args);
+
+    adminNamespace.emit('event_received', eventObj);
   });
 
   socket.onAnyOutgoing((...args) => {
-    console.log('sent event!');
-    adminNamespace.emit('event_sent', socket.id, args, new Date());
+    const eventObj = createEventObj(socket.id, args);
+    adminNamespace.emit('event_sent', eventObj);
   });
 
   socket.on('send message', (msg) => {
@@ -56,14 +69,13 @@ io.on('connection', (socket) => {
   // });
 
   socket.on('change-color', (array, callback) => {
-    console.log(array);
-
+    // console.log(array);
     let color = [];
     for (let i = 0; i < 3; i++) {
       color.push(Math.floor(Math.random() * 256));
     }
     color = `rgb(${color.join(', ')})`;
-    console.log('setting color from server');
+    // console.log('setting color from server');
     callback(color);
   });
   socket.on('event-3', () => {

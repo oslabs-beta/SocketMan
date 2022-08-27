@@ -20,15 +20,17 @@ app.get('/', (req, res) => {
 });
 
 const adminNamespace = io.of('/admin');
+
 //function that takes event array and turns into object for frontend
 const createEventObj = (socketID, event) => {
   //event : ['eventname, payload, cb]
   const obj = {};
-  obj.socketID = socketID;
+  obj.socketId = socketID;
   obj.eventName = event[0];
   obj.payload = event[1];
   obj.cb = event[2];
   obj.date = new Date();
+
   return obj;
 };
 
@@ -43,7 +45,6 @@ io.on('connection', (socket) => {
   // consider this middleware. this will catch all events and then continue through other "specific" listeners
   socket.onAny((...args) => {
     // this will listen to any event Not sent from GUI
-    // console.log('received event!');
     // "forwards" the info to our GUI
     //change data structure of args from arr into object
     const eventObj = createEventObj(socket.id, args);

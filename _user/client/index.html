@@ -89,22 +89,17 @@
 
       event2Btn.addEventListener('click', () => {
         socket.emit('change-color', [1, 2, 3], (color) => {
-          // console.log('client side fn triggered!');
-          // console.log(color);
           event2Btn.style.backgroundColor = color;
         });
       });
 
       event3Btn.addEventListener('click', () => {
-        // console.log('sending to server');
         socket.emit('event-3', 'payload that is never read');
       });
 
       socket.on('connect', () => {
         header.textContent += '--> ' + socket.id;
-        socket.on('event-response', (arg) => {
-          // console.log(arg);
-        });
+        socket.on('event-response', (arg) => {});
         socket.on('receive message', function (msg) {
           var item = document.createElement('li');
           item.textContent = `${new Date().toLocaleString()} --- ${
@@ -115,9 +110,7 @@
         });
       });
 
-      socket.onAny((...payload) => {
-        // console.log('any==>', payload);
-      });
+      socket.onAny((...payload) => {});
     </script>
   </body>
 </html>

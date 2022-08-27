@@ -38,7 +38,7 @@
   
 	#events {
       display: grid;
-	  grid-template-columns: 5fr 0.3fr 5fr;
+	  grid-template-columns: 1fr;
 	  grid-template-rows: auto;
 	  grid-template-areas: 
       'outgoing gap incoming'; 
@@ -53,13 +53,13 @@
 
 	#events > #outgoing > li {
 	  padding: 0.5rem 1rem;
-	  background: #FFF
-	}
-
-	#events >#outgoing > li:nth-child(odd) {
 	  background: #CCC;
 	}
 
+	#events >#outgoing > li:nth-child(odd) {
+	  background: #FFF
+	}
+/* 
 	#events > #incoming {
 	  grid-area: incoming;
 	  list-style-type: none;
@@ -74,7 +74,7 @@
 
 	#events >#incoming > li:nth-child(odd) {
 	  background: #CCC;
-	}
+	} */
 </style>
 
 <script >
@@ -87,9 +87,12 @@
     let connectTo = ''; 
     let eventname = '';
     let payload = '';
-    let eventsIncoming = [];
-	let eventsOutgoing = [];
-	
+	//primary arr to be displayed
+	let allEvents = [];
+	//let filtered be assigned val of allEvents at first, will be reassigned based on filter
+	let filteredEvents = [];
+	let filteredSocketID;
+	let iterable;
 	//creates a socket 
     function connect() {
 	//if there is an existing socket open, close it	
@@ -120,15 +123,31 @@
         })}
 	//this is how we seperate outgoing and incoming events
         socket.on('event_received', (newEvent) => {
-			//args is an object : {}
-			 console.log('event is =>', newEvent);
-			 //store each event within either incoming or outgoing array, but w/in array, we use another object to store info
-			 eventsIncoming = [...eventsIncoming, newEvent]
+			//assigning incoming/outgoing property to render direction 
+			console.log('event =>', newEvent);
+			newEvent = {...newEvent, direction: 'incoming'}
+			allEvents = [...allEvents, newEvent]
+			console.log('filtered events is =>', filteredEvents);
           });
           socket.on('event_sent', (newEvent) => {
-			eventsOutgoing = [...eventsOutgoing, newEvent]
+			newEvent = {...newEvent, direction: 'outgoing'}
+			allEvents = [...allEvents, newEvent]
           });
     }
+	//filter functionality for different views (event based, and socketID)
+		//each function reassigns filteredEvents arr based on user's desired setting
+	//maybe want to explore sorting by time incoming, alphabetical (for event name)
+	function filterEventName(eventName) {
+		//event is an obj now
+		filteredEvents = allEvents.filter(event => event.eventName === eventName);
+		console.log('filtered =>', filteredEvents);
+	}
+	function filterSocketID(socketid) {
+		filteredEvents = allEvents.filter(event => event.socketID === socketid);
+		console.log('filter =>', filteredEvents);
+	}
+
+
 
     function sendMessage() {
 	//if no event was sent, return out
@@ -144,6 +163,8 @@
 	function removeEvent(e) {
 		//each function has a direction property in order 
 		//sometimes timestamps would be the exact same so we have to check multiple properies 
+		filter('test-event', eventsIncoming);
+	
 	  if (e.detail.direction === 'outgoing'){
           eventsOutgoing = eventsOutgoing.filter(event => {if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId){
 	  if (event[1][0] === e.detail.eventname) {
@@ -178,48 +199,36 @@
 		<input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
 		<button>Send</button>
 	</form>
-  
+	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER</button>
+	<button id ='test' on:click={() => {filterSocketID('r1YxjnWZ8cq_VDXKAAAD')}}>CLICK TO FILTER ID</button>
+
 	<div id='events'>
-		<div id='outgoing'>
-		{#if eventsOutgoing.length === 0}
-		<p>No outgoing events</p>
+		<!-- {#if allEvents.length === 0} -->
+		<!-- <p>No events</p>
 		{:else}
-		<p>Outgoing Events:</p>
+		<p>Events:</p>
+		{#if filteredEvents.length < allEvents.length}
+			{iterable = filteredEvents};
+		 {:else} -->
+			<!-- {iterable = allEvents}; -->
+		 {#each filteredEvents.length < allEvents.length ? filteredEvents : allEvents as event}
+			<li>
+				<Event
+				eventname={event.eventName}
+				payload={event.payload}
+				timestamp={event.date}
+				socketId = {event.socketId}
+				direction = {event.direction}
+				on:removeEvent={removeEvent} />
+			</li>
+		{/each}
+		<!-- {/if} -->
 		<!-- sveltes index loop -->
 		<!-- creating a new li element containing the Event component -->
 		<!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-			{#each eventsOutgoing as event}
-			<li>
-			<Event
-				eventname={event[1][0]}
-				payload={event[1].slice(1)}
-				timestamp={event[2]}
-				socketId = {event[0]}
-				direction = 'outgoing'
-				on:removeEvent={removeEvent} />
-			</li>
-			{/each}
-		{/if}
+
+		<!-- {/if} -->
 	</div>
-  <div id='incoming'>
-	{#if eventsIncoming.length === 0}
-    <p>No incoming events</p>
-  {:else}
-  <p>Incoming Events:</p>
-    {#each eventsIncoming as event}
-	<li>
-      <Event
-        eventname={event[1][0]}
-        payload={event[1].slice(1)}
-		timestamp={event[2]}
-		socketId = {event[0]}
-		direction = 'incoming'
-        on:removeEvent={removeEvent} />
-	</li>
-    {/each}
-  {/if}
-  </div>
-</div>
 </section>
 
 

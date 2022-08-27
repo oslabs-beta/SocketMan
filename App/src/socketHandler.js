@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 
+//function to instantiate new socket.io server with no cors restrictions
 export default function socketHandler(server) {
 	//const io = new Server(server);
 

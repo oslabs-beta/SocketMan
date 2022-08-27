@@ -79,31 +79,38 @@
 
 <script >
     import ioClient from 'socket.io-client';
+	//need to import the other component we wish to use
 	import Event from './event.svelte';
- 
+	
     let socket;
+	//used to capture value of user server URL
     let connectTo = ''; 
     let eventname = '';
     let payload = '';
     let eventsIncoming = [];
 	let eventsOutgoing = [];
 	
-    function connect() {	
+	//creates a socket 
+    function connect() {
+	//if there is an existing socket open, close it	
       if(socket){
       socket.close()}
         
         console.log(connectTo || 'http://localhost:3333/admin');
+		//connects to 
+		//socket is the value of a socket IO connection to either the user's URL or  client
         socket = ioClient(connectTo || 'http://localhost:3333/admin', {
           //path: '/socket.io',
         });
-       
+    
+		//timeout if the connection failed 
         const connectionTimeout = setTimeout(() => {
           socket.close();
           socket = null;
           alert('fail');
         }, 3000);
 
-
+	//if we have a socket already open, set listener for connect and clear the connection timeout
         if (socket){
          socket.on('connect', () => {
          clearTimeout(connectionTimeout);
@@ -111,9 +118,12 @@
          console.log('connected!')
          console.log('namespace is =>', socket.nsp);    
         })}
-
+	//this is how we seperate outgoing and incoming events
         socket.on('event_received', (...args) => {
+			//args is an array : [socketID, ['event-name', payload], timestamp]
 			 const newEvent = args
+			 console.log('event is =>', newEvent);
+			 //store each event within either incoming or outgoing array, but w/in array, we use another object to store info
 			 eventsIncoming = [...eventsIncoming, newEvent]
           });
           socket.on('event_sent', (...args) => {
@@ -123,14 +133,19 @@
     }
 
     function sendMessage() {
+	//if no event was sent, return out
       if(!eventname) return;
 	  console.log("socket==>", socket)
+	//have GUI emit the mock event with the payload
 	  socket.emit(eventname.trim(), payload);
+	//reassign event name and payload to empty strings
       eventname='';
       payload = '';
     }
 
 	function removeEvent(e) {
+		//each function has a direction property in order 
+		//sometimes timestamps would be the exact same so we have to check multiple properies 
 	  if (e.detail.direction === 'outgoing'){
           eventsOutgoing = eventsOutgoing.filter(event => {if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId){
 	  if (event[1][0] === e.detail.eventname) {
@@ -157,33 +172,37 @@
 
   <section>
     <h1>GUI Interface</h1>
-  <input id='connect' autocomplete='on' type='url' bind:value={connectTo} placeholder='Server URL' />
-  <button id='connect-btn' on:click={connect}>CLICK TO CONNECT</button>
-  <form id='form' action='#' on:submit|preventDefault={sendMessage}>
-    <input id='event' bind:value={eventname} placeholder='eventname' autocomplete='off' />
-    <input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
-    <button>Send</button>
-  </form>
+	<!-- bind:value - changes to the input value will update the connectTo value and changes to connectTo value will update input -->
+	<input id='connect' autocomplete='on' type='url' bind:value={connectTo} placeholder='Server URL' />
+	<button id='connect-btn' on:click={connect}>CLICK TO CONNECT</button>
+	<form id='form' action='#' on:submit|preventDefault={sendMessage}>
+		<input id='event' bind:value={eventname} placeholder='eventname' autocomplete='off' />
+		<input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
+		<button>Send</button>
+	</form>
   
-  <div id='events'>
-	<div id='outgoing'>
-	{#if eventsOutgoing.length === 0}
-    <p>No outgoing events</p>
-  {:else}
-  <p>Outgoing Events:</p>
-    {#each eventsOutgoing as event}
-	<li>
-      <Event
-        eventname={event[1][0]}
-        payload={event[1].slice(1)}
-		timestamp={event[2]}
-		socketId = {event[0]}
-		direction = 'outgoing'
-        on:removeEvent={removeEvent} />
-	</li>
-    {/each}
-  {/if}
-  </div>
+	<div id='events'>
+		<div id='outgoing'>
+		{#if eventsOutgoing.length === 0}
+		<p>No outgoing events</p>
+		{:else}
+		<p>Outgoing Events:</p>
+		<!-- sveltes index loop -->
+		<!-- creating a new li element containing the Event component -->
+		<!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
+			{#each eventsOutgoing as event}
+			<li>
+			<Event
+				eventname={event[1][0]}
+				payload={event[1].slice(1)}
+				timestamp={event[2]}
+				socketId = {event[0]}
+				direction = 'outgoing'
+				on:removeEvent={removeEvent} />
+			</li>
+			{/each}
+		{/if}
+	</div>
   <div id='incoming'>
 	{#if eventsIncoming.length === 0}
     <p>No incoming events</p>

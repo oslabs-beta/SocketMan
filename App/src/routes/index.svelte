@@ -91,8 +91,9 @@
 	let allEvents = [];
 	//let filtered be assigned val of allEvents at first, will be reassigned based on filter
 	let filteredEvents = [];
-	let filteredSocketID;
-	let iterable;
+	let isFiltered = false; 
+	// let filteredSocketID;
+	// let iterable;
 	//creates a socket 
     function connect() {
 	//if there is an existing socket open, close it	
@@ -127,11 +128,13 @@
 			console.log('event =>', newEvent);
 			newEvent = {...newEvent, direction: 'incoming'}
 			allEvents = [...allEvents, newEvent]
+			//filteredEvents = allEvents
 			console.log('filtered events is =>', filteredEvents);
           });
           socket.on('event_sent', (newEvent) => {
 			newEvent = {...newEvent, direction: 'outgoing'}
 			allEvents = [...allEvents, newEvent]
+			//filteredEvents = allEvents
           });
     }
 	//filter functionality for different views (event based, and socketID)
@@ -139,12 +142,15 @@
 	//maybe want to explore sorting by time incoming, alphabetical (for event name)
 	function filterEventName(eventName) {
 		//event is an obj now
+		isFiltered = true; 
 		filteredEvents = allEvents.filter(event => event.eventName === eventName);
 		console.log('filtered =>', filteredEvents);
 	}
 	function filterSocketID(socketid) {
-		filteredEvents = allEvents.filter(event => event.socketID === socketid);
-		console.log('filter =>', filteredEvents);
+		filteredEvents = allEvents.filter(event => {
+		console.log("event==>", event);
+		return event.socketId === socketid});
+		//console.log('filter =>', filteredEvents);
 	}
 
 
@@ -199,8 +205,9 @@
 		<input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
 		<button>Send</button>
 	</form>
-	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER</button>
-	<button id ='test' on:click={() => {filterSocketID('r1YxjnWZ8cq_VDXKAAAD')}}>CLICK TO FILTER ID</button>
+	<button id ='test' on:click={() =>{isFiltered = false; console.log("isFiltered==>", isFiltered); filteredEvents = []; console.log("filteredEvents=>", filteredEvents)}}>CLICK TO DISPLAY ALL EVENTS</button>
+	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER EVENT NAME</button>
+	<button id ='test' on:click={() => {filterSocketID('uogP3LWfFYoE07kLAAAQ')}}>CLICK TO FILTER ID</button>
 
 	<div id='events'>
 		<!-- {#if allEvents.length === 0} -->
@@ -211,7 +218,8 @@
 			{iterable = filteredEvents};
 		 {:else} -->
 			<!-- {iterable = allEvents}; -->
-		 {#each filteredEvents.length < allEvents.length ? filteredEvents : allEvents as event}
+		 <!-- {#each filteredEvents.length < allEvents.length ? filteredEvents : allEvents as event} -->
+		 {#each isFiltered ? filteredEvents :allEvents as event}
 			<li>
 				<Event
 				eventname={event.eventName}

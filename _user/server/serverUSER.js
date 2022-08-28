@@ -25,6 +25,9 @@ const adminNamespace = io.of('/admin');
 adminNamespace.on('connection', (socket) => {
   socket.onAny((...args) => {
     console.log('received from admin==>', args);
+    // invoke a callback if passed
+    if (typeof args[args.length - 1] === 'function')
+      args[args.length - 1]('arg1', 'arg2');
   });
 });
 

@@ -87,14 +87,13 @@
     let connectTo = ''; 
     let eventname = '';
     let payload = '';
-	//primary arr to be displayed
+	//primary arr to display all incoming events
 	let allEvents = [];
-	//let filtered be assigned val of allEvents at first, will be reassigned based on filter
+	//arr rendered when user switches view between event name, socketId, incoming or outgoing
 	let filteredEvents = [];
 	let isFiltered = false; 
-	// let filteredSocketID;
-	// let iterable;
-	//creates a socket 
+
+
     function connect() {
 	//if there is an existing socket open, close it	
       if(socket){
@@ -139,20 +138,17 @@
     }
 	//filter functionality for different views (event based, and socketID)
 		//each function reassigns filteredEvents arr based on user's desired setting
-	//maybe want to explore sorting by time incoming, alphabetical (for event name)
+	//maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callbacl
 	function filterEventName(eventName) {
-		//event is an obj now
 		isFiltered = true; 
 		filteredEvents = allEvents.filter(event => event.eventName === eventName);
-		console.log('filtered =>', filteredEvents);
+
 	}
 	function filterSocketID(socketid) {
 		filteredEvents = allEvents.filter(event => {
-		console.log("event==>", event);
 		return event.socketId === socketid});
-		//console.log('filter =>', filteredEvents);
 	}
-
+	//must add filter functionality based on incoming or outgoing
 
 
     function sendMessage() {
@@ -170,7 +166,6 @@
 		//each function has a direction property in order 
 		//sometimes timestamps would be the exact same so we have to check multiple properies 
 		filter('test-event', eventsIncoming);
-	
 	  if (e.detail.direction === 'outgoing'){
           eventsOutgoing = eventsOutgoing.filter(event => {if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId){
 	  if (event[1][0] === e.detail.eventname) {
@@ -205,20 +200,15 @@
 		<input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
 		<button>Send</button>
 	</form>
+	<!-- following button necessary in order to reset the isFiltered boolean and resetting filteredEvents to empty arr -->
 	<button id ='test' on:click={() =>{isFiltered = false; console.log("isFiltered==>", isFiltered); filteredEvents = []; console.log("filteredEvents=>", filteredEvents)}}>CLICK TO DISPLAY ALL EVENTS</button>
 	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER EVENT NAME</button>
 	<button id ='test' on:click={() => {filterSocketID('uogP3LWfFYoE07kLAAAQ')}}>CLICK TO FILTER ID</button>
 
 	<div id='events'>
-		<!-- {#if allEvents.length === 0} -->
-		<!-- <p>No events</p>
-		{:else}
-		<p>Events:</p>
-		{#if filteredEvents.length < allEvents.length}
-			{iterable = filteredEvents};
-		 {:else} -->
-			<!-- {iterable = allEvents}; -->
-		 <!-- {#each filteredEvents.length < allEvents.length ? filteredEvents : allEvents as event} -->
+		<!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
+			<!-- creating a new li element containing the Event component -->
+		<!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
 		 {#each isFiltered ? filteredEvents :allEvents as event}
 			<li>
 				<Event
@@ -230,12 +220,6 @@
 				on:removeEvent={removeEvent} />
 			</li>
 		{/each}
-		<!-- {/if} -->
-		<!-- sveltes index loop -->
-		<!-- creating a new li element containing the Event component -->
-		<!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-
-		<!-- {/if} -->
 	</div>
 </section>
 

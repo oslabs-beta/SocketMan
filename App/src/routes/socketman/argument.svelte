@@ -7,6 +7,7 @@
   export let argType;
   export let argValue;
   export let argKey;
+  let jsonCheck = false;
 
   const onDelete = () => {
     console.log('onDelete called');
@@ -17,9 +18,21 @@
 
   const onChange = () => {
     console.log('onChange called');
-    //remove event is defined on index.svelte
-    //everything inside second param is going to be in e.detail => see line 152 on index.svelte
+
     dispatch('changeArg', { argKey, argLabel, argType, argValue });
+  };
+
+  const onType = () => {
+    // each time this function is called, check if type of JSON result matches what the user said it would be
+    try {
+      if (typeof JSON.parse(argValue) === argType) {
+        jsonCheck = true;
+      } else {
+        jsonCheck = false;
+      }
+    } catch (error) {
+      jsonCheck = false;
+    }
   };
 </script>
 
@@ -35,32 +48,51 @@
     class="argument-type"
     bind:value={argType}
     on:change={onChange}
+    on:input={onType}
     placeholder="Arg Type"
     autocomplete="off"
   />
-  <input
+  <textarea
     class="argument-value"
     bind:value={argValue}
     on:change={onChange}
+    on:input={onType}
     placeholder="Enter a value using JSON"
     autocomplete="off"
   />
+  <div class={`json ${jsonCheck ? 'valid' : 'invalid'}`} />
   <button type="button" on:click={onDelete}>Delete</button>
 </div>
 
 <style>
   .argument-row {
     display: flex;
+    padding: 5px 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       Helvetica, Arial, sans-serif;
   }
-
-  .argument-label {
+  .argument-row .argument-label {
+    width: 15%;
   }
-
-  .argument-type {
+  .argument-row .argument-type {
+    width: 10%;
   }
-
-  .argument-value {
+  .argument-row .argument-value {
+    flex-grow: 1;
+  }
+  .json {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+  }
+  .valid {
+    /* background-color: green; */
+  }
+  .invalid {
+    background-color: red;
   }
 </style>

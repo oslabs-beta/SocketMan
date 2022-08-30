@@ -23,7 +23,6 @@ const adminNamespace = io.of('/admin');
 
 //function that takes event array and turns into object for frontend
 const createEventObj = (socketID, event) => {
-  //event : ['eventname, payload, cb]
   const obj = {};
   obj.socketId = socketID;
   obj.eventName = event[0];
@@ -36,9 +35,7 @@ const createEventObj = (socketID, event) => {
 
 // listen to all events sent from admin
 adminNamespace.on('connection', (socket) => {
-  socket.onAny((...args) => {
-    console.log('received from admin==>', args);
-  });
+  socket.onAny((...args) => {});
 });
 
 io.on('connection', (socket) => {
@@ -58,29 +55,20 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send message', (msg) => {
-    console.log(msg);
     io.emit('receive message', msg);
   });
-  socket.on('test-event', (payload) => {
-    console.log('test received', payload);
-  });
-
-  // socket.onAny((payload) => {
-  //   console.log('any==>', payload);
-  // });
+  socket.on('test-event', (payload) => {});
 
   socket.on('change-color', (array, callback) => {
-    // console.log(array);
     let color = [];
     for (let i = 0; i < 3; i++) {
       color.push(Math.floor(Math.random() * 256));
     }
     color = `rgb(${color.join(', ')})`;
-    // console.log('setting color from server');
+
     callback(color);
   });
   socket.on('event-3', () => {
-    console.log('received event 3');
     socket.emit('event-response', 'hello client');
   });
   // console.log(socket.handshake);

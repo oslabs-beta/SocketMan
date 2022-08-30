@@ -98,13 +98,8 @@
 	//if there is an existing socket open, close it	
       if(socket){
       socket.close()}
-        
-        console.log(connectTo || 'http://localhost:3333/admin');
-		//connects to 
 		//socket is the value of a socket IO connection to either the user's URL or  client
-        socket = ioClient(connectTo || 'http://localhost:3333/admin', {
-          //path: '/socket.io',
-        });
+        socket = ioClient(connectTo || 'http://localhost:3333/admin');
     
 		//timeout if the connection failed 
         const connectionTimeout = setTimeout(() => {
@@ -117,18 +112,14 @@
         if (socket){
          socket.on('connect', () => {
          clearTimeout(connectionTimeout);
-         alert('connected!');
-         console.log('connected!')
-         console.log('namespace is =>', socket.nsp);    
+         alert('connected!'); 
         })}
 	//this is how we seperate outgoing and incoming events
         socket.on('event_received', (newEvent) => {
 			//assigning incoming/outgoing property to render direction 
-			console.log('event =>', newEvent);
 			newEvent = {...newEvent, direction: 'incoming'}
 			allEvents = [...allEvents, newEvent]
 			//filteredEvents = allEvents
-			console.log('filtered events is =>', filteredEvents);
           });
           socket.on('event_sent', (newEvent) => {
 			newEvent = {...newEvent, direction: 'outgoing'}
@@ -154,7 +145,6 @@
     function sendMessage() {
 	//if no event was sent, return out
       if(!eventname) return;
-	  console.log("socket==>", socket)
 	//have GUI emit the mock event with the payload
 	  socket.emit(eventname.trim(), payload);
 	//reassign event name and payload to empty strings
@@ -201,9 +191,10 @@
 		<button>Send</button>
 	</form>
 	<!-- following button necessary in order to reset the isFiltered boolean and resetting filteredEvents to empty arr -->
-	<button id ='test' on:click={() =>{isFiltered = false; console.log("isFiltered==>", isFiltered); filteredEvents = []; console.log("filteredEvents=>", filteredEvents)}}>CLICK TO DISPLAY ALL EVENTS</button>
+	<button id ='test' on:click={() =>{isFiltered = false;  filteredEvents = []; }}>CLICK TO DISPLAY ALL EVENTS</button>
 	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER EVENT NAME</button>
-	<button id ='test' on:click={() => {filterSocketID('uogP3LWfFYoE07kLAAAQ')}}>CLICK TO FILTER ID</button>
+	<button id ='test' on:click={() => {filterSocketID('s_CHTnb2qJLn5AxiAAAD')}}>CLICK TO FILTER ID</button> 
+	<!-- above socketID is hardcoded -->
 
 	<div id='events'>
 		<!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->

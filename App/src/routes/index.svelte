@@ -38,7 +38,7 @@
   
 	#events {
       display: grid;
-	  grid-template-columns: 5fr 0.3fr 5fr;
+	  grid-template-columns: 1fr;
 	  grid-template-rows: auto;
 	  grid-template-areas: 
       'outgoing gap incoming'; 
@@ -53,13 +53,13 @@
 
 	#events > #outgoing > li {
 	  padding: 0.5rem 1rem;
-	  background: #FFF
-	}
-
-	#events >#outgoing > li:nth-child(odd) {
 	  background: #CCC;
 	}
 
+	#events >#outgoing > li:nth-child(odd) {
+	  background: #FFF
+	}
+/* 
 	#events > #incoming {
 	  grid-area: incoming;
 	  list-style-type: none;
@@ -74,7 +74,7 @@
 
 	#events >#incoming > li:nth-child(odd) {
 	  background: #CCC;
-	}
+	} */
 </style>
 
 <script >
@@ -87,21 +87,19 @@
     let connectTo = ''; 
     let eventname = '';
     let payload = '';
-    let eventsIncoming = [];
-	let eventsOutgoing = [];
-	
-	//creates a socket 
+	//primary arr to display all incoming events
+	let allEvents = [];
+	//arr rendered when user switches view between event name, socketId, incoming or outgoing
+	let filteredEvents = [];
+	let isFiltered = false; 
+
+
     function connect() {
 	//if there is an existing socket open, close it	
       if(socket){
       socket.close()}
-        
-        console.log(connectTo || 'http://localhost:3333/admin');
-		//connects to 
 		//socket is the value of a socket IO connection to either the user's URL or  client
-        socket = ioClient(connectTo || 'http://localhost:3333/admin', {
-          //path: '/socket.io',
-        });
+        socket = ioClient(connectTo || 'http://localhost:3333/admin');
     
 		//timeout if the connection failed 
         const connectionTimeout = setTimeout(() => {
@@ -114,28 +112,39 @@
         if (socket){
          socket.on('connect', () => {
          clearTimeout(connectionTimeout);
-         alert('connected!');
-         console.log('connected!')
-         console.log('namespace is =>', socket.nsp);    
+         alert('connected!'); 
         })}
 	//this is how we seperate outgoing and incoming events
-        socket.on('event_received', (...args) => {
-			//args is an array : [socketID, ['event-name', payload], timestamp]
-			 const newEvent = args
-			 console.log('event is =>', newEvent);
-			 //store each event within either incoming or outgoing array, but w/in array, we use another object to store info
-			 eventsIncoming = [...eventsIncoming, newEvent]
+        socket.on('event_received', (newEvent) => {
+			//assigning incoming/outgoing property to render direction 
+			newEvent = {...newEvent, direction: 'incoming'}
+			allEvents = [...allEvents, newEvent]
+			//filteredEvents = allEvents
           });
-          socket.on('event_sent', (...args) => {
-			const newEvent = args
-			eventsOutgoing = [...eventsOutgoing, newEvent]
+          socket.on('event_sent', (newEvent) => {
+			newEvent = {...newEvent, direction: 'outgoing'}
+			allEvents = [...allEvents, newEvent]
+			//filteredEvents = allEvents
           });
     }
+	//filter functionality for different views (event based, and socketID)
+		//each function reassigns filteredEvents arr based on user's desired setting
+	//maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callbacl
+	function filterEventName(eventName) {
+		isFiltered = true; 
+		filteredEvents = allEvents.filter(event => event.eventName === eventName);
+
+	}
+	function filterSocketID(socketid) {
+		filteredEvents = allEvents.filter(event => {
+		return event.socketId === socketid});
+	}
+	//must add filter functionality based on incoming or outgoing
+
 
     function sendMessage() {
 	//if no event was sent, return out
       if(!eventname) return;
-	  console.log("socket==>", socket)
 	//have GUI emit the mock event with the payload
 	  socket.emit(eventname.trim(), payload);
 	//reassign event name and payload to empty strings
@@ -146,6 +155,7 @@
 	function removeEvent(e) {
 		//each function has a direction property in order 
 		//sometimes timestamps would be the exact same so we have to check multiple properies 
+		filter('test-event', eventsIncoming);
 	  if (e.detail.direction === 'outgoing'){
           eventsOutgoing = eventsOutgoing.filter(event => {if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId){
 	  if (event[1][0] === e.detail.eventname) {
@@ -180,48 +190,28 @@
 		<input id='payload' bind:value={payload} placeholder='payload' autocomplete='off' />
 		<button>Send</button>
 	</form>
-  
+	<!-- following button necessary in order to reset the isFiltered boolean and resetting filteredEvents to empty arr -->
+	<button id ='test' on:click={() =>{isFiltered = false;  filteredEvents = []; }}>CLICK TO DISPLAY ALL EVENTS</button>
+	<button id ='test' on:click={() => {filterEventName('change-color')}}>CLICK TO FILTER EVENT NAME</button>
+	<button id ='test' on:click={() => {filterSocketID('s_CHTnb2qJLn5AxiAAAD')}}>CLICK TO FILTER ID</button> 
+	<!-- above socketID is hardcoded -->
+
 	<div id='events'>
-		<div id='outgoing'>
-		{#if eventsOutgoing.length === 0}
-		<p>No outgoing events</p>
-		{:else}
-		<p>Outgoing Events:</p>
-		<!-- sveltes index loop -->
-		<!-- creating a new li element containing the Event component -->
+		<!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
+			<!-- creating a new li element containing the Event component -->
 		<!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-			{#each eventsOutgoing as event}
+		 {#each isFiltered ? filteredEvents :allEvents as event}
 			<li>
-			<Event
-				eventname={event[1][0]}
-				payload={event[1].slice(1)}
-				timestamp={event[2]}
-				socketId = {event[0]}
-				direction = 'outgoing'
+				<Event
+				eventname={event.eventName}
+				payload={event.payload}
+				timestamp={event.date}
+				socketId = {event.socketId}
+				direction = {event.direction}
 				on:removeEvent={removeEvent} />
 			</li>
-			{/each}
-		{/if}
+		{/each}
 	</div>
-  <div id='incoming'>
-	{#if eventsIncoming.length === 0}
-    <p>No incoming events</p>
-  {:else}
-  <p>Incoming Events:</p>
-    {#each eventsIncoming as event}
-	<li>
-      <Event
-        eventname={event[1][0]}
-        payload={event[1].slice(1)}
-		timestamp={event[2]}
-		socketId = {event[0]}
-		direction = 'incoming'
-        on:removeEvent={removeEvent} />
-	</li>
-    {/each}
-  {/if}
-  </div>
-</div>
 </section>
 
 

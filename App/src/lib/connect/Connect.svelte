@@ -1,20 +1,15 @@
 <script>
   import ioClient from 'socket.io-client';
   import { socketGlobal } from '../../stores';
-  import { eventsIncomingGlobal } from '../../stores';
-  import { eventsOutgoingGlobal } from '../../stores';
+  import { allEventsGlobal } from '../../stores';
 
   //used to capture value of user server URL
   let connectTo = '';
 
   // update state from store
-  let eventsIncoming;
-  let eventsOutgoing;
-  eventsIncomingGlobal.subscribe((value) => {
-    eventsIncoming = value;
-  });
-  eventsOutgoingGlobal.subscribe((value) => {
-    eventsOutgoing = value;
+  let allEvents;
+  allEventsGlobal.subscribe((value) => {
+    allEvents = value;
   });
 
   //creates a socket, updates store
@@ -39,18 +34,18 @@
       clearTimeout(connectionTimeout);
       console.log('namespace is =>', newSocket.nsp);
       //this is how we seperate outgoing and incoming events
-      newSocket.on('event_received', (...args) => {
-        //args is an array : [socketID, ['event-name', payload], timestamp]
-        const newEvent = args;
-        console.log('event is =>', newEvent);
-        //store each event within either incoming or outgoing array, but w/in array, we use another object to store info
-        eventsIncomingGlobal.update(() => [...eventsIncoming, newEvent]);
-        // eventsIncoming = [...eventsIncoming, newEvent];
+      newSocket.on('event_received', (newEvent) => {
+        //assigning incoming/outgoing property to render direction
+        newEvent = { ...newEvent, direction: 'incoming' };
+        allEventsGlobal.update((value) => {
+          return [...value, newEvent];
+        });
       });
-      newSocket.on('event_sent', (...args) => {
-        const newEvent = args;
-        eventsOutgoingGlobal.update(() => [...eventsOutgoing, newEvent]);
-        // eventsOutgoing = [...eventsOutgoing, newEvent];
+      newSocket.on('event_sent', (newEvent) => {
+        newEvent = { ...newEvent, direction: 'outgoing' };
+        allEventsGlobal.update((value) => {
+          return [...value, newEvent];
+        });
       });
 
       // update store with new socket

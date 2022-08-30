@@ -11,7 +11,6 @@
     export let direction;
 
     const onDelete = () => {
-    console.log('onDelete called')
     //remove event is defined on index.svelte
     //everything inside second param is going to be in e.detail => see line 152 on index.svelte
     dispatch('removeEvent', {timestamp, socketId, eventname, direction})};
@@ -39,6 +38,8 @@
   <div id='event'>
     <div class='event-property'> Socket Id: <span class="event-value">{socketId}</span><span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button on:click={onDelete}>Delete</button>
 </div>
+<!-- reassign direction with arrow(green or red) to signal incoming or outgoing -->
+    <div class= 'event-property'><span class="event-value">{direction}</span></div>
     <div class='event-property'> Timestamp: <span class="event-value">{timestamp}</span></div>
     <div class='event-property'> Eventname: <span class="event-value">{eventname}</span></div>
     <div class='event-property'> Payload: <span class="event-value">{payload}</span></div>

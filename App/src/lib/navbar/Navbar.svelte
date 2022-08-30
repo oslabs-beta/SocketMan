@@ -1,6 +1,9 @@
 <script>
   import '../../app.css';
   import { socketGlobal } from '../../stores';
+  // import { socketGlobal } from '../../stores';
+  // import { socketGlobal } from '../../stores';
+  // import { socketGlobal } from '../../stores';
 
   const disconnect = () => {
     $socketGlobal.close();

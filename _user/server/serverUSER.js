@@ -35,7 +35,12 @@ const createEventObj = (socketID, event) => {
 
 // listen to all events sent from admin
 adminNamespace.on('connection', (socket) => {
-  socket.onAny((...args) => {});
+  socket.onAny((...args) => {
+    console.log('received from admin==>', args);
+    // invoke a callback if passed
+    if (typeof args[args.length - 1] === 'function')
+      args[args.length - 1]('arg1', 'arg2');
+  });
 });
 
 io.on('connection', (socket) => {

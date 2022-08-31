@@ -22,27 +22,7 @@
     // create payloads array using argument strings parsed by json
     const payloads = Object.values($payloadArgsGlobal).map((el) => {
       if (!exitFlag) {
-        try {
-          if (typeof JSON.parse(el.argValue) === el.argType) {
-            return JSON.parse(el.argValue);
-          } else {
-            console.log(typeof JSON.parse(el.argValue), el.argType);
-            exitFlag = true;
-            if (!errMsg)
-              errMsg = `
-              TYPE MISMATCH \n
-              Expected : ${el.argType} \r
-              Parsed: ${typeof JSON.parse(el.argValue)}`;
-            return;
-          }
-        } catch (error) {
-          exitFlag = true;
-          if (!errMsg)
-            errMsg = `
-          INVALID JSON VALUE \n 
-          Value: ${el.argValue}`;
-          return;
-        }
+        return el.argType === 'undefined' ? undefined : JSON.parse(el.argValue);
       }
     });
 
@@ -193,7 +173,14 @@
       {/if}
     </div>
 
-    <button id="emit-btn" type="submit">Emit</button>
+    {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
+      return cur.validJson ? 0 : sum + 1;
+    }, 0)}
+      <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
+      >
+    {:else}
+      <button id="emit-btn" type="submit">Emit</button>
+    {/if}
   </form>
   <!-- bind:value - changes to the input value will update the connectTo value and changes to connectTo value will update input -->
 </section>
@@ -255,5 +242,8 @@
   }
   #emit-btn {
     background-color: green;
+  }
+  .disabled {
+    background-color: gray !important;
   }
 </style>

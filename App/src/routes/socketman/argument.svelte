@@ -9,12 +9,40 @@
   export let argKey;
   export let validJson;
 
+  // worth making a component that appears on mouseover. this will get big-ish in the current file
+  let errObj = {
+    header: '',
+    description: '',
+    expect: '',
+    actual: '',
+  };
+
   checkJson(argType, argValue);
 
   function checkJson(type, value) {
     console.log(type, value);
+
     try {
-      if (typeof JSON.parse(value) === type) {
+      // check array, obj, undefined, null
+      if (['array', 'object', 'null', 'undefined'].includes(type)) {
+        switch (type) {
+          case 'array':
+            validJson = value[0] === '[' && JSON.parse(value) ? true : false;
+            break;
+          case 'object':
+            validJson = value[0] === '{' && JSON.parse(value) ? true : false;
+            break;
+          case 'null':
+            validJson =
+              value === 'null' && JSON.parse(value) === null ? true : false;
+            break;
+          case 'undefined':
+            validJson = true;
+            break;
+        }
+      }
+      // check others
+      else if (typeof JSON.parse(value) === type) {
         console.log(validJson);
         console.log(typeof JSON.parse(value) === type);
         validJson = true;
@@ -52,7 +80,6 @@
     value={argType}
     on:change={(e) => {
       argType = e.target.value;
-      onChange();
       checkJson(argType, argValue);
     }}
   >
@@ -67,7 +94,6 @@
   <textarea
     class="argument-value"
     bind:value={argValue}
-    on:change={onChange}
     on:input={() => {
       checkJson(argType, argValue);
     }}

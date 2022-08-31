@@ -14,6 +14,7 @@
     //remove event is defined on index.svelte
     //everything inside second param is going to be in e.detail => see line 152 on index.svelte
     dispatch('removeEvent', {timestamp, socketId, eventname, direction})};
+
 </script>
   
 <style>

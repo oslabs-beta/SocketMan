@@ -11,6 +11,14 @@
   import { isFilteredGlobal } from '../stores';
   //   let isFiltered = false;
 
+  //change to a single filterVariable
+  import { filterEventNameGlobal } from '../stores';
+  import { socketIdGlobal } from '../stores';
+
+
+
+  //instantiate maybe a single variable 
+  //get emitted event to display with everything else
   function removeEvent(e) {
     //each function has a direction property in order
     //sometimes timestamps would be the exact same so we have to check multiple properies
@@ -46,11 +54,23 @@
   }
   function filterSocketID(socketid) {
     isFilteredGlobal.set(true);
+    console.log('global socketId is =>', $socketIdGlobal);
     filteredEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.socketId === socketid);
     });
   }
-  //must add filter functionality based on incoming or outgoing
+  function filterIncoming() {
+    isFilteredGlobal.set(true);
+    filteredEventsGlobal.update(() => {
+      return $allEventsGlobal.filter((event) => event.direction === 'incoming')
+    })
+  }
+  function filterOutgoing() {
+    isFilteredGlobal.set(true);
+    filteredEventsGlobal.update(() => {
+      return $allEventsGlobal.filter((event) => event.direction === 'outgoing')
+    })
+  }
 </script>
 
 <svelte:head>
@@ -72,15 +92,44 @@
   <button
     id="test"
     on:click={() => {
-      filterEventName('change-color');
-    }}>CLICK TO FILTER EVENT NAME</button
+      filterIncoming();
+    }}>CLICK TO FILTER INCOMING</button
   >
   <button
     id="test"
     on:click={() => {
-      filterSocketID('s_CHTnb2qJLn5AxiAAAD');
-    }}>CLICK TO FILTER ID</button
+      filterOutgoing();
+    }}>CLICK TO FILTER OUTGOING</button
   >
+  <form>
+    <input 
+    placeholder= "Enter event name"
+    bind:value= {$filterEventNameGlobal}
+    >
+    <button
+    id="test"
+    on:click|preventDefault={() => {
+      filterEventName($filterEventNameGlobal);
+    }}>CLICK TO FILTER EVENT NAME</button
+    >
+  </form>
+  
+
+  <form id = 'socketId'>
+    <input 
+    placeholder= "Enter socket id"
+    on:change={(e) => {
+      socketIdGlobal.set(e.target.value);
+    }}
+    >
+    <button
+      id="test"
+      on:click|preventDefault={() => {
+        filterSocketID($socketIdGlobal);
+      }}>CLICK TO FILTER ID</button
+    >
+  </form>
+
   <!-- above socketID is hardcoded -->
   <div id="events">
     <!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->

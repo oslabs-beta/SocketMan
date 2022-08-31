@@ -7,43 +7,36 @@
   export let argType;
   export let argValue;
   export let argKey;
-  let jsonCheck = false;
+  export let validJson;
 
-  try {
-    if (typeof JSON.parse(argValue) === argType) {
-      jsonCheck = true;
-    } else {
-      jsonCheck = false;
-    }
-  } catch (error) {
-    jsonCheck = false;
-  }
+  checkJson(argType, argValue);
 
-  const onDelete = () => {
-    console.log('onDelete called');
-    //remove event is defined on index.svelte
-    //everything inside second param is going to be in e.detail => see line 152 on index.svelte
-    dispatch('removeArg', { argKey });
-  };
-
-  const onChange = () => {
-    console.log('onChange called');
-
-    dispatch('changeArg', { argKey, argLabel, argType, argValue });
-  };
-
-  const onType = () => {
-    // each time this function is called, check if type of JSON result matches what the user said it would be
+  function checkJson(type, value) {
+    console.log(type, value);
     try {
-      if (typeof JSON.parse(argValue) === argType) {
-        jsonCheck = true;
+      if (typeof JSON.parse(value) === type) {
+        console.log(validJson);
+        console.log(typeof JSON.parse(value) === type);
+        validJson = true;
       } else {
-        jsonCheck = false;
+        console.log(validJson);
+        validJson = false;
+        console.log(validJson);
       }
     } catch (error) {
-      jsonCheck = false;
+      console.log(error);
+      validJson = false;
     }
-  };
+    onChange();
+  }
+
+  function onDelete() {
+    dispatch('removeArg', { argKey });
+  }
+
+  function onChange() {
+    dispatch('changeArg', { argKey, argLabel, argType, argValue, validJson });
+  }
 </script>
 
 <div class="argument-row">
@@ -54,23 +47,34 @@
     placeholder="Arg Label"
     autocomplete="off"
   />
-  <input
+  <select
     class="argument-type"
-    bind:value={argType}
-    on:change={onChange}
-    on:input={onType}
-    placeholder="Arg Type"
-    autocomplete="off"
-  />
+    value={argType}
+    on:change={(e) => {
+      argType = e.target.value;
+      onChange();
+      checkJson(argType, argValue);
+    }}
+  >
+    <option>string</option>
+    <option>number</option>
+    <option>boolean</option>
+    <option>null</option>
+    <option>object</option>
+    <option>array</option>
+    <option>undefined</option>
+  </select>
   <textarea
     class="argument-value"
     bind:value={argValue}
     on:change={onChange}
-    on:input={onType}
+    on:input={() => {
+      checkJson(argType, argValue);
+    }}
     placeholder="Enter a value using JSON"
     autocomplete="off"
   />
-  <div class={`json ${jsonCheck ? 'valid' : 'invalid'}`} />
+  <div class={`json ${validJson ? 'valid' : 'invalid'}`} />
   <button type="button" on:click={onDelete}>Delete</button>
 </div>
 

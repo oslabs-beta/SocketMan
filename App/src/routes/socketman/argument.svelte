@@ -71,7 +71,7 @@
   <input
     class="argument-label"
     bind:value={argLabel}
-    on:change={onChange}
+    on:input={onChange}
     placeholder="Arg Label"
     autocomplete="off"
   />

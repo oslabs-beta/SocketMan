@@ -111,6 +111,12 @@
 <section>
   <h1>Socketman Interface</h1>
 
+  <h3 id="emit-preview">
+    {`socket.emit(${Object.values($payloadArgsGlobal)
+      .map((el) => el.argLabel)
+      .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
+  </h3>
+
   <!-- SOCKETMAN SECTION -->
   <form id="socketman" on:submit|preventDefault={sendMessage}>
     <div id="socketman-top">
@@ -245,5 +251,12 @@
   }
   .disabled {
     background-color: gray !important;
+  }
+  #emit-preview {
+    font-family: monospace;
+    color: rgb(255, 255, 255);
+    background-color: black;
+    padding: 5px;
+    font-weight: 400;
   }
 </style>

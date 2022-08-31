@@ -7,6 +7,7 @@
     eventNameGlobal,
     payloadArgsGlobal,
     socketGlobal,
+    allEventsGlobal,
   } from '../../stores';
 
   import Argument from './argument.svelte';
@@ -22,11 +23,12 @@
     });
 
     // if there's a callback function provided, create it
+    let cb = null;
     if ($callbackTFGlobal) {
       // create function
 
       // should probably add a try/catch here in case it's bad input
-      const cb = new Function($cbParamsGlobal, $cbBodyGlobal);
+      cb = new Function($cbParamsGlobal, $cbBodyGlobal);
 
       // add callback to payloads
       payloads.push(cb);
@@ -34,6 +36,20 @@
 
     // emit the event using the established socket in stores
     $socketGlobal.emit($eventNameGlobal.trim(), ...payloads);
+
+    // create the event object
+    const eventObject = {
+      socketId: $socketGlobal.id,
+      eventName: $eventNameGlobal,
+      payload: payloads,
+      cb: cb || null,
+      date: new Date(),
+      direction: 'Socketman',
+    };
+
+    allEventsGlobal.update((value) => {
+      return [...value, eventObject];
+    });
   }
 
   function addArg(e) {

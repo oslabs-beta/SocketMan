@@ -9,6 +9,16 @@
   export let argKey;
   let jsonCheck = false;
 
+  try {
+    if (typeof JSON.parse(argValue) === argType) {
+      jsonCheck = true;
+    } else {
+      jsonCheck = false;
+    }
+  } catch (error) {
+    jsonCheck = false;
+  }
+
   const onDelete = () => {
     console.log('onDelete called');
     //remove event is defined on index.svelte

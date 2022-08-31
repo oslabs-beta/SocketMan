@@ -15,21 +15,55 @@
     //if no event was sent, return out
     if (!$eventNameGlobal) return;
 
+    // init exitflag and error message in case values are invalid
+    let exitFlag = false;
+    let errMsg = null;
+
     // create payloads array using argument strings parsed by json
     const payloads = Object.values($payloadArgsGlobal).map((el) => {
-      console.log(el);
-      return JSON.parse(el.argValue);
+      if (!exitFlag) {
+        try {
+          if (typeof JSON.parse(el.argValue) === el.argType) {
+            return JSON.parse(el.argValue);
+          } else {
+            console.log(typeof JSON.parse(el.argValue), el.argType);
+            exitFlag = true;
+            if (!errMsg)
+              errMsg = `
+              TYPE MISMATCH \n
+              Expected : ${el.argType} \r
+              Parsed: ${typeof JSON.parse(el.argValue)}`;
+            return;
+          }
+        } catch (error) {
+          exitFlag = true;
+          if (!errMsg)
+            errMsg = `
+          INVALID JSON VALUE \n 
+          Value: ${el.argValue}`;
+          return;
+        }
+      }
     });
 
     // if there's a callback function provided, create it
-    if ($callbackTFGlobal) {
-      // create function
-
-      // should probably add a try/catch here in case it's bad input
-      const cb = new Function($cbParamsGlobal, $cbBodyGlobal);
+    if (!exitFlag && $callbackTFGlobal) {
+      try {
+        // create function
+        const cb = new Function($cbParamsGlobal, $cbBodyGlobal);
+        payloads.push(cb);
+      } catch (error) {
+        exitFlag = true;
+        if (!errMsg)
+          errMsg = `
+          Could not compile function :(`;
+      }
 
       // add callback to payloads
-      payloads.push(cb);
+    }
+    if (exitFlag) {
+      alert(errMsg);
+      return;
     }
 
     // emit the event using the established socket in stores

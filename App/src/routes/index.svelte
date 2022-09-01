@@ -11,6 +11,7 @@
   import { isFilteredGlobal } from '../stores';
   import { filterEventNameGlobal } from '../stores';
   import { socketIdGlobal } from '../stores';
+  import { get } from 'svelte/store';
 
   //get emitted event to display with everything else
   function removeEvent(e) {
@@ -67,12 +68,16 @@
   }
   //following functionality for sorting 
   function sortAlphabetical() {
-    console.log('invoked!')
     //iterate through filtered array global by alphabetical order and reassign filtered
-    filteredEventsGlobal.update(() => {
-      //need to instantiate a check for either allEvent or filteredArr
-     return $filteredEventsGlobal.sort((a, b) => {
-      console.log('sorting...', a.eventName);
+    let sorted;
+
+      
+      sorted = $isFilteredGlobal ? filteredEventsGlobal : allEventsGlobal;
+      console.log('sorted is=>', sorted)
+    sorted.update((value) => {
+      //need to instantiate a check to see if we are in display view 
+      // ($isFilteredGlobal)? sorted = $filteredEventsGlobal : sorted = $allEventsGlobal
+     return value.sort((a, b) => {
         const eventA = a.eventName.toUpperCase();
         const eventB = b.eventName.toUpperCase();
          if (eventA < eventB){
@@ -84,13 +89,20 @@
          return 0;
       })
     })
+    console.log('sorted after update is=>', sorted)
   }
   //NEED TO FIX
   //checks to see if events have a callback
-  function sortCallback() {
-   return filteredEventsGlobal.update(() => {
-      $filteredEventsGlobal.filter((event) => event.cb)
-    })
+  function filterCallback() {
+    console.log('...filtering callbacks');
+    filteredEventsGlobal.update(() => {
+      let sorted;
+      ($isFilteredGlobal)? sorted = $filteredEventsGlobal : sorted = $allEventsGlobal
+      return sorted.filter((event) => {
+        console.log('event callback is =>', event.cb);
+        return event.cb
+      })
+      })
   }
   function sortTimestamp (){
    return filterEventNameGlobal.update(() => {
@@ -208,7 +220,7 @@
 <button
   id ='test'
   on:click={() => {
-    sortCallback();
+    filterCallback();
   }}>Click to view all events with callbacks
 </button>
 

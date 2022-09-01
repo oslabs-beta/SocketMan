@@ -6,7 +6,6 @@
   import { filteredEventsGlobal } from '../../stores';
   import { isFilteredGlobal } from '../../stores'
 
-  //PROP DRILLING
   //export let is how we access props attached to the event component
    let socketId;
    let eventname;

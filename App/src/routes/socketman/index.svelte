@@ -11,6 +11,51 @@
   } from '../../stores';
 
   import Argument from './argument.svelte';
+  import SaveList from './saveList.svelte';
+
+  let saveName = '';
+  let selectedEvent = '';
+  // check localstorage on mount
+  let savedEvents = window.localStorage.savedEvents;
+  // initialize if savedEvents doesn't exist
+  if (!savedEvents) {
+    window.localStorage.savedEvents = JSON.stringify({});
+  }
+  // save savedEvents to state
+  savedEvents = JSON.parse(window.localStorage.savedEvents);
+
+  function saveEvent() {
+    if (saveName === '') return;
+    // add to savedEvents object a new object of all our inputs
+    savedEvents[saveName] = {
+      callbackTF: $callbackTFGlobal,
+      cbBody: $cbBodyGlobal,
+      cbParams: $cbParamsGlobal,
+      eventName: $eventNameGlobal,
+      payloadArgs: $payloadArgsGlobal,
+    };
+    // then stringify the entire savedevents object and update localstorage with it
+    window.localStorage.savedEvents = JSON.stringify(savedEvents);
+  }
+
+  function loadEvent(e) {
+    // update selectedEvent state
+    selectedEvent = e.target.value;
+    // if we chose the blank option, clear the form
+    if (selectedEvent === '') return resetSocketmanStore();
+
+    // else, update all globals to update all form values
+    const choice = savedEvents[selectedEvent];
+    eventNameGlobal.set(choice.eventName);
+    payloadArgsGlobal.set(choice.payloadArgs);
+    callbackTFGlobal.set(choice.callbackTF);
+    cbParamsGlobal.set(choice.cbParams);
+    cbBodyGlobal.set(choice.cbBody);
+    argsCountGlobal.set(Object.keys(choice.payloadArgs).length);
+
+    // update save input to reflect chosen event
+    saveName = selectedEvent;
+  }
 
   function sendMessage() {
     //if no event was sent, return out
@@ -23,7 +68,7 @@
     // create payloads array using argument strings parsed by json
     const payloads = Object.values($payloadArgsGlobal).map((el) => {
       if (!exitFlag) {
-        return el.argType === 'undefined' ? undefined : JSON.parse(el.argValue);
+        return el.argType === 'null' ? null : JSON.parse(el.argValue);
       }
     });
 
@@ -111,13 +156,17 @@
     });
   }
 
-  function clearAllArgs(e) {
-    // update payload obj by replacing it with a blank object
-    payloadArgsGlobal.update(() => {
-      return {};
-    });
-    // hide the callback too
-    callbackTFGlobal.update(() => false);
+  function resetSocketmanStore() {
+    // this is triggered when loading "" as selected event
+    // and when clicking the "clear all inputs" button
+    eventNameGlobal.set('');
+    payloadArgsGlobal.set({});
+    callbackTFGlobal.set(false);
+    cbParamsGlobal.set('');
+    cbBodyGlobal.set('');
+    argsCountGlobal.set(0);
+    selectedEvent = '';
+    saveName = '';
   }
 </script>
 
@@ -126,19 +175,39 @@
   <meta name="description" content="GUI socketman" />
 </svelte:head>
 
-<section>
-  <h1>Socketman Interface</h1>
+<section id="socketmain">
+  <h1>Socketman 🚀</h1>
 
-  <h3 id="emit-preview">
-    {`socket.emit(${$eventNameGlobal}${
-      Object.keys($payloadArgsGlobal).length ? ', ' : ''
-    }${Object.values($payloadArgsGlobal)
-      .map((el) => el.argLabel)
-      .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
-  </h3>
+  <button id="clear-inputs" type="button" on:click={resetSocketmanStore}
+    >Clear all inputs</button
+  >
+
+  <div id="save-container" class="floating">
+    <span class="title">Save or Load Event</span>
+    <form id="save-form" on:submit|preventDefault={saveEvent}>
+      <input
+        id="save-input"
+        placeholder="Name this emit:"
+        bind:value={saveName}
+      />
+      <button id="save-btn">Save event</button>
+    </form>
+    <div id="save-list-container">
+      <span>Choose from your saved events:</span>
+      <SaveList {savedEvents} {loadEvent} {selectedEvent} />
+    </div>
+  </div>
 
   <!-- SOCKETMAN SECTION -->
-  <form id="socketman" on:submit|preventDefault={sendMessage}>
+  <form id="socketman" class="floating" on:submit|preventDefault={sendMessage}>
+    <span class="title">Emit an Event</span>
+    <h3 id="emit-preview">
+      {`socket.emit(${$eventNameGlobal}${
+        Object.keys($payloadArgsGlobal).length ? ', ' : ''
+      }${Object.values($payloadArgsGlobal)
+        .map((el) => el.argLabel)
+        .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
+    </h3>
     <div id="socketman-top">
       <input
         id="event"
@@ -146,11 +215,6 @@
         placeholder="eventName"
         autocomplete="off"
       />
-      {#if Object.keys($payloadArgsGlobal).length}
-        <button id="clear-args" type="button" on:click={clearAllArgs}
-          >Remove all arguments</button
-        >
-      {/if}
     </div>
 
     <div id="argument-container">
@@ -208,27 +272,52 @@
       <button id="emit-btn" type="submit">Emit</button>
     {/if}
   </form>
-  <!-- bind:value - changes to the input value will update the connectTo value and changes to connectTo value will update input -->
 </section>
 
 <style>
+  #socketmain {
+    display: flex;
+    flex-direction: column;
+  }
+  #clear-inputs {
+    align-self: center;
+  }
+  .floating {
+    background-color: rgb(196, 213, 246);
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+      rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  }
+  .title {
+    text-align: center;
+    font-weight: 700;
+    font-size: large;
+  }
+  #save-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 12px 10px;
+  }
+  #save-form {
+    display: flex;
+    width: 100%;
+    margin: 10px 0;
+  }
+  #save-form input {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  #save-list-container {
+    display: flex;
+    flex-direction: column;
+  }
   #socketman {
-    padding: 0.25rem;
+    padding: 20px;
+    margin: 12px 10px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
-  }
-  #socketman > button {
-    align-self: center;
-    background: rgb(63, 153, 108);
-    width: 50%;
-    border: none;
-    padding: 7px;
-    margin: 20px 0;
-    border-radius: 3px;
-    outline: none;
-    color: #fff;
   }
   #argument-container {
     /* width: 100%; */
@@ -267,7 +356,14 @@
     justify-self: flex-start;
   }
   #emit-btn {
-    background-color: green;
+    align-self: center;
+    background-color: rgb(63, 153, 108);
+    width: 50%;
+    padding: 7px;
+    margin: 20px 0;
+    border-radius: 5px;
+    outline: none;
+    color: #fff;
   }
   .disabled {
     background-color: gray !important;

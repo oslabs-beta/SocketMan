@@ -20,11 +20,9 @@
   checkJson(argType, argValue);
 
   function checkJson(type, value) {
-    console.log(type, value);
-
     try {
-      // check array, obj, undefined, null
-      if (['array', 'object', 'null', 'undefined'].includes(type)) {
+      // check array, obj, null
+      if (['array', 'object', 'null'].includes(type)) {
         switch (type) {
           case 'array':
             validJson = value[0] === '[' && JSON.parse(value) ? true : false;
@@ -33,26 +31,17 @@
             validJson = value[0] === '{' && JSON.parse(value) ? true : false;
             break;
           case 'null':
-            validJson =
-              value === 'null' && JSON.parse(value) === null ? true : false;
-            break;
-          case 'undefined':
             validJson = true;
             break;
         }
       }
       // check others
       else if (typeof JSON.parse(value) === type) {
-        console.log(validJson);
-        console.log(typeof JSON.parse(value) === type);
         validJson = true;
       } else {
-        console.log(validJson);
         validJson = false;
-        console.log(validJson);
       }
     } catch (error) {
-      console.log(error);
       validJson = false;
     }
     onChange();
@@ -89,17 +78,27 @@
     <option>null</option>
     <option>object</option>
     <option>array</option>
-    <option>undefined</option>
   </select>
-  <textarea
-    class="argument-value"
-    bind:value={argValue}
-    on:input={() => {
-      checkJson(argType, argValue);
-    }}
-    placeholder="Enter a value using JSON"
-    autocomplete="off"
-  />
+  {#if argType !== 'null'}
+    <textarea
+      class={'argument-value'}
+      bind:value={argValue}
+      on:input={() => {
+        checkJson(argType, argValue);
+      }}
+      placeholder="Enter a value using JSON"
+      autocomplete="off"
+    />
+  {:else}
+    <textarea
+      class={'argument-value null'}
+      disabled
+      on:input={() => {
+        checkJson(argType, argValue);
+      }}
+      autocomplete="off"
+    />
+  {/if}
   <div class={`json ${validJson ? 'valid' : 'invalid'}`} />
   <button type="button" on:click={onDelete}>Delete</button>
 </div>
@@ -134,5 +133,8 @@
   }
   .invalid {
     background-color: red;
+  }
+  .null {
+    background-color: rgba(255, 255, 255, 0.4);
   }
 </style>

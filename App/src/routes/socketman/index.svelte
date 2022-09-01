@@ -130,7 +130,9 @@
   <h1>Socketman Interface</h1>
 
   <h3 id="emit-preview">
-    {`socket.emit(${Object.values($payloadArgsGlobal)
+    {`socket.emit(${$eventNameGlobal}${
+      Object.keys($payloadArgsGlobal).length ? ', ' : ''
+    }${Object.values($payloadArgsGlobal)
       .map((el) => el.argLabel)
       .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
   </h3>

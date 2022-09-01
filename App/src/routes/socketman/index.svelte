@@ -16,22 +16,35 @@
     //if no event was sent, return out
     if (!$eventNameGlobal) return;
 
+    // init exitflag and error message in case values are invalid
+    let exitFlag = false;
+    let errMsg = null;
+
     // create payloads array using argument strings parsed by json
     const payloads = Object.values($payloadArgsGlobal).map((el) => {
-      console.log(el);
-      return JSON.parse(el.argValue);
+      if (!exitFlag) {
+        return el.argType === 'undefined' ? undefined : JSON.parse(el.argValue);
+      }
     });
 
     // if there's a callback function provided, create it
     let cb = null;
-    if ($callbackTFGlobal) {
-      // create function
-
-      // should probably add a try/catch here in case it's bad input
-      cb = new Function($cbParamsGlobal, $cbBodyGlobal);
-
-      // add callback to payloads
-      payloads.push(cb);
+    if (!exitFlag && $callbackTFGlobal) {
+      try {
+        // create function
+        cb = new Function($cbParamsGlobal, $cbBodyGlobal);
+        // add callback to payloads
+        payloads.push(cb);
+      } catch (error) {
+        exitFlag = true;
+        if (!errMsg)
+          errMsg = `
+          Could not compile function :(`;
+      }
+    }
+    if (exitFlag) {
+      alert(errMsg);
+      return;
     }
 
     // emit the event using the established socket in stores
@@ -50,6 +63,9 @@
     allEventsGlobal.update((value) => {
       return [...value, eventObject];
     });
+
+    // temporary confirmation of success
+    alert('Event emitted successfully!');
   }
 
   function addArg(e) {
@@ -63,6 +79,7 @@
           argValue: '',
           argType: '',
           argLabel: `arg${$argsCountGlobal + 1}`,
+          validJson: false,
         },
       };
     });
@@ -79,6 +96,7 @@
           argValue: e.detail.argValue,
           argType: e.detail.argType,
           argLabel: e.detail.argLabel,
+          validJson: e.detail.validJson,
         },
       };
     });
@@ -111,6 +129,14 @@
 <section>
   <h1>Socketman Interface</h1>
 
+  <h3 id="emit-preview">
+    {`socket.emit(${$eventNameGlobal}${
+      Object.keys($payloadArgsGlobal).length ? ', ' : ''
+    }${Object.values($payloadArgsGlobal)
+      .map((el) => el.argLabel)
+      .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
+  </h3>
+
   <!-- SOCKETMAN SECTION -->
   <form id="socketman" on:submit|preventDefault={sendMessage}>
     <div id="socketman-top">
@@ -130,12 +156,13 @@
     <div id="argument-container">
       <!--  -->
       <!-- here we'll loop through our args and render them -->
-      {#each Object.keys($payloadArgsGlobal) as argument}
+      {#each Object.values($payloadArgsGlobal) as argument}
         <Argument
-          argLabel={$payloadArgsGlobal[argument].argLabel}
-          argType={$payloadArgsGlobal[argument].argType}
-          argValue={$payloadArgsGlobal[argument].argValue}
-          argKey={$payloadArgsGlobal[argument].argKey}
+          argLabel={argument.argLabel}
+          argType={argument.argType}
+          argValue={argument.argValue}
+          argKey={argument.argKey}
+          validJson={argument.validJson}
           on:changeArg={changeArg}
           on:removeArg={removeArg}
         />
@@ -172,7 +199,14 @@
       {/if}
     </div>
 
-    <button id="emit-btn" type="submit">Emit</button>
+    {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
+      return cur.validJson ? 0 : sum + 1;
+    }, 0)}
+      <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
+      >
+    {:else}
+      <button id="emit-btn" type="submit">Emit</button>
+    {/if}
   </form>
   <!-- bind:value - changes to the input value will update the connectTo value and changes to connectTo value will update input -->
 </section>
@@ -234,5 +268,15 @@
   }
   #emit-btn {
     background-color: green;
+  }
+  .disabled {
+    background-color: gray !important;
+  }
+  #emit-preview {
+    font-family: monospace;
+    color: rgb(255, 255, 255);
+    background-color: black;
+    padding: 5px;
+    font-weight: 400;
   }
 </style>

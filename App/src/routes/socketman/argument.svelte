@@ -7,60 +7,100 @@
   export let argType;
   export let argValue;
   export let argKey;
-  let jsonCheck = false;
+  export let validJson;
 
-  const onDelete = () => {
-    console.log('onDelete called');
-    //remove event is defined on index.svelte
-    //everything inside second param is going to be in e.detail => see line 152 on index.svelte
-    dispatch('removeArg', { argKey });
+  // worth making a component that appears on mouseover. this will get big-ish in the current file
+  let errObj = {
+    header: '',
+    description: '',
+    expect: '',
+    actual: '',
   };
 
-  const onChange = () => {
-    console.log('onChange called');
+  checkJson(argType, argValue);
 
-    dispatch('changeArg', { argKey, argLabel, argType, argValue });
-  };
+  function checkJson(type, value) {
+    console.log(type, value);
 
-  const onType = () => {
-    // each time this function is called, check if type of JSON result matches what the user said it would be
     try {
-      if (typeof JSON.parse(argValue) === argType) {
-        jsonCheck = true;
+      // check array, obj, undefined, null
+      if (['array', 'object', 'null', 'undefined'].includes(type)) {
+        switch (type) {
+          case 'array':
+            validJson = value[0] === '[' && JSON.parse(value) ? true : false;
+            break;
+          case 'object':
+            validJson = value[0] === '{' && JSON.parse(value) ? true : false;
+            break;
+          case 'null':
+            validJson =
+              value === 'null' && JSON.parse(value) === null ? true : false;
+            break;
+          case 'undefined':
+            validJson = true;
+            break;
+        }
+      }
+      // check others
+      else if (typeof JSON.parse(value) === type) {
+        console.log(validJson);
+        console.log(typeof JSON.parse(value) === type);
+        validJson = true;
       } else {
-        jsonCheck = false;
+        console.log(validJson);
+        validJson = false;
+        console.log(validJson);
       }
     } catch (error) {
-      jsonCheck = false;
+      console.log(error);
+      validJson = false;
     }
-  };
+    onChange();
+  }
+
+  function onDelete() {
+    dispatch('removeArg', { argKey });
+  }
+
+  function onChange() {
+    dispatch('changeArg', { argKey, argLabel, argType, argValue, validJson });
+  }
 </script>
 
 <div class="argument-row">
   <input
     class="argument-label"
     bind:value={argLabel}
-    on:change={onChange}
+    on:input={onChange}
     placeholder="Arg Label"
     autocomplete="off"
   />
-  <input
+  <select
     class="argument-type"
-    bind:value={argType}
-    on:change={onChange}
-    on:input={onType}
-    placeholder="Arg Type"
-    autocomplete="off"
-  />
+    value={argType}
+    on:change={(e) => {
+      argType = e.target.value;
+      checkJson(argType, argValue);
+    }}
+  >
+    <option>string</option>
+    <option>number</option>
+    <option>boolean</option>
+    <option>null</option>
+    <option>object</option>
+    <option>array</option>
+    <option>undefined</option>
+  </select>
   <textarea
     class="argument-value"
     bind:value={argValue}
-    on:change={onChange}
-    on:input={onType}
+    on:input={() => {
+      checkJson(argType, argValue);
+    }}
     placeholder="Enter a value using JSON"
     autocomplete="off"
   />
-  <div class={`json ${jsonCheck ? 'valid' : 'invalid'}`} />
+  <div class={`json ${validJson ? 'valid' : 'invalid'}`} />
   <button type="button" on:click={onDelete}>Delete</button>
 </div>
 

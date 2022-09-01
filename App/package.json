@@ -12,6 +12,9 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.22.2",
+		"@smui/button": "^6.1.0",
+		"@smui/form-field": "^6.1.0",
+		"@smui/switch": "^6.1.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-node": "^1.0.0-next.86",
 		"@sveltejs/kit": "next",

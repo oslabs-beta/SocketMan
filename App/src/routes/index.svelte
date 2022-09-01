@@ -1,23 +1,17 @@
 <script>
-  //need to import the other component we wish to use
-  import Event from '../lib/event.svelte';
-
+  import Feed from '../lib/feed/feed.svelte';
+  // import Switch from '@smui/switch';
+  import Switch from '../lib/switch.svelte';
+  import FormField from '@smui/form-field';
+  import Button from '@smui/button';
   //primary arr to display all incoming events
   import { allEventsGlobal } from '../stores';
-  //   let allEvents = [];
   //arr rendered when user switches view between event name, socketId, incoming or outgoing
   import { filteredEventsGlobal } from '../stores';
-  //   let filteredEvents = [];
   import { isFilteredGlobal } from '../stores';
-  //   let isFiltered = false;
-
-  //change to a single filterVariable
   import { filterEventNameGlobal } from '../stores';
   import { socketIdGlobal } from '../stores';
 
-
-
-  //instantiate maybe a single variable 
   //get emitted event to display with everything else
   function removeEvent(e) {
     //each function has a direction property in order
@@ -71,11 +65,78 @@
       return $allEventsGlobal.filter((event) => event.direction === 'outgoing')
     })
   }
+  //following functionality for sorting 
+  function sortAlphabetical() {
+    console.log('invoked!')
+    //iterate through filtered array global by alphabetical order and reassign filtered
+    filteredEventsGlobal.update(() => {
+      //need to instantiate a check for either allEvent or filteredArr
+     return $filteredEventsGlobal.sort((a, b) => {
+      console.log('sorting...', a.eventName);
+        const eventA = a.eventName.toUpperCase();
+        const eventB = b.eventName.toUpperCase();
+         if (eventA < eventB){
+          return -1;
+         } 
+         if (eventA > eventB) {
+          return 1;
+         }
+         return 0;
+      })
+    })
+  }
+  //NEED TO FIX
+  //checks to see if events have a callback
+  function sortCallback() {
+   return filteredEventsGlobal.update(() => {
+      $filteredEventsGlobal.filter((event) => event.cb)
+    })
+  }
+  function sortTimestamp (){
+   return filterEventNameGlobal.update(() => {
+      $filteredEventsGlobal.sort((eventA, eventB) => {
+        return eventA.date - eventB.date;
+      })
+    })
+  }
+  //array of obj for options
+  const sortingOptions = [
+    {
+      name: 'Alphabetically',
+      disabled: false
+    }, 
+    {
+      name: 'Timestamp',
+      disabled: false
+    }, 
+    {
+      name: 'Callback Included',
+      disabled: false
+    } 
+];
+//array to display selected
+  let selected = [];
 </script>
 
 <svelte:head>
   <title>GUI Client</title>
   <meta name="description" content="GUI dashboard" />
+
+  <link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+<!-- Roboto -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700"
+/>
+<!-- Roboto Mono -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto+Mono"
+/>
+<link rel="stylesheet" href="/smui.css" />
 </svelte:head>
 
 <!-- LISTENERS SECTION -->
@@ -101,10 +162,12 @@
       filterOutgoing();
     }}>CLICK TO FILTER OUTGOING</button
   >
-  <form>
+  <form id='filter-eventName'>
     <input 
     placeholder= "Enter event name"
-    bind:value= {$filterEventNameGlobal}
+    on:change={(e) => {
+      filterEventNameGlobal.set(e.target.value);
+    }}
     >
     <button
     id="test"
@@ -113,9 +176,7 @@
     }}>CLICK TO FILTER EVENT NAME</button
     >
   </form>
-  
-
-  <form id = 'socketId'>
+  <form id = 'filter-socketId'>
     <input 
     placeholder= "Enter socket id"
     on:change={(e) => {
@@ -130,12 +191,66 @@
     >
   </form>
 
-  <!-- above socketID is hardcoded -->
+ <button
+  id ='test'
+  on:click={() => {
+    sortTimestamp();
+  }}>Click to sort by timestamp
+ </button>
+
+ <button
+ id ='test'
+  on:click={() => {
+    sortAlphabetical();
+  }}>Click to sort by event-name 
+</button>
+
+<button
+  id ='test'
+  on:click={() => {
+    sortCallback();
+  }}>Click to view all events with callbacks
+</button>
+
+<!-- SMUI ATTEMPT -->
+  <!-- <div id='sorting' style="display:flex" >
+    {#each sortingOptions as option}
+      <div>
+        <FormField>
+          <Switch
+            bind:group={selected}
+            value={option.name}
+            disabled={option.disabled}
+          />
+          <span slot="label"
+            >{option.name}{option.disabled ? ' (disabled)' : ''}</span
+          >
+        </FormField>
+      </div>
+    {/each}
+
+    <pre class="status">Sort by: {selected.join(', ')}</pre>
+
+    <div style="margin-top: 1em;">
+      <Button
+        on:click={() => {
+          const idx = selected.indexOf('Doc');
+          if (idx > -1) {
+            selected.splice(idx, 1);
+          } else {
+            selected.push('Doc');
+          }
+          selected = selected;
+        }}
+      >
+        Sort
+      </Button>
+    </div>
+  </div> -->
+
   <div id="events">
-    <!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
-    <!-- creating a new li element containing the Event component -->
-    <!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-    {#each $isFilteredGlobal ? $filteredEventsGlobal : $allEventsGlobal as event}
+    <Feed />
+    <!-- {#each $isFilteredGlobal ? $filteredEventsGlobal : $allEventsGlobal as event}
       <li>
         <Event
           eventname={event.eventName}
@@ -146,13 +261,12 @@
           on:removeEvent={removeEvent}
         />
       </li>
-    {/each}
+    {/each} -->
   </div>
-  <!-- bind:value - changes to the input value will update the connectTo value and changes to connectTo value will update input -->
 </section>
 
 <style>
-  #events {
+  /* #events {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
@@ -178,5 +292,5 @@
   }
   .no-events {
     text-align: center;
-  }
+  } */
 </style>

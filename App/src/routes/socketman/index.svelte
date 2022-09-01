@@ -63,6 +63,9 @@
     allEventsGlobal.update((value) => {
       return [...value, eventObject];
     });
+
+    // temporary confirmation of success
+    alert('Event emitted successfully!');
   }
 
   function addArg(e) {

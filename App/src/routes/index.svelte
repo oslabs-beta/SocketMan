@@ -60,7 +60,7 @@
 
 <!-- LISTENERS SECTION -->
 <section>
-  <h1>GUI Events</h1>
+  <h1>Events Log</h1>
   <!-- following button necessary in order to reset the isFiltered boolean and resetting filteredEvents to empty arr -->
   <button
     id="test"

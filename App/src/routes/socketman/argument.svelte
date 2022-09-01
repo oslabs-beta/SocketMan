@@ -20,8 +20,6 @@
   checkJson(argType, argValue);
 
   function checkJson(type, value) {
-    console.log(type, value);
-
     try {
       // check array, obj, undefined, null
       if (['array', 'object', 'null', 'undefined'].includes(type)) {
@@ -43,16 +41,11 @@
       }
       // check others
       else if (typeof JSON.parse(value) === type) {
-        console.log(validJson);
-        console.log(typeof JSON.parse(value) === type);
         validJson = true;
       } else {
-        console.log(validJson);
         validJson = false;
-        console.log(validJson);
       }
     } catch (error) {
-      console.log(error);
       validJson = false;
     }
     onChange();

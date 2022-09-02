@@ -1,6 +1,6 @@
 <script>
    import Event from '../feed/event.svelte'; 
-   import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
+   import Accordion from '@smui-extra/accordion';
   import { filteredEventsGlobal } from '../../stores';
 
   //export let is how we access props attached to the event component

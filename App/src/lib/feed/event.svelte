@@ -11,11 +11,15 @@
     //direction does not render in event component but it is received for removeEvent functionality on index.svelte
     export let direction;
 
-    const onDelete = () => {
-    //remove event is defined on index.svelte
+      //remove event is defined on index.svelte
     //everything inside second param is going to be in e.detail => see line 152 on index.svelte
+    const onDelete = () => {
+  
     dispatch('removeEvent', {timestamp, socketId, eventname, direction})};
+    const previewPayload = () => {
 
+    }
+  
 </script>
   
 <style>
@@ -35,11 +39,17 @@
       font-size:small;
       color:midnightblue;
   } 
- 
 </style>
   <div class='events'>
     <Panel>
-      <Header>Socket ID: {socketId}</Header>
+      <Header>
+        Socket ID: {socketId}
+        {#if direction ==='incoming'}
+          ⬆
+        {:else}
+          ⬇
+        {/if}
+      </Header>
     <Content>
       <ul>
         <li>Event Name:{eventname}</li>
@@ -50,4 +60,3 @@
     </Panel>
   </div>
   
-<!--  -->

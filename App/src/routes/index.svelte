@@ -13,7 +13,6 @@
   import { socketIdGlobal } from '../stores';
 
 
- 
   //get emitted event to display with everything else
   function removeEvent(e) {
     //each function has a direction property in order

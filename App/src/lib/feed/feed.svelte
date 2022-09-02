@@ -1,8 +1,8 @@
 <script>
-   import Event from '../feed/event.svelte'; 
-   import Accordion from '@smui-extra/accordion';
-  import { filteredEventsGlobal } from '../../stores';
-
+  import Event from '../feed/event.svelte'; 
+  import Accordion from '@smui-extra/accordion';
+  import { filteredEventsGlobal, isFilteredGlobal, allEventsGlobal } from '../../stores';
+	import { onMount } from 'svelte';
   //export let is how we access props attached to the event component
    let socketId;
    let eventname;
@@ -10,13 +10,18 @@
    let timestamp; 
     //direction does not render in event component but it is received for removeEvent functionality on index.svelte
     let direction;
-     //reassign filteredEventsGlobal arr to all events global if no filter has been set
+    // //instantiate eventsArr to 
+    // let eventsArr = [];
+    // onMount(() => {
+    //   eventArr = $isFilteredGlobal? $filteredEventsGlobal.slice() : $allEventsGlobal.slice()
+    // })
+
 </script>
 
 <section>
   <div id="events">
         <Accordion >
-        {#each $filteredEventsGlobal as event}
+          {#each $filteredEventsGlobal as event}
             <Event
               eventname={event.eventName}
               payload={event.payload}
@@ -24,7 +29,7 @@
               socketId={event.socketId}
               direction={event.direction}
             />
-        {/each}
+          {/each}
         </Accordion>
   </div>
   

@@ -40,7 +40,7 @@
 
   //filter functionality for different views (event based, and socketID)
   //each function reassigns filteredEvents arr based on user's desired setting
-  //maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callbacl
+  //maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callback
   function filterEventName(eventName) {
     isFilteredGlobal.set(true);
     filteredEventsGlobal.update(() => {
@@ -70,14 +70,17 @@
   function sortAlphabetical() {
     //iterate through filtered array global by alphabetical order and reassign filtered
     let sorted;
+    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
+    console.log('isFiltered is =>', $isFilteredGlobal);
+    let copy = $filteredEventsGlobal
+    let copy2 = $filteredEventsGlobal
 
-      
-      sorted = $isFilteredGlobal ? filteredEventsGlobal : allEventsGlobal;
-      console.log('sorted is=>', sorted)
-    sorted.update((value) => {
+    console.log('test =>', sorted === $filteredEventsGlobal);
+    console.log('test2 =>', sorted === $allEventsGlobal);
+
+    filteredEventsGlobal.update(() => {
       //need to instantiate a check to see if we are in display view 
-      // ($isFilteredGlobal)? sorted = $filteredEventsGlobal : sorted = $allEventsGlobal
-     return value.sort((a, b) => {
+     return sorted.sort((a, b) => {
         const eventA = a.eventName.toUpperCase();
         const eventB = b.eventName.toUpperCase();
          if (eventA < eventB){
@@ -159,7 +162,9 @@
     id="test"
     on:click={() => {
       isFilteredGlobal.set(false);
-      filteredEventsGlobal.set([]);
+      filteredEventsGlobal.set($allEventsGlobal.slice());
+      console.log('filter events is reset =>', $filteredEventsGlobal);
+      console.log('isFiltered =>', $isFilteredGlobal);
     }}>CLICK TO DISPLAY ALL EVENTS</button
   >
   <button
@@ -262,47 +267,8 @@
 
   <div id="events">
     <Feed />
-    <!-- {#each $isFilteredGlobal ? $filteredEventsGlobal : $allEventsGlobal as event}
-      <li>
-        <Event
-          eventname={event.eventName}
-          payload={event.payload}
-          timestamp={event.date}
-          socketId={event.socketId}
-          direction={event.direction}
-          on:removeEvent={removeEvent}
-        />
-      </li>
-    {/each} -->
   </div>
 </section>
 
 <style>
-  /* #events {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: 'outgoing gap incoming';
-  }
-
-  #events > li {
-    padding: 0.5rem 1rem;
-    background: #ccc;
-  }
-
-  #events > li:nth-child(odd) {
-    background: #ccc;
-  }
-
-  #events > li {
-    padding: 0.5rem 1rem;
-    background: #fff;
-  }
-
-  #events > li:nth-child(odd) {
-    background: #ccc;
-  }
-  .no-events {
-    text-align: center;
-  } */
 </style>

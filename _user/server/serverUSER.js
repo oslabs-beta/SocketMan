@@ -24,12 +24,12 @@ const adminNamespace = io.of('/admin');
 //some type of check for callback
 const createEventObj = (socketID, event) => {
   //instance of
-  obj.cb = event[event.length - 1] instanceof Function;
+  // obj.cb = event[event.length - 1] instanceof Function;
   const obj = {};
   obj.socketId = socketID;
   obj.eventName = event[0];
   obj.payload = event[1];
-  // obj.cb = event[2];
+  obj.cb = event[2];
   obj.date = new Date();
   //add room and namespace to this obj
 

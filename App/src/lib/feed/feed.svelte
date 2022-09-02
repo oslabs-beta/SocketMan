@@ -20,7 +20,7 @@
     <!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
     <!-- creating a new li element containing the Event component -->
     <!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-    {#each $isFilteredGlobal ? $filteredEventsGlobal : $allEventsGlobal as event}
+    {#each $filteredEventsGlobal as event}
       <li>
         <Event
           eventname={event.eventName}

@@ -11,8 +11,9 @@
   import { isFilteredGlobal } from '../stores';
   import { filterEventNameGlobal } from '../stores';
   import { socketIdGlobal } from '../stores';
-  import { get } from 'svelte/store';
 
+
+ 
   //get emitted event to display with everything else
   function removeEvent(e) {
     //each function has a direction property in order
@@ -97,19 +98,21 @@
   //NEED TO FIX
   //checks to see if events have a callback
   function filterCallback() {
-    console.log('...filtering callbacks');
+    let sorted;
+    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
     filteredEventsGlobal.update(() => {
-      let sorted;
-      ($isFilteredGlobal)? sorted = $filteredEventsGlobal : sorted = $allEventsGlobal
       return sorted.filter((event) => {
         console.log('event callback is =>', event.cb);
         return event.cb
       })
       })
   }
-  function sortTimestamp (){
+  function sortTimestamp () {
+    let sorted;
+    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
    return filterEventNameGlobal.update(() => {
       $filteredEventsGlobal.sort((eventA, eventB) => {
+        console.log(eventA.date - eventB.date)
         return eventA.date - eventB.date;
       })
     })

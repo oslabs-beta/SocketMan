@@ -6,6 +6,7 @@
   import { filteredEventsGlobal } from '../../stores';
   import { isFilteredGlobal } from '../../stores'
 
+
   //export let is how we access props attached to the event component
    let socketId;
    let eventname;
@@ -13,6 +14,7 @@
    let timestamp; 
     //direction does not render in event component but it is received for removeEvent functionality on index.svelte
     let direction;
+     //reassign filteredEventsGlobal arr to all events global if no filter has been set
 </script>
 
 <section>
@@ -20,6 +22,7 @@
     <!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
     <!-- creating a new li element containing the Event component -->
     <!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
+
     {#each $filteredEventsGlobal as event}
       <li>
         <Event

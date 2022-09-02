@@ -5,7 +5,7 @@
   import FormField from '@smui/form-field';
   import Button from '@smui/button';
   //primary arr to display all incoming events
-  import { allEventsGlobal, isFilteredGlobal, filterEventNameGlobal,socketIdGlobal, displayRules, displayEventsGlobal } from '../stores';
+  import { allEventsGlobal, isFilteredGlobal, filterEventNameGlobal,socketIdGlobal, displayRules, displayEventsGlobal, arrayOfEventNamesGlobal, arrayOfSocketIdsGlobal, arrayOfDirectionsGlobal } from '../stores';
   //arr rendered when user switches view between event name, socketId, incoming or outgoing
   // import { } from '../stores';
   // import {  } from '../stores';
@@ -14,6 +14,24 @@
   
   console.log('Object.keys($displayRules)[0]==>', Object.keys($displayRules)[0])
 
+  let arrayOfEventNames; 
+  let arrayOfSocketIds;
+  let arrayOfDirections;
+
+  arrayOfEventNamesGlobal.subscribe(value => {
+    arrayOfEventNames = value;
+	});
+
+
+  arrayOfSocketIdsGlobal.subscribe(value => {
+    arrayOfSocketIds = value;
+	});
+
+  arrayOfDirectionsGlobal.subscribe(value => {
+    arrayOfDirections = value;
+	});
+
+
 		
   if (!Object.keys($displayRules)[0]){
     allEventsGlobal.subscribe(value => {
@@ -21,9 +39,17 @@
 	});
   }
      
-    //   $displayEventsGlobal = $allEventsGlobal.slice()
-    // }
-
+function filter(){
+  displayEventsGlobal.update(() => {
+      return $allEventsGlobal.filter(
+        (event) => arrayOfEventNames.includes(event.eventName)).filter(
+          (event)=>{
+            return arrayOfDirections.includes(event.direction)
+        }).filter((event)=>{
+          return arrayOfSocketIds.includes(event.socketId)
+        });
+    });
+}
 
   //get emitted event to display with everything else
   function removeEvent(e) {
@@ -53,31 +79,7 @@
   //filter functionality for different views (event based, and socketID)
   //each function reassigns filteredEvents arr based on user's desired setting
   //maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callback
-  function filterEventName(eventName) {
-    isFilteredGlobal.set(true);
-    displayEventsGlobal.update(() => {
-      return $allEventsGlobal.filter((event) => event.eventName === eventName);
-    });
-  }
-  function filterSocketID(socketid) {
-    isFilteredGlobal.set(true);
-    console.log('global socketId is =>', $socketIdGlobal);
-    displayEventsGlobal.update(() => {
-      return $allEventsGlobal.filter((event) => event.socketId === socketid);
-    });
-  }
-  function filterIncoming() {
-    isFilteredGlobal.set(true);
-    displayEventsGlobal.update(() => {
-      return $allEventsGlobal.filter((event) => event.direction === 'incoming')
-    })
-  }
-  function filterOutgoing() {
-    isFilteredGlobal.set(true);
-    displayEventsGlobal.update(() => {
-      return $allEventsGlobal.filter((event) => event.direction === 'outgoing')
-    })
-  }
+  
   //following functionality for sorting events by event name A-Z
   function sortAlphabetical() {
     //iterate through filtered array global by alphabetical order and reassign filtered
@@ -118,43 +120,54 @@
 <!-- LISTENERS SECTION -->
 <section>
   <h1>Events Log</h1>
+  {#if $allEventsGlobal.length}
+  <h4>Filters</h4>
+  <div class="filters">
+  <div>Event Name: </div>
+  {#each $arrayOfEventNamesGlobal as eventName}
+    <label>
+      <input type=checkbox bind:group={arrayOfEventNames} value={eventName} on:change={filter}>
+      "{eventName}"
+    </label>
+  {/each}
+  </div>
+  <div class="filters">
+    <div>Socket ID: </div>
+    {#each $arrayOfSocketIdsGlobal as socketId}
+      <label>
+        <input type=checkbox bind:group={arrayOfSocketIds} value={socketId} on:change={filter}>
+        {socketId}
+      </label>
+    {/each}
+    </div>
+    <div class="filters">
+      <div>Direction: </div>
+      {#each $arrayOfDirectionsGlobal as direction}
+        <label>
+          <input type=checkbox bind:group={arrayOfDirections} value={direction} on:change={filter}>
+          {direction[0].toUpperCase()+direction.slice(1)}
+        </label>
+      {/each}
+      </div>
+  {/if}
   <!-- following button necessary in order to reset the isFiltered boolean and resetting filteredEvents to empty arr -->
-  <button
-    id="test"
-    on:click={() => {
-      isFilteredGlobal.set(false);
-      $displayEventsGlobal = $allEventsGlobal.slice();
-      console.log('filter events is reset =>', $displayEventsGlobal);
-      console.log('isFiltered =>', $isFilteredGlobal);
-    }}>CLICK TO DISPLAY ALL EVENTS</button
-  >
-  <button
-    id="test"
-    on:click={() => {
-      filterIncoming();
-    }}>CLICK TO FILTER INCOMING</button
-  >
-  <button
-    id="test"
-    on:click={() => {
-      filterOutgoing();
-    }}>CLICK TO FILTER OUTGOING</button
-  >
-  <form id='filter-eventName'>
+  
+  
+  <!-- <form id='filter-eventName'>
     <input 
     placeholder= "Enter event name"
     on:change={(e) => {
       filterEventNameGlobal.set(e.target.value);
     }}
-    >
-    <button
+    > -->
+    <!-- <button
     id="test"
     on:click|preventDefault={() => {
       filterEventName($filterEventNameGlobal);
     }}>CLICK TO FILTER EVENT NAME</button
-    >
-  </form>
-  <form id = 'filter-socketId'>
+    > -->
+  <!-- </form> -->
+  <!-- <form id = 'filter-socketId'>
     <input 
     placeholder= "Enter socket id"
     on:change={(e) => {
@@ -167,13 +180,13 @@
         filterSocketID($socketIdGlobal);
       }}>CLICK TO FILTER ID</button
     >
-  </form>
- <button
+  </form> -->
+ <!-- <button
  id ='test'
   on:click={() => {
     sortAlphabetical();
   }}>Sort by Event Name - Alphabetically 
-</button>
+</button> -->
 
 
 <!-- SMUI SWITCH ATTEMPT TO SORTING  -->
@@ -212,7 +225,11 @@
   </div> -->
     
   <div id="events">
+    {#if $displayEventsGlobal.length}
     <Feed />
+    {:else}
+    <p>No event yet</p>
+    {/if}
   </div>
 </section>
 
@@ -223,5 +240,11 @@
   } */
   button{
     margin-top: 10px;
+  }
+
+  .filters{
+    border: 1px solid;
+    border-radius: 2%;
+    border-color: gray;
   }
 </style>

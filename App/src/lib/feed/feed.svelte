@@ -15,9 +15,8 @@
 
 <section>
   <div id="events">
-        <Accordion multiple>
+        <Accordion >
         {#each $filteredEventsGlobal as event}
-          <Panel>
             <Event
               eventname={event.eventName}
               payload={event.payload}
@@ -25,10 +24,10 @@
               socketId={event.socketId}
               direction={event.direction}
             />
-          </Panel>
         {/each}
         </Accordion>
   </div>
+  
 </section>
 
 <style>

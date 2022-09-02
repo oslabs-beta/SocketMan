@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import{ Panel, Header, Content } from '@smui-extra/accordion';
     const dispatch = createEventDispatcher();
 
   //export let is how we access props attached to the event component
@@ -34,13 +35,19 @@
       font-size:small;
       color:midnightblue;
   } 
+ 
 </style>
-    <div class='event-property'> Socket Id: <span class="event-value">{socketId}</span><span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button on:click={onDelete}>Delete</button>
-    </div>
-<!-- reassign direction with arrow(green or red) to signal incoming or outgoing -->
-    <div class= 'event-property'><span class="event-value">{direction}</span></div>
-    <div class='event-property'> Timestamp: <span class="event-value">{timestamp}</span></div>
-    <div class='event-property'> Eventname: <span class="event-value">{eventname}</span></div>
-    <div class='event-property'> Payload: <span class="event-value">{payload}</span></div>
-
+  <div class='events'>
+    <Panel>
+      <Header>Socket ID: {socketId}</Header>
+    <Content>
+      <ul>
+        <li>Event Name:{eventname}</li>
+        <li>Payload: {payload}</li>
+        <li>Timestamp: {timestamp}</li>
+      </ul>
+    </Content>
+    </Panel>
+  </div>
   
+<!--  -->

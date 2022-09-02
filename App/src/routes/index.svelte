@@ -1,7 +1,7 @@
 <script>
   import Feed from '../lib/feed/feed.svelte';
-  // import Switch from '@smui/switch';
-  import Switch from '../lib/switch.svelte';
+  import Switch from '@smui/switch';
+  // import Switch from '../lib/switch.svelte';
   import FormField from '@smui/form-field';
   import Button from '@smui/button';
   //primary arr to display all incoming events
@@ -67,18 +67,11 @@
       return $allEventsGlobal.filter((event) => event.direction === 'outgoing')
     })
   }
-  //following functionality for sorting 
+  //following functionality for sorting events by event name A-Z
   function sortAlphabetical() {
     //iterate through filtered array global by alphabetical order and reassign filtered
     let sorted;
     sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
-    console.log('isFiltered is =>', $isFilteredGlobal);
-    let copy = $filteredEventsGlobal
-    let copy2 = $filteredEventsGlobal
-
-    console.log('test =>', sorted === $filteredEventsGlobal);
-    console.log('test2 =>', sorted === $allEventsGlobal);
-
     filteredEventsGlobal.update(() => {
       //need to instantiate a check to see if we are in display view 
      return sorted.sort((a, b) => {
@@ -95,42 +88,12 @@
     })
     console.log('sorted after update is=>', sorted)
   }
-  //NEED TO FIX
-  //checks to see if events have a callback
-  function filterCallback() {
-    let sorted;
-    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
-    filteredEventsGlobal.update(() => {
-      return sorted.filter((event) => {
-        console.log('event callback is =>', event.cb);
-        return event.cb
-      })
-      })
-  }
-  function sortTimestamp () {
-    let sorted;
-    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
-   return filterEventNameGlobal.update(() => {
-      $filteredEventsGlobal.sort((eventA, eventB) => {
-        console.log(eventA.date - eventB.date)
-        return eventA.date - eventB.date;
-      })
-    })
-  }
   //array of obj for options
   const sortingOptions = [
     {
       name: 'Alphabetically',
       disabled: false
-    }, 
-    {
-      name: 'Timestamp',
-      disabled: false
-    }, 
-    {
-      name: 'Callback Included',
-      disabled: false
-    } 
+    }
 ];
 //array to display selected
   let selected = [];
@@ -139,22 +102,6 @@
 <svelte:head>
   <title>GUI Client</title>
   <meta name="description" content="GUI dashboard" />
-
-  <link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/icon?family=Material+Icons"
-/>
-<!-- Roboto -->
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700"
-/>
-<!-- Roboto Mono -->
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Roboto+Mono"
-/>
-<link rel="stylesheet" href="/smui.css" />
 </svelte:head>
 
 <!-- LISTENERS SECTION -->
@@ -210,14 +157,6 @@
       }}>CLICK TO FILTER ID</button
     >
   </form>
-
- <button
-  id ='test'
-  on:click={() => {
-    sortTimestamp();
-  }}>Click to sort by timestamp
- </button>
-
  <button
  id ='test'
   on:click={() => {
@@ -225,15 +164,9 @@
   }}>Click to sort by event-name 
 </button>
 
-<button
-  id ='test'
-  on:click={() => {
-    filterCallback();
-  }}>Click to view all events with callbacks
-</button>
 
 <!-- SMUI ATTEMPT -->
-  <!-- <div id='sorting' style="display:flex" >
+  <div id='sorting' style="display:flex" >
     {#each sortingOptions as option}
       <div>
         <FormField>
@@ -266,8 +199,7 @@
         Sort
       </Button>
     </div>
-  </div> -->
-
+  </div>
   <div id="events">
     <Feed />
   </div>

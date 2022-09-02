@@ -164,8 +164,8 @@
 </button>
 
 
-<!-- SMUI ATTEMPT -->
-  <div id ='sort-section'>
+<!-- SMUI SWITCH ATTEMPT TO SORTING  -->
+  <!-- <div id ='sort-section'>
     <div id='switch'>
       {#each sortingOptions as option}
         <div>
@@ -181,7 +181,6 @@
           </FormField>
         </div>
       {/each}
-      <!-- <pre >Sort by: {selected.join(', ')}</pre> -->
       <div >
         <Button
           on:click={() => {
@@ -197,16 +196,17 @@
           Sort
         </Button>
       </div>
-      </div>
     </div>
+  </div> -->
+    
   <div id="events">
     <Feed />
   </div>
 </section>
 
 <style>
-  #sort-section {
+  /* #sort-section {
     display: flex;
     flex-direction: row;
-  }
+  } */
 </style>

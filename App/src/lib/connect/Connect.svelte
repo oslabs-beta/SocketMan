@@ -1,7 +1,7 @@
 <script>
   import ioClient from 'socket.io-client';
   import { socketGlobal } from '../../stores';
-  import { allEventsGlobal } from '../../stores';
+  import { allEventsGlobal, arrayOfEventNamesGlobal, arrayOfSocketIdsGlobal } from '../../stores';
 
   //used to capture value of user server URL
   let connectTo = '';
@@ -35,17 +35,42 @@
       console.log('namespace is =>', newSocket.nsp);
       //this is how we seperate outgoing and incoming events
       newSocket.on('event_received', (newEvent) => {
+        console.log("newEvent==>", newEvent  )
         //assigning incoming/outgoing property to render direction
         newEvent = { ...newEvent, direction: 'incoming' };
         allEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
+        arrayOfEventNamesGlobal.update((array)=>{
+          if(!array.includes(newEvent.eventName)){
+           array.push(newEvent.eventName)
+        }
+        return array
+      })
+      arrayOfSocketIdsGlobal.update((array)=>{
+          if(!array.includes(newEvent.socketId)){
+           array.push(newEvent.socketId)
+        }
+        return array
+      });
       });
       newSocket.on('event_sent', (newEvent) => {
         newEvent = { ...newEvent, direction: 'outgoing' };
         allEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
+        arrayOfEventNamesGlobal.update((array)=>{
+          if(!array.includes(newEvent.eventName)){
+           array.push(newEvent.eventName)
+        }
+        return array
+      })
+      arrayOfSocketIdsGlobal.update((array)=>{
+          if(!array.includes(newEvent.socketId)){
+           array.push(newEvent.socketId)
+        }
+        return array
+      })
       });
 
       // update store with new socket

@@ -1,7 +1,6 @@
 /*
 This is the USER'S server. 
 The server that we are trying to monitor for traffic.
-
 */
 const path = require('path');
 const { allowedNodeEnvironmentFlags } = require('process');
@@ -22,13 +21,17 @@ app.get('/', (req, res) => {
 const adminNamespace = io.of('/admin');
 
 //function that takes event array and turns into object for frontend
+//some type of check for callback
 const createEventObj = (socketID, event) => {
+  //instance of
+  // obj.cb = event[event.length - 1] instanceof Function;
   const obj = {};
   obj.socketId = socketID;
   obj.eventName = event[0];
   obj.payload = event[1];
   obj.cb = event[2];
   obj.date = new Date();
+  //add room and namespace to this obj
 
   return obj;
 };

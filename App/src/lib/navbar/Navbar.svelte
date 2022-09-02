@@ -6,6 +6,7 @@
   // import { socketGlobal } from '../../stores';
 
   const disconnect = () => {
+ //reset allEventsGlobal, isFiltered, and filteredEvents arr when user disconnect
     $socketGlobal.close();
     socketGlobal.update(() => null);
   };
@@ -14,7 +15,7 @@
 <nav>
   {#if $socketGlobal}
     <nav-left>
-      <a href="/">Listen 🎧</a>
+      <a href="/">Listen 🔺 🔻 🎧</a>
       <a href="/socketman">Socketman 🚀</a>
     </nav-left>
     <nav-right>

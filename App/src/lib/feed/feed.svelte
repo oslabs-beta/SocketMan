@@ -1,5 +1,6 @@
 <script>
    import Event from '../feed/event.svelte'; 
+   import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
   import { filteredEventsGlobal } from '../../stores';
 
   //export let is how we access props attached to the event component
@@ -13,20 +14,20 @@
 </script>
 
 <section>
-    <div id="events">
-
-    <!-- creating a new li element containing the Event component -->
-    {#each $filteredEventsGlobal as event}
-      <li>
-        <Event
-          eventname={event.eventName}
-          payload={event.payload}
-          timestamp={event.date}
-          socketId={event.socketId}
-          direction={event.direction}
-        />
-      </li>
-    {/each}
+  <div id="events">
+        <Accordion multiple>
+        {#each $filteredEventsGlobal as event}
+          <Panel>
+            <Event
+              eventname={event.eventName}
+              payload={event.payload}
+              timestamp={event.date}
+              socketId={event.socketId}
+              direction={event.direction}
+            />
+          </Panel>
+        {/each}
+        </Accordion>
   </div>
 </section>
 

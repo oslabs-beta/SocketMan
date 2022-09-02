@@ -166,44 +166,48 @@
 
 
 <!-- SMUI ATTEMPT -->
-  <div id='sorting' style="display:flex" >
-    {#each sortingOptions as option}
-      <div>
-        <FormField>
-          <Switch
-            bind:group={selected}
-            value={option.name}
-            disabled={option.disabled}
-          />
-          <span slot="label"
-            >{option.name}{option.disabled ? ' (disabled)' : ''}</span
-          >
-        </FormField>
+  <div id ='sort-section'>
+    <div id='switch'>
+      {#each sortingOptions as option}
+        <div>
+          <FormField>
+            <Switch
+              bind:group={selected}
+              value={option.name}
+              disabled={option.disabled}
+            />
+            <span slot="label"
+              >{option.name}{option.disabled ? ' (disabled)' : ''}</span
+            >
+          </FormField>
+        </div>
+      {/each}
+      <!-- <pre >Sort by: {selected.join(', ')}</pre> -->
+      <div >
+        <Button
+          on:click={() => {
+            const idx = selected.indexOf('Doc');
+            if (idx > -1) {
+              selected.splice(idx, 1);
+            } else {
+              selected.push('Doc');
+            }
+            selected = selected;
+          }}
+        >
+          Sort
+        </Button>
       </div>
-    {/each}
-
-    <pre class="status">Sort by: {selected.join(', ')}</pre>
-
-    <div style="margin-top: 1em;">
-      <Button
-        on:click={() => {
-          const idx = selected.indexOf('Doc');
-          if (idx > -1) {
-            selected.splice(idx, 1);
-          } else {
-            selected.push('Doc');
-          }
-          selected = selected;
-        }}
-      >
-        Sort
-      </Button>
+      </div>
     </div>
-  </div>
   <div id="events">
     <Feed />
   </div>
 </section>
 
 <style>
+  #sort-section {
+    display: flex;
+    flex-direction: row;
+  }
 </style>

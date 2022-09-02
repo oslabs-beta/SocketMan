@@ -35,14 +35,12 @@
       color:midnightblue;
   } 
 </style>
-  
-  <div id='event'>
     <div class='event-property'> Socket Id: <span class="event-value">{socketId}</span><span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><button on:click={onDelete}>Delete</button>
-</div>
+    </div>
 <!-- reassign direction with arrow(green or red) to signal incoming or outgoing -->
     <div class= 'event-property'><span class="event-value">{direction}</span></div>
     <div class='event-property'> Timestamp: <span class="event-value">{timestamp}</span></div>
     <div class='event-property'> Eventname: <span class="event-value">{eventname}</span></div>
     <div class='event-property'> Payload: <span class="event-value">{payload}</span></div>
-</div>
+
   

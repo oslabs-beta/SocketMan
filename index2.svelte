@@ -6,7 +6,7 @@
   import { allEventsGlobal } from '../stores';
   //   let allEvents = [];
   //arr rendered when user switches view between event name, socketId, incoming or outgoing
-  import { filteredEventsGlobal } from '../stores';
+  import { displayEventsGlobal } from '../stores';
   //   let filteredEvents = [];
   import { isFilteredGlobal } from '../stores';
   //   let isFiltered = false;
@@ -40,13 +40,13 @@
   //maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callbacl
   function filterEventName(eventName) {
     isFilteredGlobal.set(true);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.eventName === eventName);
     });
   }
   function filterSocketID(socketid) {
     isFilteredGlobal.set(true);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.socketId === socketid);
     });
   }
@@ -66,7 +66,7 @@
     id="test"
     on:click={() => {
       isFilteredGlobal.set(false);
-      filteredEventsGlobal.set([]);
+      displayEventsGlobal.set([]);
     }}>CLICK TO DISPLAY ALL EVENTS</button
   >
   <button
@@ -86,7 +86,7 @@
     <!-- if user view switches (by event name, socketId or other), iterate through filtered events, else, iterate and render all events -->
     <!-- creating a new li element containing the Event component -->
     <!-- setting a listener for the event name removeEvent - which will be dispatched from event component -->
-    {#each $isFilteredGlobal ? $filteredEventsGlobal : $allEventsGlobal as event}
+    {#each $isFilteredGlobal ? $displayEventsGlobal : $allEventsGlobal as event}
       <li>
         <Event
           eventname={event.eventName}

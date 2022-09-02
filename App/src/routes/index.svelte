@@ -5,12 +5,24 @@
   import FormField from '@smui/form-field';
   import Button from '@smui/button';
   //primary arr to display all incoming events
-  import { allEventsGlobal } from '../stores';
+  import { allEventsGlobal, isFilteredGlobal, filterEventNameGlobal,socketIdGlobal, displayRules, displayEventsGlobal } from '../stores';
   //arr rendered when user switches view between event name, socketId, incoming or outgoing
-  import { filteredEventsGlobal } from '../stores';
-  import { isFilteredGlobal } from '../stores';
-  import { filterEventNameGlobal } from '../stores';
-  import { socketIdGlobal } from '../stores';
+  // import { } from '../stores';
+  // import {  } from '../stores';
+  // import { } from '../stores';
+  import { onMount } from 'svelte';
+  
+  console.log('Object.keys($displayRules)[0]==>', Object.keys($displayRules)[0])
+
+		
+  if (!Object.keys($displayRules)[0]){
+    allEventsGlobal.subscribe(value => {
+      $displayEventsGlobal = value;
+	});
+  }
+     
+    //   $displayEventsGlobal = $allEventsGlobal.slice()
+    // }
 
 
   //get emitted event to display with everything else
@@ -43,26 +55,26 @@
   //maybe want to explore sorting by time incoming, alphabetical (for event name), or whether or not event contains callback
   function filterEventName(eventName) {
     isFilteredGlobal.set(true);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.eventName === eventName);
     });
   }
   function filterSocketID(socketid) {
     isFilteredGlobal.set(true);
     console.log('global socketId is =>', $socketIdGlobal);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.socketId === socketid);
     });
   }
   function filterIncoming() {
     isFilteredGlobal.set(true);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.direction === 'incoming')
     })
   }
   function filterOutgoing() {
     isFilteredGlobal.set(true);
-    filteredEventsGlobal.update(() => {
+    displayEventsGlobal.update(() => {
       return $allEventsGlobal.filter((event) => event.direction === 'outgoing')
     })
   }
@@ -70,8 +82,8 @@
   function sortAlphabetical() {
     //iterate through filtered array global by alphabetical order and reassign filtered
     let sorted;
-    sorted = $isFilteredGlobal ? $filteredEventsGlobal.slice() : $allEventsGlobal.slice();
-    filteredEventsGlobal.update(() => {
+    sorted = $isFilteredGlobal ? $displayEventsGlobal.slice() : $allEventsGlobal.slice();
+    displayEventsGlobal.update(() => {
       //need to instantiate a check to see if we are in display view 
      return sorted.sort((a, b) => {
         const eventA = a.eventName.toUpperCase();
@@ -111,8 +123,8 @@
     id="test"
     on:click={() => {
       isFilteredGlobal.set(false);
-      filteredEventsGlobal.set($allEventsGlobal.slice());
-      console.log('filter events is reset =>', $filteredEventsGlobal);
+      $displayEventsGlobal = $allEventsGlobal.slice();
+      console.log('filter events is reset =>', $displayEventsGlobal);
       console.log('isFiltered =>', $isFilteredGlobal);
     }}>CLICK TO DISPLAY ALL EVENTS</button
   >
@@ -160,7 +172,7 @@
  id ='test'
   on:click={() => {
     sortAlphabetical();
-  }}>Click to sort by event-name 
+  }}>Sort by Event Name - Alphabetically 
 </button>
 
 
@@ -209,4 +221,7 @@
     display: flex;
     flex-direction: row;
   } */
+  button{
+    margin-top: 10px;
+  }
 </style>

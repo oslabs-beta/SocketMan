@@ -1,7 +1,7 @@
 <script>
   import Event from '../feed/event.svelte'; 
   import Accordion from '@smui-extra/accordion';
-  import { filteredEventsGlobal, isFilteredGlobal, allEventsGlobal } from '../../stores';
+  import { displayEventsGlobal, isFilteredGlobal, allEventsGlobal } from '../../stores';
 	import { onMount } from 'svelte';
   //export let is how we access props attached to the event component
    let socketId;
@@ -13,15 +13,21 @@
     // //instantiate eventsArr to 
     // let eventsArr = [];
     // onMount(() => {
-    //   eventArr = $isFilteredGlobal? $filteredEventsGlobal.slice() : $allEventsGlobal.slice()
+    //   eventArr = $isFilteredGlobal? $displayEventsGlobal.slice() : $allEventsGlobal.slice()
     // })
+  //   export let displayEvents
+
+  //   displayEventsGlobal.update(value => {return value = displayEvents}
+  //   )
+
+  //  console.log('$displayEventsGlobal==>', $displayEventsGlobal)
 
 </script>
 
 <section>
   <div id="events">
         <Accordion >
-          {#each $filteredEventsGlobal as event}
+          {#each $displayEventsGlobal as event}
             <Event
               eventname={event.eventName}
               payload={event.payload}
@@ -29,7 +35,8 @@
               socketId={event.socketId}
               direction={event.direction}
             />
-          {/each}
+	{/each}
+        
         </Accordion>
   </div>
   

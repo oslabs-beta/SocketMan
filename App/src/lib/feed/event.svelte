@@ -35,6 +35,14 @@
       color:cornflowerblue;
   }
 
+  .arrow-up{
+    color:seagreen
+  }
+
+  .arrow-down{
+    color:orangered
+  }
+
   .event-value{
       font-size:small;
       color:midnightblue;
@@ -45,9 +53,9 @@
       <Header>
         Socket ID: {socketId}
         {#if direction ==='incoming'}
-          ⬆
+          <span class='arrow-up'>⬆</span>
         {:else}
-          ⬇
+        <span class='arrow-down'>⬇</span>
         {/if}
       </Header>
     <Content>

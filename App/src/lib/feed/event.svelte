@@ -34,9 +34,15 @@
         <emph> Time: </emph>
         {timestamp}
         {#if direction === 'incoming'}
-          <span class="arrow-down">⬇</span>
+          <!-- <span class="arrow-down">⇓</span> -->
+          <!-- <span class="arrow-down">↧</span> -->
+          <span class="arrow-down">⇣</span>
+          <!-- <span class="arrow-down">⇲</span> -->
         {:else}
-          <span class="arrow-up">⬆</span>
+          <!-- <span class="arrow-up">⇑</span> -->
+          <!-- <span class="arrow-up">↥</span> -->
+          <span class="arrow-up">⇡</span>
+          <!-- <span class="arrow-up">⇱</span> -->
         {/if}
       </span>
     </div>
@@ -77,10 +83,16 @@
   }
 
   .arrow-up {
+    margin-left: 10px;
+    font-size: xx-large;
+    font-weight: 900;
     color: seagreen;
   }
 
   .arrow-down {
+    margin-left: 10px;
+    font-size: xx-large;
+    font-weight: 900;
     color: orangered;
   }
 

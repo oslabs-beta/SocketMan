@@ -286,7 +286,7 @@
     align-self: center;
   }
   .floating {
-    background-color: rgb(196, 213, 246);
+    background-color: rgb(207, 211, 224);
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
       rgba(0, 0, 0, 0.23) 0px 6px 6px;
   }

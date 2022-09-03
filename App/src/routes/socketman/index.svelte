@@ -103,7 +103,7 @@
       eventName: $eventNameGlobal,
       payload: payloads,
       cb: cb || null,
-      date: new Date(),
+      date: +new Date(),
       direction: 'Socketman',
     };
 

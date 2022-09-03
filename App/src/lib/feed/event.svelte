@@ -32,7 +32,7 @@
       </span>
       <span>
         <emph> Time: </emph>
-        {timestamp}
+        {new Date(timestamp).toLocaleString()}
         {#if direction === 'incoming'}
           <!-- <span class="arrow-down">⇓</span> -->
           <!-- <span class="arrow-down">↧</span> -->
@@ -41,7 +41,11 @@
         {:else}
           <!-- <span class="arrow-up">⇑</span> -->
           <!-- <span class="arrow-up">↥</span> -->
-          <span class="arrow-up">⇡</span>
+          {#if direction !== 'Socketman'}
+            <span class="arrow-up">⇡</span>
+          {:else}
+            <span class="socketman">👨‍🔬</span>
+          {/if}
           <!-- <span class="arrow-up">⇱</span> -->
         {/if}
       </span>
@@ -92,6 +96,12 @@
   .arrow-down {
     margin-left: 10px;
     font-size: xx-large;
+    font-weight: 900;
+    color: orangered;
+  }
+  .socketman {
+    /* margin-left: 10px; */
+    font-size: x-large;
     font-weight: 900;
     color: orangered;
   }

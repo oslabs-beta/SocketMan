@@ -135,6 +135,7 @@
 
   function changeArg(e) {
     // update payload obj by cloning it and updating a given key with a new object
+    console.log($payloadArgsGlobal[e.detail.argKey]);
     payloadArgsGlobal.update(() => {
       return {
         ...$payloadArgsGlobal,
@@ -147,6 +148,7 @@
         },
       };
     });
+    console.log($payloadArgsGlobal[e.detail.argKey]);
   }
 
   function removeArg(e) {
@@ -265,10 +267,13 @@
       {/if}
     </div>
 
-    {#if [Object.values($payloadArgsGlobal), { validJson: $eventNameGlobal === '' ? false : true }].reduce( (sum, cur) => {
+    {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
+      return cur.validJson ? 0 : sum + 1;
+    }, 0)}
+      <!-- {#if [Object.values($payloadArgsGlobal), { validJson: $eventNameGlobal === '' ? false : true }].reduce( (sum, cur) => {
         console.log(cur.validJson ? 0 : sum + 1);
         return cur.validJson ? 0 : sum + 1;
-      }, 0 )}
+      }, 0 )} -->
       <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
       >
     {:else}

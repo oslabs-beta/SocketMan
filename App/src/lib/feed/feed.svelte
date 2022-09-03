@@ -1,45 +1,35 @@
 <script>
-  import Event from '../feed/event.svelte'; 
+  import Event from '../feed/event.svelte';
   import Accordion from '@smui-extra/accordion';
-  import { displayEventsGlobal, isFilteredGlobal, allEventsGlobal } from '../../stores';
-	import { onMount } from 'svelte';
+  import {
+    displayEventsGlobal,
+    isFilteredGlobal,
+    allEventsGlobal,
+  } from '../../stores';
+
   //export let is how we access props attached to the event component
-   let socketId;
-   let eventname;
-   let payload;
-   let timestamp; 
-    //direction does not render in event component but it is received for removeEvent functionality on index.svelte
-    let direction;
-    // //instantiate eventsArr to 
-    // let eventsArr = [];
-    // onMount(() => {
-    //   eventArr = $isFilteredGlobal? $displayEventsGlobal.slice() : $allEventsGlobal.slice()
-    // })
-  //   export let displayEvents
-
-  //   displayEventsGlobal.update(value => {return value = displayEvents}
-  //   )
-
-  //  console.log('$displayEventsGlobal==>', $displayEventsGlobal)
-
+  let socketId;
+  let eventname;
+  let payload;
+  let timestamp;
+  //direction does not render in event component but it is received for removeEvent functionality on index.svelte
+  let direction;
 </script>
 
 <section>
   <div id="events">
-        <Accordion >
-          {#each $displayEventsGlobal as event}
-            <Event
-              eventname={event.eventName}
-              payload={event.payload}
-              timestamp={event.date}
-              socketId={event.socketId}
-              direction={event.direction}
-            />
-	{/each}
-        
-        </Accordion>
+    <Accordion>
+      {#each $displayEventsGlobal as event}
+        <Event
+          eventname={event.eventName}
+          payload={event.payload}
+          timestamp={event.date}
+          socketId={event.socketId}
+          direction={event.direction}
+        />
+      {/each}
+    </Accordion>
   </div>
-  
 </section>
 
 <style>

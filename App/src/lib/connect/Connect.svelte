@@ -16,11 +16,63 @@
   //used to capture value of user server URL
   let connectTo = '';
 
-  // update state from store
-  let allEvents;
   allEventsGlobal.subscribe((value) => {
-    allEvents = value;
+    if (value.length) {
+      const newestEvent = value[value.length - 1];
+      updateFn(newestEvent);
+    }
   });
+
+  function updateFn(newEvent) {
+    // if new event
+    if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
+      console.log('making a change in the if does not include');
+
+      $arrayOfEventNamesGlobal = Array.from([
+        ...$arrayOfEventNamesGlobal,
+        newEvent.eventName,
+      ]);
+      $selectedEventNamesGlobal = Array.from([
+        ...$selectedEventNamesGlobal,
+        newEvent.eventName,
+      ]);
+      $displayRulesGlobal[newEvent.eventName] = true;
+    }
+
+    // if new socketid
+    if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
+      console.log('making a change in the if does not include');
+
+      $arrayOfSocketIdsGlobal = Array.from([
+        ...$arrayOfSocketIdsGlobal,
+        newEvent.socketId,
+      ]);
+      $selectedSocketIdsGlobal = Array.from([
+        ...$selectedSocketIdsGlobal,
+        newEvent.socketId,
+      ]);
+      $displayRulesGlobal[newEvent.socketId] = true;
+    }
+
+    // if new direction
+    if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
+      console.log('making a change in the if does not include');
+
+      $arrayOfDirectionsGlobal = Array.from([
+        ...$arrayOfDirectionsGlobal,
+        newEvent.direction,
+      ]);
+      $selectedDirectionGlobal = Array.from([
+        ...$selectedDirectionGlobal,
+        newEvent.direction,
+      ]);
+      $displayRulesGlobal[newEvent.direction] = true;
+    }
+
+    displayEventsGlobal.update((value) => {
+      return [...value, newEvent];
+    });
+  }
 
   //creates a socket, updates store
   const connect = () => {
@@ -63,107 +115,11 @@
         allEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
-
-        // if new event
-        if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfEventNamesGlobal = Array.from([
-            ...$arrayOfEventNamesGlobal,
-            newEvent.eventName,
-          ]);
-          $selectedEventNamesGlobal = Array.from([
-            ...$selectedEventNamesGlobal,
-            newEvent.eventName,
-          ]);
-          $displayRulesGlobal[newEvent.eventName] = true;
-        }
-
-        // if new socketid
-        if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfSocketIdsGlobal = Array.from([
-            ...$arrayOfSocketIdsGlobal,
-            newEvent.socketId,
-          ]);
-          $selectedSocketIdsGlobal = Array.from([
-            ...$selectedSocketIdsGlobal,
-            newEvent.socketId,
-          ]);
-          $displayRulesGlobal[newEvent.socketId] = true;
-        }
-
-        // if new direction
-        if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfDirectionsGlobal = Array.from([
-            ...$arrayOfDirectionsGlobal,
-            newEvent.direction,
-          ]);
-          $selectedDirectionGlobal = Array.from([
-            ...$selectedDirectionGlobal,
-            newEvent.direction,
-          ]);
-          $displayRulesGlobal[newEvent.direction] = true;
-        }
-
-        displayEventsGlobal.update((value) => {
-          return [...value, newEvent];
-        });
       });
 
       newSocket.on('event_sent', (newEvent) => {
         newEvent = { ...newEvent, direction: 'outgoing' };
         allEventsGlobal.update((value) => {
-          return [...value, newEvent];
-        });
-
-        // if new event
-        if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfEventNamesGlobal = Array.from([
-            ...$arrayOfEventNamesGlobal,
-            newEvent.eventName,
-          ]);
-          $selectedEventNamesGlobal = Array.from([
-            ...$selectedEventNamesGlobal,
-            newEvent.eventName,
-          ]);
-          $displayRulesGlobal[newEvent.eventName] = true;
-        }
-
-        // if new socketid
-        if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfSocketIdsGlobal = Array.from([
-            ...$arrayOfSocketIdsGlobal,
-            newEvent.socketId,
-          ]);
-          $selectedSocketIdsGlobal = Array.from([
-            ...$selectedSocketIdsGlobal,
-            newEvent.socketId,
-          ]);
-          $displayRulesGlobal[newEvent.socketId] = true;
-        }
-
-        // if new direction
-        if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
-          console.log('making a change in the if does not include');
-
-          $arrayOfDirectionsGlobal = Array.from(
-            new Set([...$arrayOfDirectionsGlobal, newEvent.direction])
-          );
-          $selectedDirectionGlobal = Array.from(
-            new Set([...$selectedDirectionGlobal, newEvent.direction])
-          );
-          $displayRulesGlobal[newEvent.direction] = true;
-        }
-
-        displayEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
       });
@@ -173,7 +129,7 @@
       console.log('updated global socket');
     });
   };
-  // };
+  //
 </script>
 
 <svelte:head>

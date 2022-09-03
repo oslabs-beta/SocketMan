@@ -16,7 +16,7 @@
   const onDelete = () => {
     dispatch('removeEvent', { timestamp, socketId, eventname, direction });
   };
-  const previewPayload = () => {};
+
 </script>
 
 <Panel>

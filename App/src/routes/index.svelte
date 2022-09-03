@@ -80,16 +80,16 @@
   //   });
   // }
 
-  console.log('display rules is =>', $displayRulesGlobal);
   function filter() {
     displayEventsGlobal.update(() => {
-      return $displayEventsGlobal
-        .filter((event) => arrayOfEventNames.includes(event.eventName))
+      console.log('..filter invoked')
+      return $allEventsGlobal
+        .filter((event) => $selectedEventNamesGlobal.includes(event.eventName))
         .filter((event) => {
-          return arrayOfDirections.includes(event.direction);
+          return $selectedDirectionGlobal.includes(event.direction);
         })
         .filter((event) => {
-          return arrayOfSocketIds.includes(event.socketId);
+          return $selectedSocketIdsGlobal.includes(event.socketId);
         });
     });
   }
@@ -177,7 +177,7 @@
             value={eventName}
             on:change={(e) => {
               $displayRulesGlobal[eventName] = e.target.checked;
-              filter;
+              filter()
               console.log($selectedEventNamesGlobal);
             }}
           />
@@ -195,7 +195,7 @@
             value={socketId}
             on:change={(e) => {
               $displayRulesGlobal[socketId] = e.target.checked;
-              filter;
+              filter()
               console.log($selectedSocketIdsGlobal);
             }}
           />
@@ -213,7 +213,7 @@
             value={direction}
             on:change={(e) => {
               $displayRulesGlobal[direction] = e.target.checked;
-              filter;
+              filter();
               console.log($selectedDirectionGlobal);
             }}
           />

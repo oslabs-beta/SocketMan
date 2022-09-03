@@ -1,4 +1,6 @@
 <script>
+  import { loop_guard } from 'svelte/internal';
+
   import {
     argsCountGlobal,
     callbackTFGlobal,
@@ -263,9 +265,10 @@
       {/if}
     </div>
 
-    {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
-      return cur.validJson ? 0 : sum + 1;
-    }, 0)}
+    {#if [Object.values($payloadArgsGlobal), { validJson: $eventNameGlobal === '' ? false : true }].reduce( (sum, cur) => {
+        console.log(cur.validJson ? 0 : sum + 1);
+        return cur.validJson ? 0 : sum + 1;
+      }, 0 )}
       <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
       >
     {:else}

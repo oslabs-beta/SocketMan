@@ -1,16 +1,78 @@
 <script>
   import ioClient from 'socket.io-client';
   import { socketGlobal } from '../../stores';
-  import { allEventsGlobal, arrayOfEventNamesGlobal, arrayOfSocketIdsGlobal } from '../../stores';
+  import {
+    allEventsGlobal,
+    arrayOfEventNamesGlobal,
+    arrayOfSocketIdsGlobal,
+    arrayOfDirectionsGlobal,
+    displayEventsGlobal,
+    displayRulesGlobal,
+    selectedEventNamesGlobal,
+    selectedSocketIdsGlobal,
+    selectedDirectionGlobal,
+  } from '../../stores';
 
   //used to capture value of user server URL
   let connectTo = '';
 
-  // update state from store
-  let allEvents;
   allEventsGlobal.subscribe((value) => {
-    allEvents = value;
+    if (value.length) {
+      const newestEvent = value[value.length - 1];
+      updateFn(newestEvent);
+    }
   });
+
+  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores.js
+  function updateFn(newEvent) {
+    // if new event
+    if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
+      console.log('making a change in the if does not include');
+
+      $arrayOfEventNamesGlobal = Array.from([
+        ...$arrayOfEventNamesGlobal,
+        newEvent.eventName,
+      ]);
+      $selectedEventNamesGlobal = Array.from([
+        ...$selectedEventNamesGlobal,
+        newEvent.eventName,
+      ]);
+      $displayRulesGlobal[newEvent.eventName] = true;
+    }
+
+    // if new socketid
+    if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
+      console.log('making a change in the if does not include');
+
+      $arrayOfSocketIdsGlobal = Array.from([
+        ...$arrayOfSocketIdsGlobal,
+        newEvent.socketId,
+      ]);
+      $selectedSocketIdsGlobal = Array.from([
+        ...$selectedSocketIdsGlobal,
+        newEvent.socketId,
+      ]);
+      $displayRulesGlobal[newEvent.socketId] = true;
+    }
+
+    // if new direction
+    if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
+      console.log('making a change in the if does not include');
+      $arrayOfDirectionsGlobal = Array.from([
+        ...$arrayOfDirectionsGlobal,
+        newEvent.direction,
+      ]);
+      $selectedDirectionGlobal = Array.from([
+        ...$selectedDirectionGlobal,
+        newEvent.direction,
+      ]);
+      $displayRulesGlobal[newEvent.direction] = true;
+    }
+    //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
+    displayEventsGlobal.update((value) => {
+      return [...value, newEvent];
+    });
+  }
 
   //creates a socket, updates store
   const connect = () => {
@@ -27,7 +89,18 @@
       newSocket = null;
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
-
+    function newEventDisplay(event) {
+      if ($displayRulesGlobal[newEvent.eventName]) {
+        displayEventsGlobal.update((value) => {
+          return [...value, newEvent];
+        });
+      }
+      if ($displayRulesGlobal[newEvent.socketId]) {
+        displayEventsGlobal.update((value) => {
+          return [...value, newEvent];
+        });
+      }
+    }
     //if we've successfully created a socket, clear the connection timeout and set listeners
     // if (newSocket) {
     newSocket.on('connect', () => {
@@ -35,42 +108,20 @@
       console.log('namespace is =>', newSocket.nsp);
       //this is how we seperate outgoing and incoming events
       newSocket.on('event_received', (newEvent) => {
-        console.log("newEvent==>", newEvent  )
+        console.log('newEvent==>', newEvent);
         //assigning incoming/outgoing property to render direction
         newEvent = { ...newEvent, direction: 'incoming' };
+
         allEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
-        arrayOfEventNamesGlobal.update((array)=>{
-          if(!array.includes(newEvent.eventName)){
-           array.push(newEvent.eventName)
-        }
-        return array
-      })
-      arrayOfSocketIdsGlobal.update((array)=>{
-          if(!array.includes(newEvent.socketId)){
-           array.push(newEvent.socketId)
-        }
-        return array
       });
-      });
+
       newSocket.on('event_sent', (newEvent) => {
         newEvent = { ...newEvent, direction: 'outgoing' };
         allEventsGlobal.update((value) => {
           return [...value, newEvent];
         });
-        arrayOfEventNamesGlobal.update((array)=>{
-          if(!array.includes(newEvent.eventName)){
-           array.push(newEvent.eventName)
-        }
-        return array
-      })
-      arrayOfSocketIdsGlobal.update((array)=>{
-          if(!array.includes(newEvent.socketId)){
-           array.push(newEvent.socketId)
-        }
-        return array
-      })
       });
 
       // update store with new socket
@@ -78,7 +129,7 @@
       console.log('updated global socket');
     });
   };
-  // };
+  //
 </script>
 
 <svelte:head>

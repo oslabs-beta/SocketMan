@@ -1,4 +1,6 @@
 <script>
+  import { loop_guard } from 'svelte/internal';
+
   import {
     argsCountGlobal,
     callbackTFGlobal,
@@ -101,7 +103,7 @@
       eventName: $eventNameGlobal,
       payload: payloads,
       cb: cb || null,
-      date: new Date(),
+      date: +new Date(),
       direction: 'Socketman',
     };
 
@@ -133,6 +135,7 @@
 
   function changeArg(e) {
     // update payload obj by cloning it and updating a given key with a new object
+    console.log($payloadArgsGlobal[e.detail.argKey]);
     payloadArgsGlobal.update(() => {
       return {
         ...$payloadArgsGlobal,
@@ -145,6 +148,7 @@
         },
       };
     });
+    console.log($payloadArgsGlobal[e.detail.argKey]);
   }
 
   function removeArg(e) {
@@ -266,6 +270,10 @@
     {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
       return cur.validJson ? 0 : sum + 1;
     }, 0)}
+      <!-- {#if [Object.values($payloadArgsGlobal), { validJson: $eventNameGlobal === '' ? false : true }].reduce( (sum, cur) => {
+        console.log(cur.validJson ? 0 : sum + 1);
+        return cur.validJson ? 0 : sum + 1;
+      }, 0 )} -->
       <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
       >
     {:else}
@@ -283,7 +291,7 @@
     align-self: center;
   }
   .floating {
-    background-color: rgb(196, 213, 246);
+    background-color: rgb(207, 211, 224);
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
       rgba(0, 0, 0, 0.23) 0px 6px 6px;
   }

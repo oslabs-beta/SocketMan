@@ -3,17 +3,17 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
+    "@smui/switch": "^6.1.0",
     "@socket.io/admin-ui": "^0.4.0",
     "@sveltejs/kit": "^1.0.0-next.442",
     "express": "^4.17.1",
     "nodemon": "^2.0.19",
-    "socket.io": "^4.1.2",
-    "@smui/switch": "^6.1.0"
+    "npm-socketman": "^0.0.5",
+    "socket.io": "^4.1.2"
   },
   "scripts": {
     "startverbose": "set DEBUG=socket* & nodemon index.js",
     "startGUI": "clear & node _gui/server/serverGUI.js",
     "startUSER": "clear & nodemon _user/server/serverUSER.js"
-  },
-  "devDependencies": {}
+  }
 }

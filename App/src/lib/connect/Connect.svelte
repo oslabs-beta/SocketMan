@@ -108,6 +108,10 @@
           ]);
           $displayRulesGlobal[newEvent.direction] = true;
         }
+
+        displayEventsGlobal.update((value) => {
+          return [...value, newEvent];
+        });
       });
 
       newSocket.on('event_sent', (newEvent) => {

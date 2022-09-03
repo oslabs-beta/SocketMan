@@ -1,18 +1,13 @@
 <script>
   import Event from '../feed/event.svelte';
   import Accordion from '@smui-extra/accordion';
-  import {
-    displayEventsGlobal,
-    isFilteredGlobal,
-    allEventsGlobal,
-  } from '../../stores';
+  import { displayEventsGlobal } from '../../stores';
 
   //export let is how we access props attached to the event component
   let socketId;
   let eventname;
   let payload;
   let timestamp;
-  //direction does not render in event component but it is received for removeEvent functionality on index.svelte
   let direction;
 </script>
 

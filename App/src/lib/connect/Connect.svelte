@@ -23,6 +23,7 @@
     }
   });
 
+  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores.js
   function updateFn(newEvent) {
     // if new event
     if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
@@ -57,7 +58,6 @@
     // if new direction
     if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
       console.log('making a change in the if does not include');
-
       $arrayOfDirectionsGlobal = Array.from([
         ...$arrayOfDirectionsGlobal,
         newEvent.direction,
@@ -68,7 +68,7 @@
       ]);
       $displayRulesGlobal[newEvent.direction] = true;
     }
-
+    //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
     displayEventsGlobal.update((value) => {
       return [...value, newEvent];
     });

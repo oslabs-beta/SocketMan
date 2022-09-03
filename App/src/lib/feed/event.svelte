@@ -2,21 +2,19 @@
   import { createEventDispatcher } from 'svelte';
   import { Panel, Header, Content } from '@smui-extra/accordion';
   const dispatch = createEventDispatcher();
-
-  //export let is how we access props attached to the event component
   export let socketId;
   export let eventname;
   export let payload;
   export let timestamp;
-  //direction does not render in event component but it is received for removeEvent functionality on index.svelte
+  //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
   export let direction;
 
+  //NO LONGER DELETING FOR NOW
   //remove event is defined on index.svelte
   //everything inside second param is going to be in e.detail => see line 152 on index.svelte
   const onDelete = () => {
     dispatch('removeEvent', { timestamp, socketId, eventname, direction });
   };
-
 </script>
 
 <Panel>
@@ -34,19 +32,11 @@
         <emph> Time: </emph>
         {new Date(timestamp).toLocaleString()}
         {#if direction === 'incoming'}
-          <!-- <span class="arrow-down">⇓</span> -->
-          <!-- <span class="arrow-down">↧</span> -->
           <span class="arrow-down">⇣</span>
-          <!-- <span class="arrow-down">⇲</span> -->
+        {:else if direction !== 'Socketman'}
+          <span class="arrow-up">⇡</span>
         {:else}
-          <!-- <span class="arrow-up">⇑</span> -->
-          <!-- <span class="arrow-up">↥</span> -->
-          {#if direction !== 'Socketman'}
-            <span class="arrow-up">⇡</span>
-          {:else}
-            <span class="socketman">👨‍🔬</span>
-          {/if}
-          <!-- <span class="arrow-up">⇱</span> -->
+          <span class="socketman">👨‍🔬</span>
         {/if}
       </span>
     </div>

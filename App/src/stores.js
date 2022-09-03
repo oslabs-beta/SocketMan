@@ -15,13 +15,9 @@ export const cbBodyGlobal = writable('');
 export const callbackTFGlobal = writable(false);
 
 export const displayRulesGlobal = writable({
-  //socketId and eventName strings will be added directly to display rules Obj instead of nesting them
-  // socketId: {},
-  // eventName: {},
-  //both incoming and outgoing properties initial values are true
   incoming: true,
   outgoing: true,
-}); //not using it yet
+});
 export const arrayOfEventNamesGlobal = writable([]);
 export const selectedEventNamesGlobal = writable([]);
 export const arrayOfSocketIdsGlobal = writable([]);

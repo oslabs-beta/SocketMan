@@ -14,6 +14,9 @@ const io = require('socket.io')(http, {
   },
 });
 
+//user automatically connects to '/' namespace
+//we create admin namespace on the user server on our
+//can make namespace
 setup(io);
 
 app.get('/', (req, res) => {

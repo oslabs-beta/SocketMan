@@ -37,8 +37,8 @@
 
   console.log($selectedSocketIdsGlobal);
 
-  let arrayOfSocketIds;
-  let arrayOfDirections;
+  // let arrayOfSocketIds;
+  // let arrayOfDirections;
 
   // arrayOfEventNamesGlobal.subscribe((value) => {
   //   console.log($selectedEventNamesGlobal);

@@ -5,10 +5,14 @@
   export let selectedEvent;
 </script>
 
-<select id="save-list" on:change={loadEvent} value={selectedEvent}>
+<select
+  id="save-list"
+  on:change={loadEvent}
+  value={selectedEvent ? selectedEvent : ''}
+>
   <option selected />
-  {#each Object.keys(savedEvents) as saveName}
-    <option>{saveName}</option>
+  {#each Object.keys(savedEvents) as event}
+    <option>{event}</option>
   {/each}
 </select>
 

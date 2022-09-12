@@ -56,7 +56,8 @@
     argsCountGlobal.set(Object.keys(choice.payloadArgs).length);
 
     // update save input to reflect chosen event
-    saveName = selectedEvent;
+    //saveName = selectedEvent;
+    selectedEvent = '';
   }
 
   function sendMessage() {
@@ -206,11 +207,13 @@
   <form id="socketman" class="floating" on:submit|preventDefault={sendMessage}>
     <span class="title">Emit an Event</span>
     <h3 id="emit-preview">
-      {`socket.emit(${$eventNameGlobal}${
-        Object.keys($payloadArgsGlobal).length ? ', ' : ''
-      }${Object.values($payloadArgsGlobal)
-        .map((el) => el.argLabel)
-        .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
+      socket.emit({$eventNameGlobal ? `'${$eventNameGlobal}'` : ''}
+
+      {$eventNameGlobal && Object.keys($payloadArgsGlobal).length ? ', ' : ''}
+      {Object.values($payloadArgsGlobal)
+        .map((el) => el.argValue)
+        .join(', ')}
+      {$callbackTFGlobal ? ', callback' : ''})
     </h3>
     <div id="socketman-top">
       <input

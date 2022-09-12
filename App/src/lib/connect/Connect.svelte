@@ -89,18 +89,18 @@
       newSocket = null;
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
-    function newEventDisplay(event) {
-      if ($displayRulesGlobal[newEvent.eventName]) {
-        displayEventsGlobal.update((value) => {
-          return [...value, newEvent];
-        });
-      }
-      if ($displayRulesGlobal[newEvent.socketId]) {
-        displayEventsGlobal.update((value) => {
-          return [...value, newEvent];
-        });
-      }
-    }
+    // function newEventDisplay(event) {
+    //   if ($displayRulesGlobal[newEvent.eventName]) {
+    //     displayEventsGlobal.update((value) => {
+    //       return [...value, newEvent];
+    //     });
+    //   }
+    //   if ($displayRulesGlobal[newEvent.socketId]) {
+    //     displayEventsGlobal.update((value) => {
+    //       return [...value, newEvent];
+    //     });
+    //   }
+    // }
     //if we've successfully created a socket, clear the connection timeout and set listeners
     // if (newSocket) {
     newSocket.on('connect', () => {

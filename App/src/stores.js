@@ -22,5 +22,5 @@ export const arrayOfEventNamesGlobal = writable([]);
 export const selectedEventNamesGlobal = writable([]);
 export const arrayOfSocketIdsGlobal = writable([]);
 export const selectedSocketIdsGlobal = writable([]);
-export const arrayOfDirectionsGlobal = writable(['incoming', 'outgoing']);
+export const arrayOfDirectionsGlobal = writable([]);
 export const selectedDirectionGlobal = writable([]);

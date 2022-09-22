@@ -77,6 +77,7 @@
 
     // if there's a callback function provided, create it
     let cb = null;
+    re;
     if (!exitFlag && $callbackTFGlobal) {
       try {
         // create function

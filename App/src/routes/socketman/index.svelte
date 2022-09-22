@@ -206,12 +206,21 @@
   <form id="socketman" class="floating" on:submit|preventDefault={sendMessage}>
     <span class="title">Emit an Event</span>
     <h3 id="emit-preview">
+      socket.emit({$eventNameGlobal ? `'${$eventNameGlobal}'` : ''}
+
+      {$eventNameGlobal && Object.keys($payloadArgsGlobal).length ? ', ' : ''}
+      {Object.values($payloadArgsGlobal)
+        .map((el) => el.argLabel)
+        .join(', ')}
+      {$callbackTFGlobal ? ', callback' : ''})
+    </h3>
+    <!-- refactor emit preview to add quotation marks to the first parameter (eventname)
       {`socket.emit(${$eventNameGlobal}${
         Object.keys($payloadArgsGlobal).length ? ', ' : ''
       }${Object.values($payloadArgsGlobal)
         .map((el) => el.argLabel)
         .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
-    </h3>
+    </h3> -->
     <div id="socketman-top">
       <input
         id="event"

@@ -9,7 +9,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "format": "prettier --write --plugin-search-dir=. .",
+    "_dev": "vite dev",
+    "_build": "vite build",
+    "_package": "svelte-kit package",
+    "_preview": "vite preview",
+    "_check": "svelte-check --tsconfig ./tsconfig.json",
+    "_check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
     "@smui-extra/accordion": "^6.1.1",
@@ -22,10 +28,14 @@
     "prettier": "^2.6.2",
     "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.49.0",
+    "svelte-check": "^2.9.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^4.0.0",
-    "smui-theme": "^6.1.3"
+    "smui-theme": "^6.1.3",
+    "tslib": "^2.4.0",
+    "typescript": "~4.8.3",
+    "vite": "^3.1.1"
   },
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",

@@ -15,9 +15,14 @@ interface StoredEvent extends SIOEvent {
 export type EventArray = StoredEvent[];
 
 export type SMArgument = {
-  X: number;
-  O: number;
+  argKey: number;
+  argValue: string;
+  argType: string;
+  argLabel: string;
+  validJson: boolean;
 };
+
+export type ArgsArray = SMArgument[];
 
 // export type BoardText = 'X' | 'O' | '-';
 

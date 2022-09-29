@@ -1,8 +1,9 @@
 import { writable } from 'svelte/store';
+import { SIOEvent, StoredEvent, EventArray } from '../types';
 
 export const socketGlobal = writable(null);
 export const isFilteredGlobal = writable(false);
-export const allEventsGlobal = writable([]);
+export const allEventsGlobal = writable < EventArray > [];
 
 export const displayEventsGlobal = writable([]);
 export const socketIdGlobal = writable('');

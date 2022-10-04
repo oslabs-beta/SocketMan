@@ -97,7 +97,7 @@
     }, 3000);
 
     //if we've successfully created a socket, clear the connection timeout and set listeners
-    newSocket.on('connect', () => {
+    newSocket.on('connect', (): void => {
       clearTimeout(connectionTimeout);
       console.log('namespace is =>', newSocket.nsp);
       //this is how we seperate outgoing and incoming events

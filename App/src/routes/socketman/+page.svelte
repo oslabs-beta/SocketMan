@@ -1,6 +1,10 @@
-<script>
-  import { loop_guard } from 'svelte/internal';
-
+<script lang="ts">
+  import type {
+    EventArray,
+    savedEventBody,
+    savedEventsObj,
+    StoredEvent,
+  } from '$lib/types';
   import {
     argsCountGlobal,
     callbackTFGlobal,
@@ -15,21 +19,25 @@
   import Argument from './argument.svelte';
   import SaveList from './saveList.svelte';
 
-  let saveName = '';
-  let selectedEvent = '';
+  let savedEventName: string = '';
+  let selectedEvent: string = '';
   // check localstorage on mount
-  let savedEvents = window.localStorage.savedEvents;
+  let savedEvents: string | undefined = window.localStorage.savedEvents;
   // initialize if savedEvents doesn't exist
   if (!savedEvents) {
     window.localStorage.savedEvents = JSON.stringify({});
   }
-  // save savedEvents to state
-  savedEvents = JSON.parse(window.localStorage.savedEvents);
 
-  function saveEvent() {
-    if (saveName === '') return;
+  // save savedEvents to state
+  // set new variable for parsing the json
+  const savedEventsObj: savedEventsObj = JSON.parse(
+    window.localStorage.savedEvents
+  );
+
+  function saveEvent(): void {
+    if (savedEventName === '') return;
     // add to savedEvents object a new object of all our inputs
-    savedEvents[saveName] = {
+    savedEventsObj[savedEventName] = {
       callbackTF: $callbackTFGlobal,
       cbBody: $cbBodyGlobal,
       cbParams: $cbParamsGlobal,
@@ -40,14 +48,14 @@
     window.localStorage.savedEvents = JSON.stringify(savedEvents);
   }
 
-  function loadEvent(e) {
+  function loadEvent(e: { target: HTMLSelectElement }): void {
     // update selectedEvent state
     selectedEvent = e.target.value;
     // if we chose the blank option, clear the form
     if (selectedEvent === '') return resetSocketmanStore();
 
     // else, update all globals to update all form values
-    const choice = savedEvents[selectedEvent];
+    const choice: savedEventBody = savedEventsObj[selectedEvent]!;
     eventNameGlobal.set(choice.eventName);
     payloadArgsGlobal.set(choice.payloadArgs);
     callbackTFGlobal.set(choice.callbackTF);
@@ -56,26 +64,26 @@
     argsCountGlobal.set(Object.keys(choice.payloadArgs).length);
 
     // update save input to reflect chosen event
-    saveName = selectedEvent;
+    savedEventName = selectedEvent;
   }
 
-  function sendMessage() {
+  function sendMessage(): void {
     //if no event was sent, return out
     if (!$eventNameGlobal) return;
 
     // init exitflag and error message in case values are invalid
-    let exitFlag = false;
-    let errMsg = null;
+    let exitFlag: boolean = false;
+    let errMsg: null | string = null;
 
     // create payloads array using argument strings parsed by json
-    const payloads = Object.values($payloadArgsGlobal).map((el) => {
+    const payloads: any[] = Object.values($payloadArgsGlobal).map((el) => {
       if (!exitFlag) {
         return el.argType === 'null' ? null : JSON.parse(el.argValue);
       }
     });
 
     // if there's a callback function provided, create it
-    let cb = null;
+    let cb: null | Function = null;
     if (!exitFlag && $callbackTFGlobal) {
       try {
         // create function
@@ -98,7 +106,7 @@
     $socketGlobal.emit($eventNameGlobal.trim(), ...payloads);
 
     // create the event object
-    const eventObject = {
+    const eventObject: StoredEvent = {
       socketId: $socketGlobal.id,
       eventName: $eventNameGlobal,
       payload: payloads,
@@ -107,7 +115,7 @@
       direction: 'Socketman',
     };
 
-    allEventsGlobal.update((value) => {
+    allEventsGlobal.update((value: EventArray) => {
       return [...value, eventObject];
     });
 
@@ -115,7 +123,7 @@
     alert('Event emitted successfully!');
   }
 
-  function addArg(e) {
+  function addArg() {
     // update payload obj by cloning it and adding a new default entry
     // increment the key to keep everything unique and searchable
     payloadArgsGlobal.update(() => {
@@ -133,7 +141,7 @@
     argsCountGlobal.update(() => $argsCountGlobal + 1);
   }
 
-  function changeArg(e) {
+  function changeArg(e: any) {
     // update payload obj by cloning it and updating a given key with a new object
     console.log($payloadArgsGlobal[e.detail.argKey]);
     payloadArgsGlobal.update(() => {
@@ -151,7 +159,7 @@
     console.log($payloadArgsGlobal[e.detail.argKey]);
   }
 
-  function removeArg(e) {
+  function removeArg(e: any) {
     // update payload obj by cloning it and deleting the requested key
     const tempObj = { ...$payloadArgsGlobal };
     delete tempObj[e.detail.argKey];
@@ -170,7 +178,7 @@
     cbBodyGlobal.set('');
     argsCountGlobal.set(0);
     selectedEvent = '';
-    saveName = '';
+    savedEventName = '';
   }
 </script>
 
@@ -192,7 +200,7 @@
       <input
         id="save-input"
         placeholder="Name this emit:"
-        bind:value={saveName}
+        bind:value={savedEventName}
       />
       <button id="save-btn">Save event</button>
     </form>

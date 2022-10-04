@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import { writable } from 'svelte/store';
-import type { SIOEvent, StoredEvent, EventArray, ArgsArray } from './lib/types';
+import type { EventArray, ArgsObj } from './lib/types';
 
 interface Directions {
   [index: string]: boolean;
@@ -11,12 +11,12 @@ interface Directions {
 
 // socket
 export const socketIdGlobal = writable<string>('');
-export const socketGlobal = writable<Socket>();
+export const socketGlobal = writable<Socket>(undefined);
 // display
 export const allEventsGlobal = writable<EventArray>([]);
 export const displayEventsGlobal = writable<EventArray>([]);
 // socketman
-export const payloadArgsGlobal = writable<ArgsArray>({});
+export const payloadArgsGlobal = writable<ArgsObj>({});
 export const argsCountGlobal = writable<number>(0);
 export const eventNameGlobal = writable<string>('');
 export const cbParamsGlobal = writable<string>('');

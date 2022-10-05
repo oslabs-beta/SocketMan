@@ -5,11 +5,13 @@ import type { EventArray, ArgsObj } from './lib/types';
 //I guess if we had defined this an a interface as opposed to type, do we have to extend at some point?
 interface Directions {
   //this allows the direction to be indexed
-  [index: string]: boolean;
+  [key: string]: boolean;
   incoming: boolean;
   outgoing: boolean;
   socketman?: boolean;
 }
+
+//[key: string]: any
 //stores were originally written with generics but now we have an expected types
 // socket
 export const socketIdGlobal = writable<string>('');

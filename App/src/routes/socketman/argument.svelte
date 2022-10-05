@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   //export let is how we access props attached to the event component
-  export let argLabel;
-  export let argType;
-  export let argValue;
-  export let argKey;
-  export let validJson;
+  export let argLabel: string;
+  export let argType: string;
+  export let argValue: string;
+  export let argKey: number;
+  export let validJson: boolean;
 
   // worth making a component that appears on mouseover. this will get big-ish in the current file
   let errObj = {
@@ -19,7 +19,7 @@
 
   checkJson(argType, argValue);
 
-  function checkJson(type, value) {
+  function checkJson(type: string, value: string): void {
     try {
       // check array, obj, null
       if (['array', 'object', 'null'].includes(type)) {

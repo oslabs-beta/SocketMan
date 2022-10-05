@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Feed from '../lib/feed/feed.svelte';
   import {
     allEventsGlobal,
@@ -12,7 +12,7 @@
     selectedSocketIdsGlobal,
   } from '../stores';
 
-  function filter() {
+  function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');
       return $allEventsGlobal
@@ -95,9 +95,9 @@
             bind:group={$selectedEventNamesGlobal}
             value={eventName}
             on:change={(e) => {
-              $displayRulesGlobal[eventName] = e.target.checked;
-              filter();
-              console.log($selectedEventNamesGlobal);
+                e!==null && $displayRulesGlobal[eventName] = e.target.checked;
+                filter();
+                console.log($selectedEventNamesGlobal);
             }}
           />
           "{eventName}"

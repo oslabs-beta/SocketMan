@@ -1,6 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import { writable } from 'svelte/store';
-import type { SIOEvent, StoredEvent, EventArray, ArgsArray } from './lib/types';
+import type { EventArray, ArgsObj } from './lib/types';
 
 //I guess if we had defined this an a interface as opposed to type, do we have to extend at some point?
 interface Directions {
@@ -21,8 +21,7 @@ export const socketGlobal = writable<Socket>(undefined);
 export const allEventsGlobal = writable<EventArray>([]);
 export const displayEventsGlobal = writable<EventArray>([]);
 // socketman
-//shouldn't the following be an array?
-export const payloadArgsGlobal = writable<ArgsArray>({});
+export const payloadArgsGlobal = writable<ArgsObj>({});
 export const argsCountGlobal = writable<number>(0);
 export const eventNameGlobal = writable<string>('');
 export const cbParamsGlobal = writable<string>('');

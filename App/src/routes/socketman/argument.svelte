@@ -1,13 +1,13 @@
-<script lang="ts">
+<script>
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   //export let is how we access props attached to the event component
-  export let argLabel: string;
-  export let argType: string;
-  export let argValue: string;
-  export let argKey: string;
-  export let validJson: boolean;
+  export let argLabel;
+  export let argType;
+  export let argValue;
+  export let argKey;
+  export let validJson;
 
   // worth making a component that appears on mouseover. this will get big-ish in the current file
   let errObj = {

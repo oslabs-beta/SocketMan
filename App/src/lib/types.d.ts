@@ -8,11 +8,8 @@ export interface SIOEvent {
   //?: just denotes an optional property
   //https://www.logicbig.com/tutorials/misc/typescript/interface-to-describe-object-with-optional-properties.html
   payload?: any[];
-  //can this type be defined as function, I guess yes because technicaly we do not know the return value or the functionality inside the cb
-  //but normally, we would type methods within interface based on their return value
-  //also can type the paramters but in this case we don't know what the parameters are
-  cb?: Function;
-  date: Date;
+  cb?: Function | null;
+  date: Date | number;
 }
 //https://www.typescripttutorial.net/typescript-tutorial/typescript-extend-interface/
 //extends allows us to copy properties and methods of one interface to another
@@ -24,18 +21,38 @@ interface StoredEvent extends SIOEvent {
 //each el in event array will be an instance of a stored event interface
 export type EventArray = StoredEvent[];
 
-//https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c
-//I guess we use type here because these args are not exactly optional, but I feel like that has nothing to do with it
-//https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces
-//type cannot be reopned to add new properties/fields and an interface is always extendable
-export type SMArgument = {
+export interface SMArgument {
   argKey: number;
   argValue: string;
   argType: string;
   argLabel: string;
   validJson: boolean;
-};
-export type ArgsArray = SMArgument[];
+}
+
+export interface ArgsObj {
+  [index: string]: SMArgument;
+}
+
+export interface savedEventBody {
+  callbackTF: boolean;
+  cbBody: string;
+  cbParams: string;
+  eventName: string;
+  payloadArgs: ArgsObj;
+}
+
+export interface savedEventsObj {
+  [index: string]: savedEventBody;
+}
+
+// savedEventsObj[savedEventName] = {
+//   callbackTF: $callbackTFGlobal,
+//   cbBody: $cbBodyGlobal,
+//   cbParams: $cbParamsGlobal,
+//   eventName: $eventNameGlobal,
+//   payloadArgs: $payloadArgsGlobal,
+
+// export type ArgsArray = SMArgument[];
 
 //[index: string]
 

@@ -11,7 +11,7 @@ interface Directions {
 
 // socket
 export const socketIdGlobal = writable<string>('');
-export const socketGlobal = writable<Socket>(undefined);
+export const socketGlobal = writable<Socket | null>(null);
 // display
 export const allEventsGlobal = writable<EventArray>([]);
 export const displayEventsGlobal = writable<EventArray>([]);

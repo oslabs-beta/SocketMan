@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import Event from '../feed/event.svelte';
   import Accordion from '@smui-extra/accordion';
   import { displayEventsGlobal } from '../../stores';
 
   //export let is how we access props attached to the event component
-  let socketId;
-  let eventname;
-  let payload;
-  let timestamp;
-  let direction;
+  // let socketId: string;
+  // let eventname: string;
+  // let payload: any[];
+  // let timestamp;
+  // let direction;
 </script>
 
 <section>

@@ -9,8 +9,14 @@
   export let argKey: number;
   export let validJson: boolean;
 
+  interface errObj {
+    header: string;
+    description: string;
+    expect: string;
+    actual: string;
+  }
   // worth making a component that appears on mouseover. this will get big-ish in the current file
-  let errObj = {
+  let errObj: errObj = {
     header: '',
     description: '',
     expect: '',
@@ -54,6 +60,10 @@
   function onChange() {
     dispatch('changeArg', { argKey, argLabel, argType, argValue, validJson });
   }
+  function tsWorkaround(e: any): void {
+    argType = e.target.value;
+    checkJson(argType, argValue);
+  }
 </script>
 
 <div class="argument-row">
@@ -67,10 +77,7 @@
   <select
     class="argument-type"
     value={argType}
-    on:change={(e) => {
-      argType = e.target.value;
-      checkJson(argType, argValue);
-    }}
+    on:change={(e) => tsWorkaround(e)}
   >
     <option>string</option>
     <option>number</option>

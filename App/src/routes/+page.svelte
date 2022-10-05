@@ -25,6 +25,10 @@
         });
     });
   }
+  function filterTsWorkaround(e: any, filterArg: string): void {
+    $displayRulesGlobal[filterArg] = e.target.checked;
+    filter();
+  }
 
   //func no longer in use
   // function removeEvent(e) {
@@ -94,11 +98,7 @@
             type="checkbox"
             bind:group={$selectedEventNamesGlobal}
             value={eventName}
-            on:change={(e) => {
-                e!==null && $displayRulesGlobal[eventName] = e.target.checked;
-                filter();
-                console.log($selectedEventNamesGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, eventName)}
           />
           "{eventName}"
         </label>
@@ -112,11 +112,7 @@
             type="checkbox"
             bind:group={$selectedSocketIdsGlobal}
             value={socketId}
-            on:change={(e) => {
-              $displayRulesGlobal[socketId] = e.target.checked;
-              filter();
-              console.log($selectedSocketIdsGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, socketId)}
           />
           "{socketId}"
         </label>
@@ -130,11 +126,7 @@
             type="checkbox"
             bind:group={$selectedDirectionGlobal}
             value={direction}
-            on:change={(e) => {
-              $displayRulesGlobal[direction] = e.target.checked;
-              filter();
-              console.log($selectedDirectionGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, direction)}
           />
           "{direction}"
         </label>

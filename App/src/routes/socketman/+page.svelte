@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { loop_guard } from 'svelte/internal';
 
   import {
@@ -15,15 +15,21 @@
   import Argument from './argument.svelte';
   import SaveList from './saveList.svelte';
 
-  let saveName = '';
-  let selectedEvent = '';
+  //TYPESCRIPT NOTES
+  //anything new to the envirornment
+  //with user input, unless we are restricting it you don't have to be specific
+  let saveName: string = '';
+  let selectedEvent: string = '';
+  //local storage is going save all current eventname, and accompanying arguments just in case
+  //takes form of json stringified object
   // check localstorage on mount
-  let savedEvents = window.localStorage.savedEvents;
+  let savedEvents: string | undefined = window.localStorage.savedEvents;
   // initialize if savedEvents doesn't exist
   if (!savedEvents) {
     window.localStorage.savedEvents = JSON.stringify({});
   }
   // save savedEvents to state
+  //json parse could potentially return a string or object or whatever
   savedEvents = JSON.parse(window.localStorage.savedEvents);
 
   function saveEvent() {

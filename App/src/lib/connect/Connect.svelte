@@ -17,6 +17,7 @@
   //used to capture value of user server URL
   let connectTo: string = '';
 
+  //only when we declare new things do we have to worry about type (function definitions, varibles used later down the line)
   allEventsGlobal.subscribe((value: EventArray) => {
     if (value.length) {
       // TS sometimes says "what if this is undefined, tho?"
@@ -119,6 +120,7 @@
           ...newEvent,
           direction: 'outgoing',
         };
+        //if we don't provide a type, ts is going to give this a type of never
         allEventsGlobal.update((value: EventArray): EventArray => {
           return [...value, updatedEvent];
         });
@@ -147,6 +149,7 @@
       bind:value={connectTo}
       placeholder="Server URL"
     />
+    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
     <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button>
   </div>
 </section>

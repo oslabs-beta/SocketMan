@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { Panel, Header, Content } from '@smui-extra/accordion';
   const dispatch = createEventDispatcher();
-  export let socketId;
-  export let eventname;
-  export let payload;
-  export let timestamp;
+  export let socketId: string;
+  export let eventname: string;
+  export let payload: any[];
+  export let timestamp: number | Date;
   //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
-  export let direction;
+  export let direction: string;
 
   //NO LONGER DELETING FOR NOW
   //remove event is defined on index.svelte

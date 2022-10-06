@@ -69,7 +69,7 @@
 
   function sendMessage(): void {
     //if no event was sent, return out
-    if (!$eventNameGlobal) return;
+    if (!$eventNameGlobal || !$socketGlobal) return;
 
     // init exitflag and error message in case values are invalid
     let exitFlag: boolean = false;
@@ -206,7 +206,7 @@
     </form>
     <div id="save-list-container">
       <span>Choose from your saved events:</span>
-      <SaveList {savedEvents} {loadEvent} {selectedEvent} />
+      <SaveList {savedEventsObj} {loadEvent} {selectedEvent} />
     </div>
   </div>
 

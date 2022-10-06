@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -6,7 +6,7 @@
   export let argLabel;
   export let argType;
   export let argValue;
-  export let argKey;
+  export let argKey: number;
   export let validJson;
 
   // worth making a component that appears on mouseover. this will get big-ish in the current file

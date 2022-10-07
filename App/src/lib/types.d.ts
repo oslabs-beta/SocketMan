@@ -7,7 +7,7 @@ export interface SIOEvent {
   eventName: string;
   payload: any[];
   cb?: Function | null;
-  date: Date | number;
+  date: Date;
 }
 //https://www.typescripttutorial.net/typescript-tutorial/typescript-extend-interface/
 //extends allows us to copy properties and methods of one interface to another
@@ -15,6 +15,7 @@ export interface SIOEvent {
 //I know SIOEvent typing relates more to the socketman package, but for the purposes of our gui its necessary to extend and add the direction property for display purposes.
 interface StoredEvent extends SIOEvent {
   direction: string;
+  date: number;
 }
 //each el in event array will be an instance of a stored event interface
 export type EventArray = StoredEvent[];

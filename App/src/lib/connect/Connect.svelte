@@ -107,6 +107,7 @@
         const updatedEvent: StoredEvent = {
           ...newEvent,
           direction: 'incoming',
+          date: +newEvent.date,
         };
 
         allEventsGlobal.update((value: EventArray): EventArray => {
@@ -118,6 +119,7 @@
         const updatedEvent: StoredEvent = {
           ...newEvent,
           direction: 'outgoing',
+          date: +newEvent.date,
         };
         allEventsGlobal.update((value: EventArray): EventArray => {
           return [...value, updatedEvent];

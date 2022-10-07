@@ -5,7 +5,7 @@
   export let socketId: string;
   export let eventname: string;
   export let payload: any[];
-  export let timestamp: number | Date;
+  export let timestamp: number;
   //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
   export let direction: string;
 

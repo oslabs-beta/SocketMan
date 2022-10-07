@@ -1,17 +1,13 @@
-<script lang="ts">
-  import type { savedEventsObj } from '$lib/types';
-
+<script>
   //export let is how we access props attached to the event component
-  export let savedEventsObj: savedEventsObj;
-  export let loadEvent: (
-    event: Event & { currentTarget: EventTarget & HTMLSelectElement }
-  ) => any;
-  export let selectedEvent: string;
+  export let savedEvents;
+  export let loadEvent;
+  export let selectedEvent;
 </script>
 
 <select id="save-list" on:change={loadEvent} value={selectedEvent}>
   <option selected />
-  {#each Object.keys(savedEventsObj) as event}
+  {#each Object.keys(savedEvents) as event}
     <option>{event}</option>
   {/each}
 </select>

@@ -1,15 +1,14 @@
-<script lang="ts">
+<script>
   import '../../app.css';
   import { socketGlobal } from '../../stores';
-  import type { Socket } from 'socket.io-client';
+  // import { socketGlobal } from '../../stores';
+  // import { socketGlobal } from '../../stores';
+  // import { socketGlobal } from '../../stores';
 
   const disconnect = () => {
     //reset allEventsGlobal, isFiltered, and filteredEvents arr when user disconnect
-    if ($socketGlobal !== null) {
-      $socketGlobal.close();
-      //socketGlobal.update(() => unknown as Sokcet);
-      socketGlobal.update(() => null);
-    }
+    $socketGlobal.close();
+    socketGlobal.update(() => null);
   };
 </script>
 

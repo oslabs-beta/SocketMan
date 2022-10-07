@@ -1,7 +1,7 @@
 <script>
   import '../app.css';
 
-  import { socketGlobal } from '../stores.js';
+  import { socketGlobal } from '../stores.ts';
   import Connect from '../lib/connect/Connect.svelte';
   import Navbar from '../lib/navbar/Navbar.svelte';
   // define state, subscribe state to store value's changes

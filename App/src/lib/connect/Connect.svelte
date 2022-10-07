@@ -30,7 +30,7 @@
     }
   });
 
-  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores.js
+  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores
   function updateFn(newEvent: StoredEvent) {
     // if new event
     if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {

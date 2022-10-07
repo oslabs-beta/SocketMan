@@ -5,11 +5,12 @@ export interface SIOEvent {
   eventName: string;
   payload?: any[];
   cb?: Function | null;
-  date: Date | number;
+  date: Date;
 }
 
 interface StoredEvent extends SIOEvent {
   direction: string;
+  date: number;
 }
 
 export type EventArray = StoredEvent[];

@@ -108,6 +108,7 @@
         const updatedEvent: StoredEvent = {
           ...newEvent,
           direction: 'incoming',
+          date: +newEvent.date,
         };
 
         allEventsGlobal.update((value: EventArray): EventArray => {
@@ -119,6 +120,7 @@
         const updatedEvent: StoredEvent = {
           ...newEvent,
           direction: 'outgoing',
+          date: +newEvent.date,
         };
         //if we don't provide a type, ts is going to give this a type of never
         allEventsGlobal.update((value: EventArray): EventArray => {

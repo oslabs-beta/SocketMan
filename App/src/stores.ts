@@ -15,7 +15,7 @@ interface Directions {
 //stores were originally written with generics but now we have an expected types
 // socket
 export const socketIdGlobal = writable<string>('');
-export const socketGlobal = writable<Socket>(undefined);
+export const socketGlobal = writable<Socket | null>(null);
 // display
 //generics are opprotunity to parameterize types so we can just reference the generic
 //ex)

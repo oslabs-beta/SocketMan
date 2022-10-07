@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Event from '../feed/event.svelte';
   import Accordion from '@smui-extra/accordion';
   import { displayEventsGlobal } from '../../stores';

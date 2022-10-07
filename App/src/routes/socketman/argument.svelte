@@ -3,11 +3,19 @@
   const dispatch = createEventDispatcher();
 
   //export let is how we access props attached to the event component
+<<<<<<< HEAD
   export let argLabel: string;
   export let argType: string;
   export let argValue: string;
   export let argKey: number;
   export let validJson: boolean;
+=======
+  export let argLabel;
+  export let argType;
+  export let argValue;
+  export let argKey: number;
+  export let validJson;
+>>>>>>> km/typescript
 
   interface errObj {
     header: string;

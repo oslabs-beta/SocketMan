@@ -5,9 +5,7 @@ import type * as Kit from '@sveltejs/kit';
 export interface SIOEvent {
   socketId: string;
   eventName: string;
-  //?: just denotes an optional property
-  //https://www.logicbig.com/tutorials/misc/typescript/interface-to-describe-object-with-optional-properties.html
-  payload?: any[];
+  payload: any[];
   cb?: Function | null;
   date: Date | number;
 }

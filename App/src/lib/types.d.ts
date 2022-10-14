@@ -3,13 +3,14 @@ import type * as Kit from '@sveltejs/kit';
 export interface SIOEvent {
   socketId: string;
   eventName: string;
-  payload?: any[];
+  payload: any[];
   cb?: Function | null;
   date: Date;
 }
 
 interface StoredEvent extends SIOEvent {
   direction: string;
+  //getting an error on my end
   date: number;
 }
 

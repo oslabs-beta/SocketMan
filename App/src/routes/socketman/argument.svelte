@@ -74,11 +74,7 @@
     placeholder="Arg Label"
     autocomplete="off"
   />
-  <select
-    class="argument-type"
-    value={argType}
-    on:change={(e) => tsWorkaround(e)}
-  >
+  <select class="argument-type" value={argType} on:change={tsWorkaround}>
     <option>string</option>
     <option>number</option>
     <option>boolean</option>

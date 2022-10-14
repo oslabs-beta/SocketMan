@@ -26,6 +26,8 @@ const config = {
     adapter: adapter(),
   },
   plugins: [sveltekit()],
+  //found from the following source
+  //https://davipon.hashnode.dev/test-svelte-component-using-vitest-playwright
   test: {
     // Jest like globals
     globals: true,

@@ -1,12 +1,13 @@
+/*
 //triple slash serves as an import for declaration packages.
 /// <reference types="vitest" />
+*/
 import { defineConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import adapter from '@sveltejs/adapter-node';
+//import adapter from '@sveltejs/adapter-node';
 //similer to webpack config, need the adapter - concerns the dummy server
 
 //Allows us to use IDE intellisense with jsdoc type hints
-/** @type {import('vite').UserConfig} */
 
 // export default defineConfig({
 //   //following plugin config is used to disable hot module replacement when running tests
@@ -21,20 +22,14 @@ import adapter from '@sveltejs/adapter-node';
 //   },
 // });
 
+/** @type {import('vite').UserConfig} */
 const config = {
-  kit: {
-    adapter: adapter(),
-  },
   plugins: [sveltekit()],
-  //found from the following source
-  //https://davipon.hashnode.dev/test-svelte-component-using-vitest-playwright
   test: {
-    // Jest like globals
-    globals: true,
+    mockReset: true,
     environment: 'jsdom',
-    include: ['src/**/*.{test,spec}.ts'],
-    // Extend jest-dom matchers
-    setupFiles: ['./setupTest.js'],
+    globals: true,
+    setupFiles: 'src/setupTests.ts',
   },
 };
 

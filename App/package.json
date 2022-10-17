@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "test": "VITEST=true vitest COME BACK TO THIS",
+    "test": "vitest",
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",
@@ -40,8 +40,12 @@
   },
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/svelte": "^3.2.2",
     "express": "^4.18.1",
+    "jsdom": "^20.0.1",
     "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1"
+    "socket.io-client": "^4.5.1",
+    "vitest-svelte-kit": "^0.0.7"
   }
 }

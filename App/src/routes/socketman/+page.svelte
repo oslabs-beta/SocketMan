@@ -18,6 +18,7 @@
 
   import Argument from './argument.svelte';
   import SaveList from './saveList.svelte';
+  import { resetSocketmanStore } from '../../lib/functions/restSocketmanStore';
 
   let savedEventName: string = '';
   let selectedEvent: string = '';
@@ -52,7 +53,7 @@
     // update selectedEvent state
     selectedEvent = e.target.value;
     // if we chose the blank option, clear the form
-    if (selectedEvent === '') return resetSocketmanStore();
+    if (selectedEvent === '') return reset();
 
     // else, update all globals to update all form values
     const choice: savedEventBody = savedEventsObj[selectedEvent]!;
@@ -167,19 +168,26 @@
       return { ...tempObj };
     });
   }
+  //modularize functionalities for testing purposes
+  const reset = (): void => {
+    resetSocketmanStore();
+    clearAll();
+  };
+  // function resetSocketmanStore(): void {
+  //   // this is triggered when loading "" as selected event
+  //   // and when clicking the "clear all inputs" button
+  //   eventNameGlobal.set('');
+  //   payloadArgsGlobal.set({});
+  //   callbackTFGlobal.set(false);
+  //   cbParamsGlobal.set('');
+  //   cbBodyGlobal.set('');
+  //   argsCountGlobal.set(0);
+  // }
 
-  function resetSocketmanStore() {
-    // this is triggered when loading "" as selected event
-    // and when clicking the "clear all inputs" button
-    eventNameGlobal.set('');
-    payloadArgsGlobal.set({});
-    callbackTFGlobal.set(false);
-    cbParamsGlobal.set('');
-    cbBodyGlobal.set('');
-    argsCountGlobal.set(0);
+  const clearAll = (): void => {
     selectedEvent = '';
     savedEventName = '';
-  }
+  };
 </script>
 
 <svelte:head>
@@ -190,7 +198,7 @@
 <section id="socketmain">
   <h1>Socketman 🚀</h1>
 
-  <button id="clear-inputs" type="button" on:click={resetSocketmanStore}
+  <button id="clear-inputs" type="button" on:click={reset}
     >Clear all inputs</button
   >
 

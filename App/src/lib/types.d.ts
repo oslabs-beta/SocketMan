@@ -5,7 +5,7 @@ export interface SIOEvent {
   eventName: string;
   payload: any[];
   cb?: Function | null;
-  date: Date;
+  date: Date | number;
 }
 
 interface StoredEvent extends SIOEvent {

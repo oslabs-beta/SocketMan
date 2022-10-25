@@ -46,6 +46,7 @@
     "jsdom": "^20.0.1",
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.1",
+    "socket.io-mock-ts": "^1.0.2",
     "vitest-svelte-kit": "^0.0.7"
   }
 }

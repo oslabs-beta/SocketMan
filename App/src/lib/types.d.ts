@@ -1,6 +1,7 @@
 import type * as Kit from '@sveltejs/kit';
 
 export interface StoredEvent {
+  [key: string]: any;
   socketId: string;
   eventName: string;
   payload: any[];

@@ -10,7 +10,16 @@
     selectedDirectionGlobal,
     selectedEventNamesGlobal,
     selectedSocketIdsGlobal,
+    eventLimitGlobal,
   } from '../stores';
+
+  let selectedLimit: number = $eventLimitGlobal;
+  function updateLimit(e: any): void {
+    // update selectedLimit state
+    selectedLimit = Number(e.target.value);
+    // update stores value
+    eventLimitGlobal.set(selectedLimit);
+  }
 
   function filter(): void {
     displayEventsGlobal.update(() => {
@@ -39,6 +48,14 @@
 <!-- LISTENERS SECTION -->
 <section>
   <h1>Events Log</h1>
+  <div>Limit Events</div>
+  <select on:change={updateLimit} value={String(selectedLimit)}>
+    <option>5</option>
+    <option>50</option>
+    <option>100</option>
+    <option>500</option>
+    <option>1000</option>
+  </select>
   {#if $allEventsGlobal.length}
     <h4>Filters</h4>
     <div class="filters">
@@ -51,7 +68,7 @@
             value={eventName}
             on:change={(e) => filterTsWorkaround(e, eventName)}
           />
-          "{eventName}"
+          {eventName}
         </label>
       {/each}
     </div>
@@ -65,7 +82,7 @@
             value={socketId}
             on:change={(e) => filterTsWorkaround(e, socketId)}
           />
-          "{socketId}"
+          {socketId}
         </label>
       {/each}
     </div>
@@ -79,7 +96,7 @@
             value={direction}
             on:change={(e) => filterTsWorkaround(e, direction)}
           />
-          "{direction}"
+          {direction}
         </label>
       {/each}
     </div>

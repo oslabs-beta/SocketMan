@@ -24,7 +24,7 @@
     <div class="accordion-preview">
       <span>
         <emph>
-          {`${direction === 'incoming' ? 'Emitter' : 'Recipient'} Socket ID:`}
+          {`${direction === 'outgoing' ? 'Recipient' : 'Emitter'} Socket ID:`}
         </emph>
         {socketId}
       </span>
@@ -47,11 +47,14 @@
   </Header>
   <Content>
     <ul>
-      <li>Event Name:{eventname}</li>
-      <li>Payload: {payload}</li>
-      <li>Timestamp: {new Date(timestamp)}</li>
-      <li>Namespace: {namespace}</li>
-      <li>Rooms: {Array.from(rooms).join(', ')}</li>
+      <li><b>Event Name:</b> {eventname}</li>
+      <li><b>Payload:</b> {payload.join(', ')}</li>
+      <li><b>Timestamp:</b> {new Date(timestamp)}</li>
+      <li><b>Namespace:</b> {namespace}</li>
+      <li>
+        <b>Rooms:</b>
+        {direction === 'Socketman' ? 'Socketman' : Array.from(rooms).join(', ')}
+      </li>
     </ul>
   </Content>
 </Panel>

@@ -14,6 +14,7 @@
     payloadArgsGlobal,
     socketGlobal,
     allEventsGlobal,
+    socketNspGlobal,
   } from '../../stores';
 
   import Argument from './argument.svelte';
@@ -114,10 +115,12 @@
       cb: cb || null,
       date: +new Date(),
       direction: 'Socketman',
+      nsp: $socketNspGlobal,
+      rooms: [$socketGlobal.id],
     };
 
     allEventsGlobal.update((value: EventArray) => {
-      return [...value, eventObject];
+      return [eventObject, ...value];
     });
 
     // temporary confirmation of success
@@ -214,7 +217,7 @@
     </form>
     <div id="save-list-container">
       <span>Choose from your saved events:</span>
-      <SaveList {savedEvents} {loadEvent} {selectedEvent} />
+      <SaveList {savedEventsObj} {loadEvent} {selectedEvent} />
     </div>
   </div>
 

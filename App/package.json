@@ -8,6 +8,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "test": "vitest",
+    "smui-theme": "smui-theme compile static/smui.css -i src/theme",
+    "prepare":"npm run smui-theme",
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",

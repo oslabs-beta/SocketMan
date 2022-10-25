@@ -17,6 +17,11 @@ const io = require('socket.io')(http, {
 //user automatically connects to '/' namespace
 //we create admin namespace on the user server on our
 //can make namespace
+
+const users = io.of('/users');
+const bongo = io.of('/bongo');
+const testnsp = io.of('/testnsp');
+
 setup(io);
 
 app.get('/', (req, res) => {
@@ -24,19 +29,78 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+  socket.on('join', function (room) {
+    socket.join(room);
+    console.log(socket.rooms);
+  });
+
+  // consider this middleware. this will catch all events and then continue through other "specific" listeners
   socket.on('send message', (msg) => {
     io.emit('receive message', msg);
   });
   socket.on('test-event', (payload) => {});
 
   socket.on('change-color', (array, callback) => {
-    let color = [];
+    const color = [];
     for (let i = 0; i < 3; i++) {
       color.push(Math.floor(Math.random() * 256));
     }
-    color = `rgb(${color.join(', ')})`;
+    const colorStr = `rgb(${color.join(', ')})`;
 
-    callback(color);
+    callback(colorStr);
+  });
+  socket.on('event-3', () => {
+    socket.emit('event-response', 'hello client');
+  });
+  // console.log(socket.handshake);
+  // console.log(socket.rawListeners());
+  // console.log(socket.eventNames());
+});
+
+bongo.on('connection', (socket) => {
+  socket.on('join', function (room) {
+    socket.join(room);
+    console.log(socket.rooms);
+  });
+  // consider this middleware. this will catch all events and then continue through other "specific" listeners
+  socket.on('send message', (msg) => {
+    io.emit('receive message', msg);
+  });
+  socket.on('test-event', (payload) => {});
+
+  socket.on('change-color', (array, callback) => {
+    const color = [];
+    for (let i = 0; i < 3; i++) {
+      color.push(Math.floor(Math.random() * 256));
+    }
+    const colorStr = `rgb(${color.join(', ')})`;
+
+    callback(colorStr);
+  });
+  socket.on('event-3', (roomName) => {
+    console.log(roomName);
+    socket.to(roomName).emit('receive message', 'it worked');
+  });
+  // console.log(socket.handshake);
+  // console.log(socket.rawListeners());
+  // console.log(socket.eventNames());
+});
+
+users.on('connection', (socket) => {
+  // consider this middleware. this will catch all events and then continue through other "specific" listeners
+  socket.on('send message', (msg) => {
+    io.emit('receive message', msg);
+  });
+  socket.on('test-event', (payload) => {});
+
+  socket.on('change-color', (array, callback) => {
+    const color = [];
+    for (let i = 0; i < 3; i++) {
+      color.push(Math.floor(Math.random() * 256));
+    }
+    const colorStr = `rgb(${color.join(', ')})`;
+
+    callback(colorStr);
   });
   socket.on('event-3', () => {
     socket.emit('event-response', 'hello client');

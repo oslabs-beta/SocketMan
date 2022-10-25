@@ -2,6 +2,7 @@
   import Event from '../feed/event.svelte';
   import Accordion from '@smui-extra/accordion';
   import { displayEventsGlobal } from '../../stores';
+  console.log($displayEventsGlobal);
 </script>
 
 <section>
@@ -14,6 +15,8 @@
           timestamp={event.date}
           socketId={event.socketId}
           direction={event.direction}
+          namespace={event.nsp}
+          rooms={event.rooms}
         />
       {/each}
     </Accordion>

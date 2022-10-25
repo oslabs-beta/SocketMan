@@ -1,17 +1,14 @@
 import type * as Kit from '@sveltejs/kit';
 
-export interface SIOEvent {
+export interface StoredEvent {
   socketId: string;
   eventName: string;
   payload: any[];
   cb?: Function | null;
-  date: Date;
-}
-
-interface StoredEvent extends SIOEvent {
-  direction: string;
-  //getting an error on my end
   date: number;
+  direction: string;
+  nsp: string;
+  rooms: string[];
 }
 
 export type EventArray = StoredEvent[];

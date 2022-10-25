@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SIOEvent, StoredEvent, EventArray } from '$lib/types';
+  import type { StoredEvent, EventArray } from '$lib/types';
   import ioClient from 'socket.io-client';
   import { socketGlobal } from '../../stores';
   import {
@@ -101,30 +101,20 @@
     newSocket.on('connect', (): void => {
       clearTimeout(connectionTimeout);
       console.log('namespace is =>', newSocket.nsp);
-      //this is how we seperate outgoing and incoming events
-      newSocket.on('event_received', (newEvent: SIOEvent) => {
-        console.log('newEvent==>', newEvent);
-        //assigning incoming/outgoing property to render direction
-        const updatedEvent: StoredEvent = {
-          ...newEvent,
-          direction: 'incoming',
-          date: +newEvent.date,
-        };
 
+      //this is how we seperate outgoing and incoming events
+      newSocket.on('event_received', (newEvent: StoredEvent) => {
+        console.log('received!!!!!!!!', newEvent);
         allEventsGlobal.update((value: EventArray): EventArray => {
-          return [...value, updatedEvent];
+          return [...value, newEvent];
         });
       });
 
-      newSocket.on('event_sent', (newEvent: SIOEvent) => {
-        const updatedEvent: StoredEvent = {
-          ...newEvent,
-          direction: 'outgoing',
-          date: +newEvent.date,
-        };
+      newSocket.on('event_sent', (newEvent: StoredEvent) => {
+        console.log('sent!!!!!!!!', newEvent);
         //if we don't provide a type, ts is going to give this a type of never
         allEventsGlobal.update((value: EventArray): EventArray => {
-          return [...value, updatedEvent];
+          return [...value, newEvent];
         });
       });
 

@@ -8,7 +8,7 @@
     "@sveltejs/kit": "^1.0.0-next.442",
     "express": "^4.17.1",
     "nodemon": "^2.0.19",
-    "npm-socketman": "^0.0.5",
+    "npm-socketman": "^0.0.12",
     "socket.io": "^4.1.2"
   },
   "scripts": {

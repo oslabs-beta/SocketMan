@@ -6,6 +6,8 @@
   export let eventname: string;
   export let payload: any[];
   export let timestamp: number;
+  export let namespace: string;
+  export let rooms: Set<string>;
   //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
   export let direction: string;
 
@@ -21,7 +23,9 @@
   <Header>
     <div class="accordion-preview">
       <span>
-        <emph> Socket ID: </emph>
+        <emph>
+          {`${direction === 'incoming' ? 'Emitter' : 'Recipient'} Socket ID:`}
+        </emph>
         {socketId}
       </span>
       <span class="name">
@@ -46,6 +50,8 @@
       <li>Event Name:{eventname}</li>
       <li>Payload: {payload}</li>
       <li>Timestamp: {new Date(timestamp)}</li>
+      <li>Namespace: {namespace}</li>
+      <li>Rooms: {Array.from(rooms).join(', ')}</li>
     </ul>
   </Content>
 </Panel>

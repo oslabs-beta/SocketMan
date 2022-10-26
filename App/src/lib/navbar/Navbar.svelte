@@ -4,6 +4,10 @@
   // import { socketGlobal } from '../../stores';
   // import { socketGlobal } from '../../stores';
   // import { socketGlobal } from '../../stores';
+  //following imported to create dark/light mode button
+  import IconButton from '@smui/icon-button';
+  import {} from '@mdi/js';
+  import { Svg } from '@smui/common/elements';
 
   const disconnect = () => {
     //reset allEventsGlobal, isFiltered, and filteredEvents arr when user disconnect
@@ -19,6 +23,11 @@
       <a href="/socketman">Socketman 🚀</a>
     </nav-left>
     <nav-right>
+      <IconButton on:click={() => clicked++}>
+        <Icon component={Svg} viewBox="0 0 24 24">
+          <path fill="currentColor" d={mdiFormatColorFill} />
+        </Icon>
+      </IconButton>
       <button type="button" on:click={disconnect}>Disconnect</button>
     </nav-right>
   {/if}

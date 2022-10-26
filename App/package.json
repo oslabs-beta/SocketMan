@@ -8,8 +8,10 @@
     "dev": "vite dev",
     "build": "vite build",
     "test": "vitest",
+    "prepare": "npm run smui-theme-light && npm run smui-theme-dark",
     "smui-theme": "smui-theme compile static/smui.css -i src/theme",
-    "prepare":"npm run smui-theme",
+    "smui-theme-light": "smui-theme compile static/smui.css -i src/theme",
+    "smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark",
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",
@@ -21,9 +23,11 @@
     "_check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@mdi/js": "^7.0.96",
     "@smui-extra/accordion": "^6.1.1",
     "@smui/button": "^6.1.0",
     "@smui/form-field": "^6.1.0",
+    "@smui/icon-button": "^7.0.0-beta.0",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "eslint": "^8.16.0",

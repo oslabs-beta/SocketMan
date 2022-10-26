@@ -6,7 +6,7 @@
 
 <section>
   <div id="events">
-    <Accordion>
+    <Accordion color="secondary">
       {#each $displayEventsGlobal as event}
         <Event
           eventname={event.eventName}

@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { StoredEvent, EventArray } from '$lib/types';
   import ioClient from 'socket.io-client';
-  import { socketGlobal } from '../../stores';
+  import {
+    eventLimitGlobal,
+    socketGlobal,
+    socketNspGlobal,
+  } from '../../stores';
   import {
     allEventsGlobal,
     arrayOfEventNamesGlobal,
@@ -17,15 +21,25 @@
   //used to capture value of user server URL
   let connectTo: string = '';
 
+  // added because using eventlimit in funcs was reading static value when func was created, instead of updating
+  const getStoreValue = (store: any) => {
+    let $val;
+    store.subscribe(($: any) => ($val = $))();
+    return $val;
+  };
+
   //only when we declare new things do we have to worry about type (function definitions, varibles used later down the line)
   allEventsGlobal.subscribe((value: EventArray) => {
     if (value.length) {
       // TS sometimes says "what if this is undefined, tho?"
       // const newestEvent: StoredEvent = value[value.length - 1];
       // ! mark tells typescript "this value will never be null/undefined"
-      const newestEvent: StoredEvent = value[value.length - 1]!;
       // OR, casting it with a type (as X) will do similarly, but coerces things so may not be best.
       // const newestEvent: StoredEvent = value[value.length - 1] as StoredEvent;
+
+      //  new events are added to the front, so when we display on gui, the newest is at the top
+      const newestEvent: StoredEvent = value[0]!;
+
       updateFn(newestEvent);
     }
   });
@@ -34,8 +48,6 @@
   function updateFn(newEvent: StoredEvent) {
     // if new event
     if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
-      console.log('making a change in the if does not include');
-
       $arrayOfEventNamesGlobal = Array.from([
         ...$arrayOfEventNamesGlobal,
         newEvent.eventName,
@@ -49,8 +61,6 @@
 
     // if new socketid
     if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
-      console.log('making a change in the if does not include');
-
       $arrayOfSocketIdsGlobal = Array.from([
         ...$arrayOfSocketIdsGlobal,
         newEvent.socketId,
@@ -64,7 +74,6 @@
 
     // if new direction
     if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
-      console.log('making a change in the if does not include');
       $arrayOfDirectionsGlobal = Array.from([
         ...$arrayOfDirectionsGlobal,
         newEvent.direction,
@@ -77,7 +86,11 @@
     }
     //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
     displayEventsGlobal.update((value: EventArray): EventArray => {
-      return [...value, newEvent];
+      //when we update display make sure it's in line with eventLimit
+      const eventLimit = getStoreValue(eventLimitGlobal)!;
+      if (value.length + 1 > eventLimit)
+        return [newEvent, ...value].slice(0, eventLimit);
+      return [newEvent, ...value];
     });
   }
 
@@ -97,16 +110,21 @@
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
 
-    //if we've successfully created a socket, clear the connection timeout and set listeners
+    //if we've successfully created a socket, clear the connection timeout, set listeners, and save namespace name
     newSocket.on('connect', (): void => {
+      socketNspGlobal.set(newSocket.nsp);
       clearTimeout(connectionTimeout);
       console.log('namespace is =>', newSocket.nsp);
 
-      //this is how we seperate outgoing and incoming events
+      //this is how we separate outgoing and incoming events
       newSocket.on('event_received', (newEvent: StoredEvent) => {
         console.log('received!!!!!!!!', newEvent);
         allEventsGlobal.update((value: EventArray): EventArray => {
-          return [...value, newEvent];
+          //when we update allEvents make sure it's in line with eventLimit
+          const eventLimit = getStoreValue(eventLimitGlobal)!;
+          if (value.length + 1 > eventLimit)
+            return [newEvent, ...value].slice(0, eventLimit);
+          return [newEvent, ...value];
         });
       });
 
@@ -114,7 +132,11 @@
         console.log('sent!!!!!!!!', newEvent);
         //if we don't provide a type, ts is going to give this a type of never
         allEventsGlobal.update((value: EventArray): EventArray => {
-          return [...value, newEvent];
+          //when we update allEvents make sure it's in line with eventLimit
+          const eventLimit = getStoreValue(eventLimitGlobal)!;
+          if (value.length + 1 > eventLimit)
+            return [newEvent, ...value].slice(0, eventLimit);
+          return [newEvent, ...value];
         });
       });
 

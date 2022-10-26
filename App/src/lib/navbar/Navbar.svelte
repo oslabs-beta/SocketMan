@@ -1,20 +1,49 @@
 <script>
   import '../../app.css';
   import { socketGlobal } from '../../stores';
+  import { onMount } from 'svelte';
   // import { socketGlobal } from '../../stores';
   // import { socketGlobal } from '../../stores';
   // import { socketGlobal } from '../../stores';
   //following imported to create dark/light mode button
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import {} from '@mdi/js';
   import { Svg } from '@smui/common/elements';
+  import { mdiWeatherSunny } from '@mdi/js';
+  import { mdiMoonWaxingCrescent } from '@mdi/js';
 
   const disconnect = () => {
     //reset allEventsGlobal, isFiltered, and filteredEvents arr when user disconnect
     $socketGlobal.close();
     socketGlobal.update(() => null);
   };
+  let darkTheme = undefined;
+
+  onMount(() => {
+    darkTheme = window.matchMedia('prefers-color-scheme: light');
+  });
 </script>
+
+<svelte:head>
+  <!-- SMUI Styles -->
+  {#if darkTheme === undefined}
+    <link
+      rel="stylesheet"
+      href="/smui.css"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="stylesheet"
+      href="/smui-dark.css"
+      media="screen and (prefers-color-scheme: dark)"
+    />
+  {:else if darkTheme}
+    <link rel="stylesheet" href="/smui.css" />
+    <link rel="stylesheet" href="/smui-dark.css" media="screen" />
+  {:else}
+    <link rel="stylesheet" href="/smui.css" />
+  {/if}
+</svelte:head>
 
 <nav>
   {#if $socketGlobal}
@@ -23,9 +52,15 @@
       <a href="/socketman">Socketman 🚀</a>
     </nav-left>
     <nav-right>
-      <IconButton on:click={() => clicked++}>
+      <IconButton
+        on:click={() => (darkTheme = !darkTheme)}
+        title={darkTheme ? 'Lights on.' : 'Lights off.'}
+      >
         <Icon component={Svg} viewBox="0 0 24 24">
-          <path fill="currentColor" d={mdiFormatColorFill} />
+          <path
+            fill="currentColor"
+            d={darkTheme ? mdiWeatherSunny : mdiMoonWaxingCrescent}
+          />
         </Icon>
       </IconButton>
       <button type="button" on:click={disconnect}>Disconnect</button>

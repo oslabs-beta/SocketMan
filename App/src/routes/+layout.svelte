@@ -8,25 +8,6 @@
   let darkTheme = undefined;
 </script>
 
-<svelte:head>
-  {#if darkTheme === undefined}
-    <link
-      rel="stylesheet"
-      href="/smui.css"
-      media="(prefers-color-scheme: light)"
-    />
-    <link
-      rel="stylesheet"
-      href="/smui-dark.css"
-      media="screen and (prefers-color-scheme: dark)"
-    />
-  {:else if darkTheme}
-    <link rel="stylesheet" href="/smui.css" />
-    <link rel="stylesheet" href="/smui-dark.css" media="screen" />
-  {:else}
-    <link rel="stylesheet" href="/smui.css" />
-  {/if}
-</svelte:head>
 <Navbar />
 
 <!-- Page content goes in SLOT -->

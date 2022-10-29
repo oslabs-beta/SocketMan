@@ -8,14 +8,9 @@
   } from '../../stores';
   import {
     allEventsGlobal,
-    arrayOfEventNamesGlobal,
-    arrayOfSocketIdsGlobal,
-    arrayOfDirectionsGlobal,
     displayEventsGlobal,
-    displayRulesGlobal,
-    selectedEventNamesGlobal,
-    selectedSocketIdsGlobal,
-    selectedDirectionGlobal,
+    masterFilterGlobal,
+    masterOptionsGlobal,
   } from '../../stores';
 
   //used to capture value of user server URL
@@ -44,46 +39,56 @@
     }
   });
 
-  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores
   function updateFn(newEvent: StoredEvent) {
-    // if new event
-    if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
-      $arrayOfEventNamesGlobal = Array.from([
-        ...$arrayOfEventNamesGlobal,
-        newEvent.eventName,
-      ]);
-      $selectedEventNamesGlobal = Array.from([
-        ...$selectedEventNamesGlobal,
-        newEvent.eventName,
-      ]);
-      $displayRulesGlobal[newEvent.eventName] = true;
-    }
+    masterFilterGlobal.update((value) => {
+      const newObj: any = {};
+      // loop through all attributes
+      for (let attribute in $masterOptionsGlobal) {
+        // if attribute set in masterOptionsGlobal does not contain new event's attribute,
+        // then we add it to our applied filters object in the correct attribute set
 
-    // if new socketid
-    if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
-      $arrayOfSocketIdsGlobal = Array.from([
-        ...$arrayOfSocketIdsGlobal,
-        newEvent.socketId,
-      ]);
-      $selectedSocketIdsGlobal = Array.from([
-        ...$selectedSocketIdsGlobal,
-        newEvent.socketId,
-      ]);
-      $displayRulesGlobal[newEvent.socketId] = true;
-    }
+        // if dealing with rooms attribute, we're looking at an array that we need to check inside of
+        if (attribute === 'rooms') {
+          // loop through rooms. if we have any of the event rooms in our filter, we're good. else return false
+          for (let room of newEvent.rooms) {
+            if (!$masterOptionsGlobal[attribute].has(newObj[room])) {
+              // update newobj (applied filters)
+              newObj[attribute] = new Set([
+                ...value[attribute],
+                ...newEvent[attribute],
+              ]);
+            }
+          }
+          // if any attribute other than rooms, if the string does not exist in applied filters, retrun false
+        } else if (!$masterOptionsGlobal[attribute].has(newObj[attribute])) {
+          // update newobj (applied filters)
+          newObj[attribute] = new Set([
+            ...value[attribute].add(newEvent[attribute]),
+          ]);
+        }
+      }
+      // return our temp object as new masterfilters value
+      return newObj;
+    });
 
-    // if new direction
-    if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
-      $arrayOfDirectionsGlobal = Array.from([
-        ...$arrayOfDirectionsGlobal,
-        newEvent.direction,
-      ]);
-      $selectedDirectionGlobal = Array.from([
-        ...$selectedDirectionGlobal,
-        newEvent.direction,
-      ]);
-      $displayRulesGlobal[newEvent.direction] = true;
-    }
+    masterOptionsGlobal.update((value) => {
+      const newObj: any = {};
+      for (let attribute in value) {
+        if (attribute === 'rooms') {
+          // loop through rooms. if we have any of the event rooms in our filter, we're good. else return false
+          for (let room of newEvent.rooms) {
+            newObj[attribute] = new Set([...value[attribute].add(room)]);
+          }
+          // if any attribute other than rooms, if the string does not exist in applied filters, retrun false
+        } else {
+          newObj[attribute] = new Set([
+            ...value[attribute].add(newEvent[attribute]),
+          ]);
+        }
+      }
+      return newObj;
+    });
+
     //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
     displayEventsGlobal.update((value: EventArray): EventArray => {
       //when we update display make sure it's in line with eventLimit

@@ -1,6 +1,11 @@
-<script>
+<script lang="ts">
+  import type { StoredEvent, EventArray } from '$lib/types';
   import ioClient from 'socket.io-client';
-  import { socketGlobal } from '../../stores';
+  import {
+    eventLimitGlobal,
+    socketGlobal,
+    socketNspGlobal,
+  } from '../../stores';
   import {
     allEventsGlobal,
     arrayOfEventNamesGlobal,
@@ -14,21 +19,35 @@
   } from '../../stores';
 
   //used to capture value of user server URL
-  let connectTo = '';
+  let connectTo: string = '';
 
-  allEventsGlobal.subscribe((value) => {
+  // added because using eventlimit in funcs was reading static value when func was created, instead of updating
+  const getStoreValue = (store: any) => {
+    let $val;
+    store.subscribe(($: any) => ($val = $))();
+    return $val;
+  };
+
+  //only when we declare new things do we have to worry about type (function definitions, varibles used later down the line)
+  allEventsGlobal.subscribe((value: EventArray) => {
     if (value.length) {
-      const newestEvent = value[value.length - 1];
+      // TS sometimes says "what if this is undefined, tho?"
+      // const newestEvent: StoredEvent = value[value.length - 1];
+      // ! mark tells typescript "this value will never be null/undefined"
+      // OR, casting it with a type (as X) will do similarly, but coerces things so may not be best.
+      // const newestEvent: StoredEvent = value[value.length - 1] as StoredEvent;
+
+      //  new events are added to the front, so when we display on gui, the newest is at the top
+      const newestEvent: StoredEvent = value[0]!;
+
       updateFn(newestEvent);
     }
   });
 
-  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores.js
-  function updateFn(newEvent) {
+  //REFACTOR: using a set instead of an array for the global arrays and selectedArrays of directions, event-Names, and socketId => in stores
+  function updateFn(newEvent: StoredEvent) {
     // if new event
     if (!$arrayOfEventNamesGlobal.includes(newEvent.eventName)) {
-      console.log('making a change in the if does not include');
-
       $arrayOfEventNamesGlobal = Array.from([
         ...$arrayOfEventNamesGlobal,
         newEvent.eventName,
@@ -42,8 +61,6 @@
 
     // if new socketid
     if (!$arrayOfSocketIdsGlobal.includes(newEvent.socketId)) {
-      console.log('making a change in the if does not include');
-
       $arrayOfSocketIdsGlobal = Array.from([
         ...$arrayOfSocketIdsGlobal,
         newEvent.socketId,
@@ -57,7 +74,6 @@
 
     // if new direction
     if (!$arrayOfDirectionsGlobal.includes(newEvent.direction)) {
-      console.log('making a change in the if does not include');
       $arrayOfDirectionsGlobal = Array.from([
         ...$arrayOfDirectionsGlobal,
         newEvent.direction,
@@ -69,8 +85,12 @@
       $displayRulesGlobal[newEvent.direction] = true;
     }
     //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
-    displayEventsGlobal.update((value) => {
-      return [...value, newEvent];
+    displayEventsGlobal.update((value: EventArray): EventArray => {
+      //when we update display make sure it's in line with eventLimit
+      const eventLimit = getStoreValue(eventLimitGlobal)!;
+      if (value.length + 1 > eventLimit)
+        return [newEvent, ...value].slice(0, eventLimit);
+      return [newEvent, ...value];
     });
   }
 
@@ -80,36 +100,43 @@
     console.log(connectTo);
 
     // if we don't have a socket in our state, create a new one
-    let newSocket;
+    let newSocket: any; // typed as "any" here because .nsp is private, can't figure out how to access it
     newSocket = ioClient(connectTo, {});
 
     //timeout if the connection failed
     const connectionTimeout = setTimeout(() => {
       newSocket.close();
-      newSocket = null;
+      // newSocket = null; // no need to assign null here, we've already closed it
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
 
-    //if we've successfully created a socket, clear the connection timeout and set listeners
-    // if (newSocket) {
-    newSocket.on('connect', () => {
+    //if we've successfully created a socket, clear the connection timeout, set listeners, and save namespace name
+    newSocket.on('connect', (): void => {
+      socketNspGlobal.set(newSocket.nsp);
       clearTimeout(connectionTimeout);
       console.log('namespace is =>', newSocket.nsp);
-      //this is how we seperate outgoing and incoming events
-      newSocket.on('event_received', (newEvent) => {
-        console.log('newEvent==>', newEvent);
-        //assigning incoming/outgoing property to render direction
-        newEvent = { ...newEvent, direction: 'incoming' };
 
-        allEventsGlobal.update((value) => {
-          return [...value, newEvent];
+      //this is how we separate outgoing and incoming events
+      newSocket.on('event_received', (newEvent: StoredEvent) => {
+        console.log('received!!!!!!!!', newEvent);
+        allEventsGlobal.update((value: EventArray): EventArray => {
+          //when we update allEvents make sure it's in line with eventLimit
+          const eventLimit = getStoreValue(eventLimitGlobal)!;
+          if (value.length + 1 > eventLimit)
+            return [newEvent, ...value].slice(0, eventLimit);
+          return [newEvent, ...value];
         });
       });
 
-      newSocket.on('event_sent', (newEvent) => {
-        newEvent = { ...newEvent, direction: 'outgoing' };
-        allEventsGlobal.update((value) => {
-          return [...value, newEvent];
+      newSocket.on('event_sent', (newEvent: StoredEvent) => {
+        console.log('sent!!!!!!!!', newEvent);
+        //if we don't provide a type, ts is going to give this a type of never
+        allEventsGlobal.update((value: EventArray): EventArray => {
+          //when we update allEvents make sure it's in line with eventLimit
+          const eventLimit = getStoreValue(eventLimitGlobal)!;
+          if (value.length + 1 > eventLimit)
+            return [newEvent, ...value].slice(0, eventLimit);
+          return [newEvent, ...value];
         });
       });
 
@@ -118,7 +145,6 @@
       console.log('updated global socket');
     });
   };
-  //
 </script>
 
 <svelte:head>
@@ -137,6 +163,7 @@
       bind:value={connectTo}
       placeholder="Server URL"
     />
+    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
     <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button>
   </div>
 </section>

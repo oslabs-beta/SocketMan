@@ -1,16 +1,22 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   //export let is how we access props attached to the event component
-  export let argLabel;
-  export let argType;
-  export let argValue;
-  export let argKey;
-  export let validJson;
+  export let argLabel: string;
+  export let argType: string;
+  export let argValue: string;
+  export let argKey: number;
+  export let validJson: boolean;
 
+  interface errObj {
+    header: string;
+    description: string;
+    expect: string;
+    actual: string;
+  }
   // worth making a component that appears on mouseover. this will get big-ish in the current file
-  let errObj = {
+  let errObj: errObj = {
     header: '',
     description: '',
     expect: '',
@@ -19,7 +25,7 @@
 
   checkJson(argType, argValue);
 
-  function checkJson(type, value) {
+  function checkJson(type: string, value: string): void {
     try {
       // check array, obj, null
       if (['array', 'object', 'null'].includes(type)) {
@@ -54,6 +60,10 @@
   function onChange() {
     dispatch('changeArg', { argKey, argLabel, argType, argValue, validJson });
   }
+  function tsWorkaround(e: any): void {
+    argType = e.target.value;
+    checkJson(argType, argValue);
+  }
 </script>
 
 <div class="argument-row">
@@ -64,14 +74,7 @@
     placeholder="Arg Label"
     autocomplete="off"
   />
-  <select
-    class="argument-type"
-    value={argType}
-    on:change={(e) => {
-      argType = e.target.value;
-      checkJson(argType, argValue);
-    }}
-  >
+  <select class="argument-type" value={argType} on:change={tsWorkaround}>
     <option>string</option>
     <option>number</option>
     <option>boolean</option>

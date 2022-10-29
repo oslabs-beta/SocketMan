@@ -1,13 +1,15 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { Panel, Header, Content } from '@smui-extra/accordion';
   const dispatch = createEventDispatcher();
-  export let socketId;
-  export let eventname;
-  export let payload;
-  export let timestamp;
+  export let socketId: string;
+  export let eventname: string;
+  export let payload: any[];
+  export let timestamp: number;
+  export let namespace: string;
+  export let rooms: Set<string>;
   //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
-  export let direction;
+  export let direction: string;
 
   //NO LONGER DELETING FOR NOW
   //remove event is defined on index.svelte
@@ -21,7 +23,9 @@
   <Header>
     <div class="accordion-preview">
       <span>
-        <emph> Socket ID: </emph>
+        <emph>
+          {`${direction === 'outgoing' ? 'Recipient' : 'Emitter'} Socket ID:`}
+        </emph>
         {socketId}
       </span>
       <span class="name">
@@ -43,9 +47,14 @@
   </Header>
   <Content>
     <ul>
-      <li>Event Name:{eventname}</li>
-      <li>Payload: {payload}</li>
-      <li>Timestamp: {new Date(timestamp)}</li>
+      <li><b>Event Name:</b> {eventname}</li>
+      <li><b>Payload:</b> {payload.join(', ')}</li>
+      <li><b>Timestamp:</b> {new Date(timestamp)}</li>
+      <li><b>Namespace:</b> {namespace}</li>
+      <li>
+        <b>Rooms:</b>
+        {direction === 'Socketman' ? 'Socketman' : Array.from(rooms).join(', ')}
+      </li>
     </ul>
   </Content>
 </Panel>

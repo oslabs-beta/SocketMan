@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Feed from '../lib/feed/feed.svelte';
   import {
     allEventsGlobal,
@@ -10,9 +10,18 @@
     selectedDirectionGlobal,
     selectedEventNamesGlobal,
     selectedSocketIdsGlobal,
+    eventLimitGlobal,
   } from '../stores';
 
-  function filter() {
+  let selectedLimit: number = $eventLimitGlobal;
+  function updateLimit(e: any): void {
+    // update selectedLimit state
+    selectedLimit = Number(e.target.value);
+    // update stores value
+    eventLimitGlobal.set(selectedLimit);
+  }
+
+  function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');
       return $allEventsGlobal
@@ -25,55 +34,10 @@
         });
     });
   }
-
-  //func no longer in use
-  // function removeEvent(e) {
-  //   //each function has a direction property in order
-  //   //sometimes timestamps would be the exact same so we have to check multiple properies
-  //   if (e.detail.direction === 'outgoing') {
-  //     eventsOutgoing = eventsOutgoing.filter((event) => {
-  //       if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId) {
-  //         if (event[1][0] === e.detail.eventname) {
-  //           return false;
-  //         }
-  //       }
-  //       return true;
-  //     });
-  //   } else if (e.detail.direction === 'incoming') {
-  //     eventsIncoming = eventsIncoming.filter((event) => {
-  //       if (event[2] === e.detail.timestamp && event[0] === e.detail.socketId) {
-  //         if (event[1][0] === e.detail.eventname) {
-  //           return false;
-  //         }
-  //       }
-  //       return true;
-  //     });
-  //   }
-  // }
-  //func no longer in use - may use for inspo for additional sorting functionality
-  // function sortAlphabetical() {
-  //   //iterate through filtered array global by alphabetical order and reassign filtered
-  //   let sorted;
-  //   sorted = $isFilteredGlobal
-  //     ? $displayEventsGlobal.slice()
-  //     : $allEventsGlobal.slice();
-  //   displayEventsGlobal.update(() => {
-  //     //need to instantiate a check to see if we are in display view
-  //     return sorted.sort((a, b) => {
-  //       const eventA = a.eventName.toUpperCase();
-  //       const eventB = b.eventName.toUpperCase();
-  //       if (eventA < eventB) {
-  //         return -1;
-  //       }
-  //       if (eventA > eventB) {
-  //         return 1;
-  //       }
-  //       return 0;
-  //     });
-  //   });
-  //   console.log('sorted after update is=>', sorted);
-  // }
-  //subscibe run essentially when we kept toggling back and forth between
+  function filterTsWorkaround(e: any, filterArg: string): void {
+    $displayRulesGlobal[filterArg] = e.target.checked;
+    filter();
+  }
 </script>
 
 <svelte:head>
@@ -84,6 +48,14 @@
 <!-- LISTENERS SECTION -->
 <section>
   <h1>Events Log</h1>
+  <div>Limit Events</div>
+  <select on:change={updateLimit} value={String(selectedLimit)}>
+    <option>5</option>
+    <option>50</option>
+    <option>100</option>
+    <option>500</option>
+    <option>1000</option>
+  </select>
   {#if $allEventsGlobal.length}
     <h4>Filters</h4>
     <div class="filters">
@@ -94,13 +66,9 @@
             type="checkbox"
             bind:group={$selectedEventNamesGlobal}
             value={eventName}
-            on:change={(e) => {
-              $displayRulesGlobal[eventName] = e.target.checked;
-              filter();
-              console.log($selectedEventNamesGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, eventName)}
           />
-          "{eventName}"
+          {eventName}
         </label>
       {/each}
     </div>
@@ -112,13 +80,9 @@
             type="checkbox"
             bind:group={$selectedSocketIdsGlobal}
             value={socketId}
-            on:change={(e) => {
-              $displayRulesGlobal[socketId] = e.target.checked;
-              filter();
-              console.log($selectedSocketIdsGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, socketId)}
           />
-          "{socketId}"
+          {socketId}
         </label>
       {/each}
     </div>
@@ -130,13 +94,9 @@
             type="checkbox"
             bind:group={$selectedDirectionGlobal}
             value={direction}
-            on:change={(e) => {
-              $displayRulesGlobal[direction] = e.target.checked;
-              filter();
-              console.log($selectedDirectionGlobal);
-            }}
+            on:change={(e) => filterTsWorkaround(e, direction)}
           />
-          "{direction}"
+          {direction}
         </label>
       {/each}
     </div>

@@ -68,6 +68,8 @@
     <button id="event1">Event 1</button>
     <button id="event2">Event 2</button>
     <button id="event3">Event 3</button>
+    <button id="join-namespace">Join new namespace</button>
+    <button id="join-room">Join new room</button>
 
     <!-- This acts as an import on client side! -->
     <script src="/socket.io/socket.io.js"></script>
@@ -80,9 +82,11 @@
       var event1Btn = document.getElementById('event1');
       var event2Btn = document.getElementById('event2');
       var event3Btn = document.getElementById('event3');
+      var joinNsp = document.getElementById('join-namespace');
+      var joinRoom = document.getElementById('join-room');
 
       event1Btn.addEventListener('click', () => {
-        socket.emit('test-event', 'hello world!');
+        socket.emit('send-message', 'hello world!');
       });
 
       event2Btn.addEventListener('click', () => {
@@ -92,13 +96,58 @@
       });
 
       event3Btn.addEventListener('click', () => {
-        socket.emit('event-3', 'payload that is never read');
+        console.log('clicking');
+        socket.emit('event-3', prompt('What room to send to?'));
+      });
+
+      joinRoom.addEventListener('click', () => {
+        const roomToJoin = prompt('What room to join?');
+        socket.emit('join', roomToJoin);
+      });
+
+      joinNsp.addEventListener('click', () => {
+        console.log('clicked nsp');
+        const connectTo = document.URL + prompt('What namespace to join?');
+        console.log(connectTo);
+        let newSocket = io(connectTo, {});
+
+        const connectionTimeout = setTimeout(() => {
+          newSocket.close();
+          newSocket = null;
+          alert(`failed to connect to ${connectTo}`);
+        }, 3000);
+
+        newSocket.on('connect', () => {
+          // demote current socket to old socket
+          const oldsocket = socket;
+          // assign current socket label to new socket
+          socket = newSocket;
+          // close old socket
+          oldsocket.close();
+
+          clearTimeout(connectionTimeout);
+          console.log('namespace is =>', socket.nsp);
+          header.textContent += '--> ' + socket.id;
+          socket.on('receive message', (arg) => {
+            console.log(arg);
+          });
+          socket.on('receive medssage', function (msg) {
+            var item = document.createElement('li');
+            item.textContent = `${new Date().toLocaleString()} --- ${
+              socket.id
+            } ---${socket.id} --- ${JSON.stringify(msg)}`;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+          });
+        });
       });
 
       socket.on('connect', () => {
         header.textContent += '--> ' + socket.id;
-        socket.on('event-response', (arg) => {});
-        socket.on('receive message', function (msg) {
+        socket.on('receive message', (arg) => {
+          console.log(arg);
+        });
+        socket.on('receive medssage', function (msg) {
           var item = document.createElement('li');
           item.textContent = `${new Date().toLocaleString()} --- ${
             socket.id

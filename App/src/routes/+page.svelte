@@ -2,15 +2,10 @@
   import Feed from '../lib/feed/feed.svelte';
   import {
     allEventsGlobal,
-    displayRulesGlobal,
     displayEventsGlobal,
-    arrayOfEventNamesGlobal,
-    arrayOfSocketIdsGlobal,
-    arrayOfDirectionsGlobal,
-    selectedDirectionGlobal,
-    selectedEventNamesGlobal,
-    selectedSocketIdsGlobal,
     eventLimitGlobal,
+    masterFilterGlobal,
+    masterOptionsGlobal,
   } from '../stores';
 
   let selectedLimit: number = $eventLimitGlobal;
@@ -21,22 +16,62 @@
     eventLimitGlobal.set(selectedLimit);
   }
 
+  let stateObj: any = {};
+
+  masterFilterGlobal.subscribe((value) => {
+    for (let attribute in value) {
+      stateObj[attribute] = [...value[attribute]];
+    }
+    filter();
+  });
+  
   function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');
-      return $allEventsGlobal
-        .filter((event) => $selectedEventNamesGlobal.includes(event.eventName))
-        .filter((event) => {
-          return $selectedDirectionGlobal.includes(event.direction);
-        })
-        .filter((event) => {
-          return $selectedSocketIdsGlobal.includes(event.socketId);
-        });
+
+      // filter allevents based on applied filters
+      return $allEventsGlobal.filter((event) => {
+        // loop through applied filters
+        for (let attribute in $masterFilterGlobal) {
+          // if dealing with rooms attribute, we're looking at an array that we need to check inside of
+          if (attribute === 'rooms') {
+            let hasRooms = 0;
+            // loop through rooms. if we have any of the event rooms in our filter, we're good. else return false
+            for (let room of event.rooms) {
+              if ($masterFilterGlobal[attribute].has(room)) hasRooms++;
+            }
+            if (hasRooms === 0) return false;
+            // if any attribute other than rooms, if the string does not exist in applied filters, retrun false
+          } else if (!$masterFilterGlobal[attribute].has(event[attribute]))
+            return false;
+        }
+        // we've passed all attribute checks; return true
+        return true;
+      });
     });
   }
-  function filterTsWorkaround(e: any, filterArg: string): void {
-    $displayRulesGlobal[filterArg] = e.target.checked;
-    filter();
+  function filterTsWorkaround(
+    e: any,
+    attribute: string,
+    attrValue: string
+  ): void {
+    console.log(attribute, attrValue);
+
+    masterFilterGlobal.update((value) => {
+      const tempSet = new Set(value[attribute]);
+      const hadValue = tempSet.delete(attrValue);
+      if (hadValue) {
+        return {
+          ...value,
+          [attribute]: tempSet,
+        };
+      } else {
+        return {
+          ...value,
+          [attribute]: tempSet.add(attrValue),
+        };
+      }
+    });
   }
 </script>
 
@@ -58,48 +93,22 @@
   </select>
   {#if $allEventsGlobal.length}
     <h4>Filters</h4>
-    <div class="filters">
-      <div>Event Name:</div>
-      {#each $arrayOfEventNamesGlobal as eventName}
-        <label>
-          <input
-            type="checkbox"
-            bind:group={$selectedEventNamesGlobal}
-            value={eventName}
-            on:change={(e) => filterTsWorkaround(e, eventName)}
-          />
-          {eventName}
-        </label>
-      {/each}
-    </div>
-    <div class="filters">
-      <div>SocketId:</div>
-      {#each $arrayOfSocketIdsGlobal as socketId}
-        <label>
-          <input
-            type="checkbox"
-            bind:group={$selectedSocketIdsGlobal}
-            value={socketId}
-            on:change={(e) => filterTsWorkaround(e, socketId)}
-          />
-          {socketId}
-        </label>
-      {/each}
-    </div>
-    <div class="filters">
-      <div>Direction:</div>
-      {#each $arrayOfDirectionsGlobal as direction}
-        <label>
-          <input
-            type="checkbox"
-            bind:group={$selectedDirectionGlobal}
-            value={direction}
-            on:change={(e) => filterTsWorkaround(e, direction)}
-          />
-          {direction}
-        </label>
-      {/each}
-    </div>
+    {#each Object.keys($masterOptionsGlobal) as attribute}
+      <div class="filters">
+        <div>{attribute.toUpperCase()}</div>
+        {#each [...$masterOptionsGlobal[attribute]] as attrValue}
+          <label>
+            <input
+              type="checkbox"
+              bind:group={stateObj[attribute]}
+              value={attrValue}
+              on:change={(e) => filterTsWorkaround(e, attribute, attrValue)}
+            />
+            {attrValue}
+          </label>
+        {/each}
+      </div>
+    {/each}
   {/if}
   <div id="events">
     {#if $displayEventsGlobal.length}

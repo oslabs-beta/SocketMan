@@ -4,6 +4,7 @@ import type { Socket } from 'socket.io-client';
 import { SocketServerMock } from 'socket.io-mock-ts';
 
 import Listen from './+page.svelte';
+import Feed from '../lib/feed/feed.svelte';
 //import { SocketServerMock } from 'socket.io-mock-ts';
 //const Client = require('socket.io-client');
 // const { createServer } = require('http');
@@ -11,7 +12,6 @@ import Listen from './+page.svelte';
 // const Client = require('socket.io-client');
 
 //create a test socket in order to properly check listen page
-
 describe("Listen for events from user's server socket", () => {
   const socket = new SocketServerMock();
   const client = socket.clientMock;
@@ -27,11 +27,26 @@ describe("Listen for events from user's server socket", () => {
   });
 });
 
+describe('Listen component tests', () => {
+  it('Component displays Event log heading', () => {
+    render(Listen);
+    const heading = screen.getByText('Events Log');
+    expect(heading).toBeInTheDocument();
+  });
+  it('Nested Feed component renders properly as events come in', () => {
+    render(Feed);
+    const;
+  });
+  it('Event components renders as each event comes in', () => {});
+  it('Event displays socketId, event-name when rendered', () => {});
+  it('Event filter');
+});
 test('shows proper heading when rendered', () => {
   render(Listen);
   const heading = screen.getByText('Events Log');
   expect(heading).toBeInTheDocument();
 });
+test('shows proper ');
 // describe("Listen for events from user's server socket", () => {
 //   let io: any, serverSocket: any, clientSocket: any;
 //   beforeAll((done) => {

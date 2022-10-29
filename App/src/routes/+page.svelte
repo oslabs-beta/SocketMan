@@ -24,7 +24,7 @@
     }
     filter();
   });
-
+  
   function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');

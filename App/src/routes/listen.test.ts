@@ -27,26 +27,27 @@ describe("Listen for events from user's server socket", () => {
   });
 });
 
-describe('Listen component tests', () => {
-  it('Component displays Event log heading', () => {
-    render(Listen);
-    const heading = screen.getByText('Events Log');
-    expect(heading).toBeInTheDocument();
-  });
-  it('Nested Feed component renders properly as events come in', () => {
-    render(Feed);
-    const;
-  });
-  it('Event components renders as each event comes in', () => {});
-  it('Event displays socketId, event-name when rendered', () => {});
-  it('Event filter');
-});
-test('shows proper heading when rendered', () => {
-  render(Listen);
-  const heading = screen.getByText('Events Log');
-  expect(heading).toBeInTheDocument();
-});
-test('shows proper ');
+// describe('Listen component tests', () => {
+//   it('Component displays Event log heading', () => {
+//     render(Listen);
+//     const heading = screen.getByText('Events Log');
+//     expect(heading).toBeInTheDocument();
+//   });
+//   it('Nested Feed component renders properly as events come in', () => {
+//     render(Feed);
+//     const
+//   });
+//   it('Event components renders as each event comes in', () => {});
+//   it('Event displays socketId, event-name when rendered', () => {});
+//   it('Event filter');
+// });
+// test('shows proper heading when rendered', () => {
+//   render(Listen);
+//   const heading = screen.getByText('Events Log');
+//   expect(heading).toBeInTheDocument();
+// });
+// test('shows proper ');
+
 // describe("Listen for events from user's server socket", () => {
 //   let io: any, serverSocket: any, clientSocket: any;
 //   beforeAll((done) => {

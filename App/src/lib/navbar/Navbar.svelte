@@ -49,7 +49,7 @@
   {#if $socketGlobal}
     <nav-left>
       <a href="/">Listen 🎧</a>
-      <a href="/socketman">Socketman 🚀</a>
+      <a href="/emit">Emit 🚀</a>
     </nav-left>
     <nav-right>
       <IconButton

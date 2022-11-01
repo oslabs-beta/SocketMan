@@ -195,11 +195,11 @@
 
 <svelte:head>
   <title>Socketman</title>
-  <meta name="description" content="GUI socketman" />
+  <meta name="description" content="GUI Socketman" />
 </svelte:head>
 
 <section id="socketmain">
-  <h1>Socketman 🚀</h1>
+  <h1>Emit 🚀</h1>
 
   <button id="clear-inputs" type="button" on:click={reset}
     >Clear all inputs</button

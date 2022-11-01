@@ -15,12 +15,7 @@
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "_dev": "vite dev",
-    "_build": "vite build",
-    "_package": "svelte-kit package",
-    "_preview": "vite preview",
-    "_check": "svelte-check --tsconfig ./tsconfig.json",
-    "_check:watch": "svelte-check --tsconfig ./tsconfig.json --watch"
+    "_preview": "vite preview"
   },
   "devDependencies": {
     "@mdi/js": "^7.0.96",

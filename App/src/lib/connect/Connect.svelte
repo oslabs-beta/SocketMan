@@ -160,6 +160,9 @@
 <!-- CONNECT TO SERVER SECTION -->
 <section>
   <h1>GUI Interface</h1>
+  <video src="../static/sky.mp4">
+    <track kind="captions" />
+  </video>
   <div class="connect-container">
     <input
       id="connect"

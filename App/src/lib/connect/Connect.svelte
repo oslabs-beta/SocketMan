@@ -158,28 +158,102 @@
 </svelte:head>
 
 <!-- CONNECT TO SERVER SECTION -->
-<section>
-  <h1>GUI Interface</h1>
-  <video src="../static/sky.mp4">
-    <track kind="captions" />
-  </video>
-  <div class="connect-container">
-    <input
-      id="connect"
-      autocomplete="on"
-      type="url"
-      bind:value={connectTo}
-      placeholder="Server URL"
-    />
-    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
-    <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button>
-  </div>
-</section>
+<body>
+  <section class="wrapper">
+    <div class="video-wrapper">
+      <video src="../static/sky.mp4" playsinline autoplay muted loop>
+        <track kind="captions" />
+      </video>
+    </div>
+    <div class="overlay" />
+    <div class="landing-content">
+      <h1>SocketMan</h1>
+      <!-- <div class="connect-container"> -->
+      <input
+        id="connect"
+        autocomplete="on"
+        type="url"
+        bind:value={connectTo}
+        placeholder="Server URL"
+      />
+      <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
+    </div>
+  </section>
+</body>
 
 <style>
-  .connect-container {
+  @import url('https://fonts.googleapis.com/css2?family=Cabin&family=Orbitron:wght@700&family=Oswald:wght@300&display=swap');
+  body {
+    font-family: 'Orbitron', sans-serif;
+    color: #2d3e50;
+  }
+
+  section {
+    max-width: 57%;
+    margin: auto;
+    text-align: center;
+  }
+  .wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .video-wrapper video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  .overlay {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #2d3e50;
+    position: absolute;
+    opacity: 0.6;
+  }
+
+  .landing-content {
+    margin-top: 17vh;
+    z-index: 2;
+  }
+
+  h1 {
+    font-size: 500%;
+    color: whitesmoke;
+  }
+  input {
+    font-size: 120%;
+    font-weight: 400;
+    margin-top: -10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 20vw;
+  }
+  .btn {
+    text-decoration: none;
+    color: #fff;
+    font-size: 140%;
+    background: #2a80b9;
+    padding: 2% 3%;
+    border-radius: 5px;
+  }
+  /* .connect-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+  } */
 </style>

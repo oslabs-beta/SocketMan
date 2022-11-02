@@ -25,13 +25,13 @@
 
 <style>
   #events {
-    display: flex;
+    display: grid;
     justify-content: flex-start;
     /* justify-items: flex-start; */
     /* align-items: flex-start; */
-    /* grid-template-columns: 1fr;
-    grid-template-rows: auto; */
-    /* grid-template-areas: 'outgoing gap incoming'; */
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 'outgoing gap incoming';
   }
 
   #events > li {

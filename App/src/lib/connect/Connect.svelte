@@ -1,16 +1,15 @@
 <script lang="ts">
   import type { StoredEvent, EventArray } from '$lib/types';
+  import Fab, { Icon, Label } from '@smui/fab';
   import ioClient from 'socket.io-client';
-  import {
-    eventLimitGlobal,
-    socketGlobal,
-    socketNspGlobal,
-  } from '../../stores';
   import {
     allEventsGlobal,
     displayEventsGlobal,
     masterFilterGlobal,
     masterOptionsGlobal,
+    eventLimitGlobal,
+    socketGlobal,
+    socketNspGlobal,
   } from '../../stores';
 
   //used to capture value of user server URL
@@ -161,7 +160,7 @@
 <body>
   <section class="wrapper">
     <div class="video-wrapper">
-      <video src="../static/sky.mp4" playsinline autoplay muted loop>
+      <video src="../static/strings.mp4" playsinline autoplay muted loop>
         <track kind="captions" />
       </video>
     </div>
@@ -177,6 +176,11 @@
         placeholder="Server URL"
       />
       <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
+      <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
+      <Fab color="primary" on:click={connect} extended>
+        <Icon class="material-icons">rocket</Icon>
+        <Label>CLICK TO CONNECT</Label>
+      </Fab>
     </div>
   </section>
 </body>
@@ -184,14 +188,13 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cabin&family=Orbitron:wght@700&family=Oswald:wght@300&display=swap');
   body {
-    font-family: 'Orbitron', sans-serif;
-    color: #2d3e50;
   }
 
   section {
     max-width: 57%;
     margin: auto;
     text-align: center;
+    font-family: 'Orbitron', sans-serif;
   }
   .wrapper {
     height: 100vh;
@@ -223,7 +226,7 @@
     left: 0;
     background: #2d3e50;
     position: absolute;
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .landing-content {
@@ -242,15 +245,17 @@
     padding-top: 2%;
     padding-bottom: 2%;
     width: 20vw;
+    margin-bottom: 3vh;
   }
-  .btn {
+
+  /* #btn {
     text-decoration: none;
     color: #fff;
     font-size: 140%;
-    background: #2a80b9;
+    background: black;
     padding: 2% 3%;
     border-radius: 5px;
-  }
+  } */
   /* .connect-container {
     display: flex;
     flex-direction: column;

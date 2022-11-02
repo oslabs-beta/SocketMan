@@ -20,8 +20,8 @@
 <style>
   main {
     padding: 1rem;
-    width: 90%;
-    max-width: 1024px;
+    width: 100%;
+    max-width: 1200px;
     margin: auto;
     margin-top: 50px;
     box-sizing: border-box;
@@ -30,7 +30,7 @@
       rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   }
 
-  /* main * {
+  main * {
     background-color: rgb(209, 209, 209);
     width: 100%;
   }

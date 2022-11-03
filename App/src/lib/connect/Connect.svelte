@@ -14,6 +14,9 @@
 
   //used to capture value of user server URL
   let connectTo: string = '';
+  let requestedNsp: string = '';
+  let username: string = '';
+  let password: string = '';
 
   // added because using eventlimit in funcs was reading static value when func was created, instead of updating
   const getStoreValue = (store: any) => {
@@ -100,12 +103,21 @@
 
   //creates a socket, updates store
   const connect = () => {
-    connectTo = connectTo || 'http://localhost:3333/admin';
-    console.log(connectTo);
+    requestedNsp = requestedNsp || 'admin';
+    let auth: any = false;
+    if (username && password) {
+      auth = { username, password };
+    }
+
+    console.log(connectTo + '/' + requestedNsp);
+    console.log(auth);
 
     // if we don't have a socket in our state, create a new one
     let newSocket: any; // typed as "any" here because .nsp is private, can't figure out how to access it
-    newSocket = ioClient(connectTo, {});
+
+    newSocket = ioClient(connectTo + '/' + requestedNsp, {
+      auth,
+    });
 
     //timeout if the connection failed
     const connectionTimeout = setTimeout(() => {
@@ -168,11 +180,36 @@
     <h1>SocketMan</h1>
     <!-- <div class="connect-container"> -->
     <input
+      class="main-input"
       id="connect"
       autocomplete="on"
       type="url"
       bind:value={connectTo}
       placeholder="Server URL"
+    />
+    <input
+      class="secondary-input"
+      id="requestednsp"
+      autocomplete="on"
+      type="input"
+      bind:value={requestedNsp}
+      placeholder="Namespace"
+    />
+    <input
+      class="secondary-input"
+      id="username"
+      autocomplete="on"
+      type="username"
+      bind:value={username}
+      placeholder="username"
+    />
+    <input
+      class="secondary-input"
+      id="password"
+      autocomplete="on"
+      type="password"
+      bind:value={password}
+      placeholder="Password"
     />
     <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
     <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
@@ -184,9 +221,6 @@
 </section>
 
 <style>
-  body {
-  }
-
   section {
     position: absolute;
     top: 0;
@@ -232,22 +266,37 @@
   }
 
   .landing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 25vh;
     z-index: 2;
   }
 
   h1 {
     font-size: 500%;
+    margin-bottom: 30px;
     color: whitesmoke;
+  }
+  input::placeholder {
+    color: rgb(172, 172, 172);
   }
   input {
     font-size: 120%;
     font-weight: 400;
-    margin-top: -10%;
-    padding-top: 2%;
-    padding-bottom: 2%;
+    padding: 20px 0px 20px 5px;
+    padding-left: 10px;
     width: 20vw;
-    margin-bottom: 3vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: whitesmoke;
+  }
+  .main-input {
+    margin: 15px 0px;
+  }
+  .secondary-input {
+    margin-bottom: 5px;
+    padding-top: 7px;
+    padding-bottom: 7px;
   }
 
   /* #btn {

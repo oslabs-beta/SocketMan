@@ -5,12 +5,12 @@ The server that we are trying to monitor for traffic.
 const path = require('path');
 const app = require('express')();
 const http = require('http').Server(app);
-const setup = require('npm-socketman');
+const { setup } = require('npm-socketman');
 
 // would be best if the dev didn't have to manually allow CORS from our domain
 const io = require('socket.io')(http, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:5173',
   },
 });
 
@@ -22,7 +22,13 @@ const users = io.of('/users');
 const bongo = io.of('/bongo');
 const testnsp = io.of('/testnsp');
 
-setup(io);
+setup(io, {
+  namespaceName: '/nsp',
+  auth: {
+    username: 'admin',
+    password: '$2b$10$heqvAkYMez.Va6Et2uXInOnkCT6/uQj1brkrbyG3LpopDklcq7ZOS', // "changeit" encrypted with bcrypt
+  },
+});
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/index.html'));

@@ -24,7 +24,7 @@
     }
     filter();
   });
-  
+
   function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');
@@ -81,7 +81,7 @@
 </svelte:head>
 
 <!-- LISTENERS SECTION -->
-<section>
+<section id="listen-page">
   <h1>Events Log</h1>
   <div>Limit Events</div>
   <select on:change={updateLimit} value={String(selectedLimit)}>

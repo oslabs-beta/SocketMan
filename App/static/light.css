@@ -1,0 +1,29 @@
+:root {
+  --primary: #a0d995;
+  --secondary: #b6d6b0;
+  --background: #ede4d6;
+  --secondaryBackground: #4cacbc;
+}
+
+html,
+body {
+  background-color: var(--background);
+  /* color: theme.$on-surface; */
+}
+/* STYLING FOR LISTEN PAGE */
+#listen-page {
+  background-color: var(--background);
+  /* border: 1px solid; */
+  border-radius: 1%;
+  /* border-color: gray; */
+  padding: 1em;
+}
+.filters {
+  background-color: var(--primary);
+  border: 1px solid;
+  border-radius: 2%;
+  border-color: var(--primary);
+}
+#events {
+  background-color: var(--secondary);
+}

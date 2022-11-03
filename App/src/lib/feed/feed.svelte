@@ -26,6 +26,7 @@
 <style>
   #events {
     display: grid;
+    justify-content: flex-start;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-template-areas: 'outgoing gap incoming';

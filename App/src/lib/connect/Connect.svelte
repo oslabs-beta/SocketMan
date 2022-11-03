@@ -1,16 +1,15 @@
 <script lang="ts">
   import type { StoredEvent, EventArray } from '$lib/types';
+  import Fab, { Icon, Label } from '@smui/fab';
   import ioClient from 'socket.io-client';
-  import {
-    eventLimitGlobal,
-    socketGlobal,
-    socketNspGlobal,
-  } from '../../stores';
   import {
     allEventsGlobal,
     displayEventsGlobal,
     masterFilterGlobal,
     masterOptionsGlobal,
+    eventLimitGlobal,
+    socketGlobal,
+    socketNspGlobal,
   } from '../../stores';
 
   //used to capture value of user server URL
@@ -158,25 +157,108 @@
 </svelte:head>
 
 <!-- CONNECT TO SERVER SECTION -->
-<section>
-  <h1>GUI Interface</h1>
-  <div class="connect-container">
-    <input
-      id="connect"
-      autocomplete="on"
-      type="url"
-      bind:value={connectTo}
-      placeholder="Server URL"
-    />
-    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
-    <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button>
-  </div>
-</section>
+<body>
+  <section class="wrapper">
+    <div class="video-wrapper">
+      <video src="../static/strings.mp4" playsinline autoplay muted loop>
+        <track kind="captions" />
+      </video>
+    </div>
+    <div class="overlay" />
+    <div class="landing-content">
+      <h1>SocketMan</h1>
+      <!-- <div class="connect-container"> -->
+      <input
+        id="connect"
+        autocomplete="on"
+        type="url"
+        bind:value={connectTo}
+        placeholder="Server URL"
+      />
+      <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
+      <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
+      <Fab color="primary" on:click={connect} extended>
+        <Icon class="material-icons">rocket</Icon>
+        <Label>CLICK TO CONNECT</Label>
+      </Fab>
+    </div>
+  </section>
+</body>
 
 <style>
-  .connect-container {
+  @import url('https://fonts.googleapis.com/css2?family=Cabin&family=Orbitron:wght@700&family=Oswald:wght@300&display=swap');
+  body {
+  }
+
+  section {
+    max-width: 57%;
+    margin: auto;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .video-wrapper video {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  .overlay {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #2d3e50;
+    position: absolute;
+    opacity: 0.7;
+  }
+
+  .landing-content {
+    margin-top: 17vh;
+    z-index: 2;
+  }
+
+  h1 {
+    font-size: 500%;
+    color: whitesmoke;
+  }
+  input {
+    font-size: 120%;
+    font-weight: 400;
+    margin-top: -10%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 20vw;
+    margin-bottom: 3vh;
+  }
+
+  /* #btn {
+    text-decoration: none;
+    color: #fff;
+    font-size: 140%;
+    background: black;
+    padding: 2% 3%;
+    border-radius: 5px;
+  } */
+  /* .connect-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+  } */
 </style>

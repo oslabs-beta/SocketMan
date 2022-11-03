@@ -17,9 +17,11 @@
   const onDelete = () => {
     dispatch('removeEvent', { timestamp, socketId, eventname, direction });
   };
+  const joinedPayload: string = payload.join(', ');
+  const roomsArr: string = Array.from(rooms).join(', ');
 </script>
 
-<Panel>
+<Panel data-testid="rendered-event">
   <Header>
     <div class="accordion-preview">
       <span>
@@ -46,7 +48,7 @@
     </div>
   </Header>
   <Content>
-    <ul>
+    <ul data-testid="event-info">
       <li><b>Event Name:</b> {eventname}</li>
       <li><b>Payload:</b> {payload.join(', ')}</li>
       <li><b>Timestamp:</b> {new Date(timestamp)}</li>

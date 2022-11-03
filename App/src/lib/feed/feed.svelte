@@ -6,7 +6,7 @@
 </script>
 
 <section>
-  <div id="events">
+  <div id="events" data-testid="all-events">
     <Accordion color="secondary">
       {#each $displayEventsGlobal as event}
         <Event

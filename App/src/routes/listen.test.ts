@@ -38,12 +38,8 @@ describe('Listen component tests', () => {
   });
   it('Feedcomponent renders events as they come in', () => {
     render(Feed, props);
-    expect(screen.getByLabelText('eventname'));
-    expect(screen.getByText(props.socketId)).toBeInTheDocument();
-  });
-  it('Event components renders as each event comes in', () => {
-    render(svelteEvent);
-    expect(screen.getByText('Event'));
+    const events = screen.getByTestId('all-events');
+    expect(events);
   });
 });
 

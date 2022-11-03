@@ -2,7 +2,6 @@
 //triple slash serves as an import for declaration packages.
 /// <reference types="vitest" />
 */
-
 import { sveltekit } from '@sveltejs/kit/vite';
 //https://vitest.dev/config/
 /** @type {import('vite').UserConfig} */

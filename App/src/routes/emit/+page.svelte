@@ -15,6 +15,7 @@
     socketGlobal,
     allEventsGlobal,
     socketNspGlobal,
+    eventLimitGlobal,
   } from '../../stores';
 
   import Argument from './argument.svelte';
@@ -119,7 +120,11 @@
       rooms: [$socketGlobal.id],
     };
 
-    allEventsGlobal.update((value: EventArray) => {
+    allEventsGlobal.update((value: EventArray): EventArray => {
+      //when we update allEvents make sure it's in line with eventLimit
+      const eventLimit = $eventLimitGlobal!;
+      if (value.length + 1 > eventLimit)
+        return [eventObject, ...value].slice(0, eventLimit);
       return [eventObject, ...value];
     });
 

@@ -2,9 +2,6 @@
   import '../../app.css';
   import { socketGlobal } from '../../stores';
   import { onMount } from 'svelte';
-  // import { socketGlobal } from '../../stores';
-  // import { socketGlobal } from '../../stores';
-  // import { socketGlobal } from '../../stores';
   //following imported to create dark/light mode button
   import IconButton, { Icon } from '@smui/icon-button';
   import {} from '@mdi/js';
@@ -26,6 +23,7 @@
 
 <svelte:head>
   <!-- SMUI Styles -->
+  <link rel="stylesheet" href="/all.css" />
   {#if darkTheme === undefined}
     <link
       rel="stylesheet"
@@ -38,7 +36,6 @@
       media="screen and (prefers-color-scheme: dark)"
     />
   {:else if darkTheme}
-    <link rel="stylesheet" href="/smui.css" />
     <link rel="stylesheet" href="/smui-dark.css" media="screen" />
   {:else}
     <link rel="stylesheet" href="/smui.css" />
@@ -72,7 +69,7 @@
   nav {
     display: flex;
     justify-content: space-between;
-    height: 50px;
+    height: 60px;
     background-color: rgb(64, 64, 64);
     padding: 0 30px;
   }
@@ -83,7 +80,9 @@
   }
   nav-left * {
     text-align: center;
-    padding: 0 20px;
+    padding: 10px;
     color: #ff9900;
+    text-decoration: none;
+    margin: 10px;
   }
 </style>

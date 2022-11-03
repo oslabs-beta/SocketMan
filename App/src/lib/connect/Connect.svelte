@@ -152,46 +152,48 @@
 </script>
 
 <svelte:head>
-  <title>GUI Welcome</title>
-  <meta name="description" content="GUI welcome" />
+  <title>Socketman</title>
+  <meta name="description" content="Socketman" />
 </svelte:head>
 
 <!-- CONNECT TO SERVER SECTION -->
-<body>
-  <section class="wrapper">
-    <div class="video-wrapper">
-      <video src="../static/strings.mp4" playsinline autoplay muted loop>
-        <track kind="captions" />
-      </video>
-    </div>
-    <div class="overlay" />
-    <div class="landing-content">
-      <h1>SocketMan</h1>
-      <!-- <div class="connect-container"> -->
-      <input
-        id="connect"
-        autocomplete="on"
-        type="url"
-        bind:value={connectTo}
-        placeholder="Server URL"
-      />
-      <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
-      <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
-      <Fab color="primary" on:click={connect} extended>
-        <Icon class="material-icons">rocket</Icon>
-        <Label>CLICK TO CONNECT</Label>
-      </Fab>
-    </div>
-  </section>
-</body>
+<section class="wrapper">
+  <div class="video-wrapper">
+    <video src="../static/strings.mp4" playsinline autoplay muted loop>
+      <track kind="captions" />
+    </video>
+  </div>
+  <div class="overlay" />
+  <div class="landing-content">
+    <h1>SocketMan</h1>
+    <!-- <div class="connect-container"> -->
+    <input
+      id="connect"
+      autocomplete="on"
+      type="url"
+      bind:value={connectTo}
+      placeholder="Server URL"
+    />
+    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
+    <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
+    <Fab color="primary" on:click={connect} extended>
+      <Icon class="material-icons">rocket</Icon>
+      <Label>CLICK TO CONNECT</Label>
+    </Fab>
+  </div>
+</section>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cabin&family=Orbitron:wght@700&family=Oswald:wght@300&display=swap');
   body {
   }
 
   section {
-    max-width: 57%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    /* max-width: 57%; */
     margin: auto;
     text-align: center;
     font-family: 'Orbitron', sans-serif;
@@ -209,7 +211,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     overflow: hidden;
   }
 
@@ -230,7 +232,7 @@
   }
 
   .landing-content {
-    margin-top: 17vh;
+    margin-top: 25vh;
     z-index: 2;
   }
 

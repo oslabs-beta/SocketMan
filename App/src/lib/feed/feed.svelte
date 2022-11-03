@@ -6,32 +6,22 @@
 </script>
 
 <section>
-  <div id="events">
-    <Accordion color="secondary">
-      {#each $displayEventsGlobal as event}
-        <Event
-          eventname={event.eventName}
-          payload={event.payload}
-          timestamp={event.date}
-          socketId={event.socketId}
-          direction={event.direction}
-          namespace={event.nsp}
-          rooms={event.rooms}
-        />
-      {/each}
-    </Accordion>
-  </div>
+  <Accordion color="secondary">
+    {#each $displayEventsGlobal as event}
+      <Event
+        eventname={event.eventName}
+        payload={event.payload}
+        timestamp={event.date}
+        socketId={event.socketId}
+        direction={event.direction}
+        namespace={event.nsp}
+        rooms={event.rooms}
+      />
+    {/each}
+  </Accordion>
 </section>
 
 <style>
-  #events {
-    display: grid;
-    justify-content: flex-start;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas: 'outgoing gap incoming';
-  }
-
   #events > li {
     padding: 0.5rem 1rem;
     background: #ccc;

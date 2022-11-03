@@ -24,6 +24,7 @@
     max-width: 1200px;
     margin: auto;
     margin-top: 50px;
+    margin-bottom: 50px;
     box-sizing: border-box;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
       rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,

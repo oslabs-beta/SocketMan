@@ -24,7 +24,7 @@
     }
     filter();
   });
-  
+
   function filter(): void {
     displayEventsGlobal.update(() => {
       console.log('..filter invoked');
@@ -120,6 +120,15 @@
 </section>
 
 <style>
+  #events {
+    display: grid;
+    justify-content: flex-start;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 'outgoing gap incoming';
+    overflow-y: auto;
+    max-height: 80vh;
+  }
   button {
     margin-top: 10px;
   }

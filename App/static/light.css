@@ -1,0 +1,123 @@
+/* :root {
+  --primary: #a0d995;
+  --secondary: #b6d6b0;
+  --background: #ede4d6;
+  --secondaryBackground: #4cacbc;
+} */
+
+html,
+body {
+  /* background-color: var(--background); */
+  /* color: theme.$on-surface; */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+/* STYLING FOR LISTEN PAGE */
+/* #listen-page {
+  background-color: var(--background);
+  /* border: 1px solid; */
+/* border-radius: 1%; */
+/* border-color: gray; */
+/* padding: 1em; */
+/* } */
+.filters {
+  background-color: var(--primary);
+  border: 1px solid;
+  border-radius: 2%;
+  border-color: var(--primary);
+}
+#events {
+  background-color: var(--secondary);
+}
+
+#listen-page {
+  background-color: #c6c6c6;
+  border: 5px solid #801428;
+  border-radius: 20px;
+  padding: 1em;
+  color: #801428;
+}
+
+#listen-page h1 {
+  text-align: center;
+}
+
+#listen-page div {
+  font-weight: bold;
+}
+
+/* main {
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 50px;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+main * {
+  background-color: #c6c6c6;
+  width: 100%;
+} */
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  background-color: #c6c6c6;
+  padding: 0 30px;
+  border: 5px solid #801248;
+  outline: 2.5px solid #111111;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px #111111;
+}
+
+nav * {
+  display: inline-block;
+  align-items: center;
+  justify-content: space-around;
+  height: 80%;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  color: #801248;
+}
+
+nav a:hover {
+  color: #801428;
+}
+
+nav-left * {
+  text-align: center;
+  padding-top: 17px;
+
+  text-decoration: none;
+  margin-right: 2rem;
+}
+
+nav-right * {
+  text-align: center;
+  padding: 0px;
+
+  text-decoration: none;
+  margin: 0px;
+}
+
+nav button {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #111111;
+  border-radius: 12px;
+  background-color: #801428;
+  color: #c6c6c6;
+}
+
+nav button:hover {
+  background: #111111;
+  color: #801428;
+}

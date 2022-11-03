@@ -2,28 +2,8 @@
 //triple slash serves as an import for declaration packages.
 /// <reference types="vitest" />
 */
-import { defineConfig } from 'vite';
+
 import { sveltekit } from '@sveltejs/kit/vite';
-//import adapter from '@sveltejs/adapter-node';
-//similer to webpack config, need the adapter - concerns the dummy server
-
-//Allows us to use IDE intellisense with jsdoc type hints
-
-// export default defineConfig({
-//   //following plugin config is used to disable hot module replacement when running tests
-//   plugins: [svelte({ hot: !process.env.VITEST }), sveltekit()],
-//   //no longer need the kit property in here, kit: {adapter: adapter()} set in svelte.config.js
-//   // kit: {
-//   //   adapter: adapter(),
-//   // },
-//   test: {
-//     globals: true,
-//     environment: 'happy-dom',
-//   },
-// });
-
-//also need to maybe include types/jest to use it/expect jest matches
-//see the following to figure out how to config w/ various properties:
 //https://vitest.dev/config/
 /** @type {import('vite').UserConfig} */
 const config = {

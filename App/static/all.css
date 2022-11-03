@@ -4,7 +4,11 @@ html {
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   /* font-size: 1rem; */
 }
-
+body {
+  padding: 0px;
+  margin: 0px;
+  overflow-y: scroll;
+}
 h1 {
   text-align: center;
 }

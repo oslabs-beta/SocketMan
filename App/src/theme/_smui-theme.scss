@@ -2,14 +2,14 @@
 
 @use '@material/theme/color-palette';
 
-// Svelte Colors!
-@use '@material/theme/index' as theme with (
-  $primary: color-palette.$amber-200,
-  $secondary: color-palette.$light-green-400,
-  $surface: rgb(247, 247, 247),
-  $background: rgb(255, 255, 255),
-  $error: color-palette.$red-900
-);
+// // Svelte Colors!
+// @use '@material/theme/index' as theme with (
+//   $primary: color-palette.$amber-200,
+//   $secondary: color-palette.$light-green-400,
+//   $surface: rgb(247, 247, 247),
+//   $background: rgb(255, 255, 255),
+//   $error: color-palette.$red-900
+// );
 
 html,
 body {

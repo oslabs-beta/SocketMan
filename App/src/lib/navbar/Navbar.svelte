@@ -65,7 +65,7 @@
   {/if}
 </nav>
 
-<style>
+<!-- <style>
   nav {
     display: flex;
     justify-content: space-between;
@@ -85,4 +85,4 @@
     text-decoration: none;
     margin: 10px;
   }
-</style>
+</style> -->

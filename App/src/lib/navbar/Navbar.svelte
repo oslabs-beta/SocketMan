@@ -36,7 +36,8 @@
       media="screen and (prefers-color-scheme: dark)"
     />
   {:else if darkTheme}
-    <link rel="stylesheet" href="/smui-dark.css" media="screen" />
+    <!-- <link rel="stylesheet" href="/smui-dark.css" media="screen" /> -->
+    <link rel="stylesheet" href="/dark.css" media="screen" />
   {:else}
     <link rel="stylesheet" href="/smui.css" />
   {/if}
@@ -55,7 +56,7 @@
       >
         <Icon component={Svg} viewBox="0 0 24 24">
           <path
-            fill="currentColor"
+            fill="yellow"
             d={darkTheme ? mdiWeatherSunny : mdiMoonWaxingCrescent}
           />
         </Icon>

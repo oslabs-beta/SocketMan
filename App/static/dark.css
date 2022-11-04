@@ -1,0 +1,21 @@
+:root {
+  --secondary-color: #121212;
+}
+html,
+body {
+  background-color: var(--secondary-color);
+  color: rgb(255, 255, 255, 0.6);
+}
+
+.filters {
+  border: 1px solid;
+  border-radius: 2%;
+  border-color: #ae99aa;
+}
+
+a {
+  color: #40b3ff;
+}
+a:visited {
+  color: color.scale(#40b3ff, $lightness: -35%);
+}

@@ -132,9 +132,9 @@
   button {
     margin-top: 10px;
   }
-  .filters {
+  /* .filters {
     border: 1px solid;
     border-radius: 2%;
     border-color: gray;
-  }
+  } */
 </style>

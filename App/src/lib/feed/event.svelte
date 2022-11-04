@@ -19,21 +19,21 @@
   };
 </script>
 
-<Panel>
-  <Header>
+<Panel class="single-events">
+  <Header class="header-acc">
     <div class="accordion-preview">
       <span>
-        <emph>
+        <emph id="event-title">
           {`${direction === 'outgoing' ? 'Recipient' : 'Emitter'} Socket ID:`}
         </emph>
         {socketId}
       </span>
       <span class="name">
-        <emph> Event: </emph>
+        <emph id="event-title"> Event: </emph>
         {eventname}
       </span>
       <span>
-        <emph> Time: </emph>
+        <emph id="event-title"> Time: </emph>
         {new Date(timestamp).toLocaleString()}
         {#if direction === 'incoming'}
           <span class="arrow-down">⇣</span>
@@ -45,7 +45,7 @@
       </span>
     </div>
   </Header>
-  <Content>
+  <Content class="content-acc">
     <ul>
       <li><b>Event Name:</b> {eventname}</li>
       <li><b>Payload:</b> {payload.join(', ')}</li>

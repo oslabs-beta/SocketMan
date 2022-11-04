@@ -1,10 +1,3 @@
-/* :root {
-  --primary: #a0d995;
-  --secondary: #b6d6b0;
-  --background: #ede4d6;
-  --secondaryBackground: #4cacbc;
-} */
-
 html,
 body {
   /* background-color: var(--background); */
@@ -12,22 +5,44 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-/* STYLING FOR LISTEN PAGE */
-/* #listen-page {
-  background-color: var(--background);
-  /* border: 1px solid; */
-/* border-radius: 1%; */
-/* border-color: gray; */
-/* padding: 1em; */
-/* } */
-.filters {
-  background-color: var(--primary);
-  border: 1px solid;
-  border-radius: 2%;
-  border-color: var(--primary);
+
+#socketmain button {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #111111;
+  border-radius: 12px;
+  background-color: #2f1480;
+  color: #c6c6c6;
 }
-#events {
-  background-color: var(--secondary);
+
+#socketmain #save-container {
+  background: #c6c6c6;
+  /* border: 3px solid #2f1480; */
+}
+
+#socketmain form {
+  background: #c6c6c6;
+}
+
+#socketmain form h3 {
+  border: 1.5px solid #111111;
+  border-radius: 7px;
+}
+
+#socketmain #emit-btn {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid #111111;
+  border-radius: 12px;
+  color: #c6c6c6;
+}
+
+section #socketmain {
+  background: #c6c6c6;
 }
 
 #listen-page {
@@ -36,6 +51,9 @@ body {
   border-radius: 20px;
   padding: 1em;
   color: #801428;
+  font-weight: bold;
+  padding: 1rem;
+  margin: 1rem;
 }
 
 #listen-page h1 {
@@ -44,66 +62,37 @@ body {
 
 #listen-page div {
   font-weight: bold;
-}
-
-/* main {
   padding: 1rem;
-  width: 100%;
-  max-width: 1200px;
-  margin: auto;
-  margin-top: 50px;
-  box-sizing: border-box;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  margin: 1rem;
 }
-
-main * {
-  background-color: #c6c6c6;
-  width: 100%;
-} */
 
 nav {
   display: flex;
   justify-content: space-between;
   height: 60px;
-  background-color: #c6c6c6;
+  background-color: #cfcdd8;
   padding: 0 30px;
-  border: 5px solid #801248;
-  outline: 2.5px solid #111111;
-  border-radius: 20px;
+  border: 2px solid #2f1480;
+  /* outline: 2px solid #111111; */
   box-shadow: 0 2px 6px #111111;
 }
 
-nav * {
-  display: inline-block;
-  align-items: center;
-  justify-content: space-around;
-  height: 80%;
-  margin: 0;
-  padding: 0;
-  font-weight: bold;
-  color: #801248;
+.single-events {
+  color: whitesmoke;
 }
-
-nav a:hover {
-  color: #801428;
+.header-acc {
+  background-color: #2f1480;
+  color: whitesmoke;
 }
-
-nav-left * {
-  text-align: center;
-  padding-top: 17px;
-
-  text-decoration: none;
-  margin-right: 2rem;
+.content-acc {
+  background-color: #c6c6c6;
+  color: black;
 }
-
-nav-right * {
-  text-align: center;
-  padding: 0px;
-
-  text-decoration: none;
-  margin: 0px;
+.events {
+  background-color: #cfcdd8;
+}
+#event-title {
+  color: white;
 }
 
 nav button {
@@ -113,11 +102,17 @@ nav button {
   align-items: center;
   border: 1.5px solid #111111;
   border-radius: 12px;
-  background-color: #801428;
+  background-color: #2f1480;
   color: #c6c6c6;
 }
 
 nav button:hover {
   background: #111111;
-  color: #801428;
+  color: #749f82;
+}
+
+section {
+  background: #cfcdd8;
+  padding: 3em;
+  border-radius: 12px;
 }

@@ -38,7 +38,7 @@
   {:else if darkTheme}
     <link rel="stylesheet" href="/smui-dark.css" media="screen" />
   {:else}
-    <link rel="stylesheet" href="/light.css" />
+    <link rel="stylesheet" href="/smui.css" />
   {/if}
 </svelte:head>
 

@@ -71,7 +71,7 @@
     display: flex;
     justify-content: space-between;
     height: 60px;
-    background-color: rgb(64, 64, 64);
+    /* background-color: rgb(64, 64, 64); */
     padding: 0 30px;
   }
   nav * {

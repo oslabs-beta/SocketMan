@@ -1,10 +1,17 @@
 :root {
-  --secondary-color: #121212;
+  --secondary-color: rgb(33, 38, 42);
 }
 html,
 body {
   background-color: var(--secondary-color);
   color: rgb(255, 255, 255, 0.6);
+}
+h1,
+.title {
+  color: white;
+}
+nav {
+  background-color: rgb(21, 21, 21);
 }
 
 .filters {
@@ -16,6 +23,31 @@ body {
 a {
   color: #40b3ff;
 }
-a:visited {
-  color: color.scale(#40b3ff, $lightness: -35%);
+button {
+  background-color: transparent;
+  color: whitesmoke;
+  border: 1px solid whitesmoke;
+}
+button:hover {
+  background-color: #4d4d4d;
+}
+mdc-icon-button {
+  background-color: transparent;
+}
+input,
+select,
+textarea {
+  background-color: rgb(60, 60, 60);
+  color: whitesmoke;
+}
+::placeholder {
+  color: rgb(178, 178, 178);
+}
+#save-container,
+#socketman {
+  background-color: rgb(24, 24, 25);
+}
+#emit-preview {
+  background-color: lightgray;
+  color: black;
 }

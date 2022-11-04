@@ -1,7 +1,3 @@
-@use 'sass:color';
-
-@use '@material/theme/color-palette';
-
 html,
 body {
   /* background-color: var(--background); */

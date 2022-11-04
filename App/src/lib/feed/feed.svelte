@@ -5,8 +5,8 @@
   console.log($displayEventsGlobal);
 </script>
 
-<section>
-  <Accordion color="secondary">
+<section class="events">
+  <Accordion>
     {#each $displayEventsGlobal as event}
       <Event
         eventname={event.eventName}

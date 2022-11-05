@@ -37,6 +37,11 @@
     />
   {:else if darkTheme}
     <!-- <link rel="stylesheet" href="/smui-dark.css" media="screen" /> -->
+    <link
+      rel="stylesheet"
+      href="/smui-dark.css"
+      media="screen and (prefers-color-scheme: dark)"
+    />
     <link rel="stylesheet" href="/dark.css" media="screen" />
   {:else}
     <link rel="stylesheet" href="/smui.css" />

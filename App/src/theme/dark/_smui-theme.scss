@@ -14,14 +14,119 @@
 
 html,
 body {
-  background-color: #000;
-  color: theme.$on-surface;
+  /* background-color: var(--background); */
+  /* color: theme.$on-surface; */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-a {
-  color: #40b3ff;
-}
-a:visited {
-  color: color.scale(#40b3ff, $lightness: -35%);
+#socketmain button {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  // border: 1.5px solid #111111;
+  border-radius: 12px;
+  // background-color: #2f1480;
+  // color: #c6c6c6;
 }
 
+#socketmain #save-container {
+  // background: #c6c6c6;
+  /* border: 3px solid #2f1480; */
+}
+
+#socketmain form {
+  // background: #c6c6c6;
+}
+
+#socketmain form h3 {
+  // border: 1.5px solid #111111;
+  border-radius: 7px;
+}
+
+#socketmain #emit-btn {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  // border: 1.5px solid #111111;
+  border-radius: 12px;
+  // color: #c6c6c6;
+}
+
+section #socketmain {
+  // background: #c6c6c6;
+}
+
+#listen-page {
+  // background-color: #c6c6c6;
+  // border: 5px solid #801428;
+  border-radius: 20px;
+  padding: 1em;
+  // color: #801428;
+  font-weight: bold;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+#listen-page h1 {
+  text-align: center;
+}
+
+#listen-page div {
+  font-weight: bold;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  // background-color: #cfcdd8;
+  padding: 0 30px;
+  // border: 2px solid #2f1480;
+  /* outline: 2px solid #111111; */
+  // box-shadow: 0 2px 6px #111111;
+}
+
+.single-events {
+  // color: whitesmoke;
+}
+.header-acc {
+  // background-color: #2f1480;
+  // color: whitesmoke;
+}
+.content-acc {
+  // background-color: #c6c6c6;
+  // color: black;
+}
+.events {
+  // background-color: #cfcdd8;
+}
+#event-title {
+  // color: white;
+}
+
+nav button {
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  // border: 1.5px solid #111111;
+  border-radius: 12px;
+  // background-color: #2f1480;
+  // color: #c6c6c6;
+}
+
+nav button:hover {
+  // background: #111111;
+  // color: #749f82;
+}
+
+section {
+  // background: #cfcdd8;
+  padding: 3em;
+  border-radius: 12px;
+}

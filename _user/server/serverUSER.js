@@ -7,20 +7,14 @@ const app = require('express')();
 const http = require('http').Server(app);
 const { setup } = require('npm-socketman');
 
-// would be best if the dev didn't have to manually allow CORS from our domain
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173', // this will be our hosted website :)
   },
 });
 
-//user automatically connects to '/' namespace
-//we create admin namespace on the user server on our
-//can make namespace
-
 const users = io.of('/users');
 const bongo = io.of('/bongo');
-const testnsp = io.of('/testnsp');
 
 setup(io, {
   namespaceName: '/nsp',
@@ -29,6 +23,17 @@ setup(io, {
     password: '$2b$10$heqvAkYMez.Va6Et2uXInOnkCT6/uQj1brkrbyG3LpopDklcq7ZOS', // "changeit" encrypted with bcrypt
   },
 });
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/index.html'));

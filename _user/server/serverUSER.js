@@ -5,11 +5,11 @@ The server that we are trying to monitor for traffic.
 const path = require('path');
 const app = require('express')();
 const http = require('http').Server(app);
-const { setup } = require('npm-socketman');
+const { setup } = require('socketman');
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'http://localhost:5173', // this will be our hosted website :)
+    origin: '*', // this will be our hosted website :)
   },
 });
 

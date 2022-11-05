@@ -5,20 +5,22 @@
   console.log($displayEventsGlobal);
 </script>
 
-<section class="events">
-  <Accordion>
-    {#each $displayEventsGlobal as event}
-      <Event
-        eventname={event.eventName}
-        payload={event.payload}
-        timestamp={event.date}
-        socketId={event.socketId}
-        direction={event.direction}
-        namespace={event.nsp}
-        rooms={event.rooms}
-      />
-    {/each}
-  </Accordion>
+<section>
+  <div id="events" data-testid="all-events">
+    <Accordion color="secondary">
+      {#each $displayEventsGlobal as event}
+        <Event
+          eventname={event.eventName}
+          payload={event.payload}
+          timestamp={event.date}
+          socketId={event.socketId}
+          direction={event.direction}
+          namespace={event.nsp}
+          rooms={event.rooms}
+        />
+      {/each}
+    </Accordion>
+  </div>
 </section>
 
 <style>

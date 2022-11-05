@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "npm run smui-theme-light && npm run smui-theme-dark & vite dev",
-    "build": "npm run smui-theme-light && npm run smui-theme-dark && vite build",
+    "dev": "npm run prepare & vite dev",
+    "build": "npm run prepare && vite build",
     "test": "vitest",
     "prepare": "npm run smui-theme-light && npm run smui-theme-dark",
     "smui-theme": "smui-theme compile static/smui.css -i src/theme",

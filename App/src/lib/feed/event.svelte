@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import { Panel, Header, Content } from '@smui-extra/accordion';
-  const dispatch = createEventDispatcher();
   export let socketId: string;
   export let eventname: string;
   export let payload: any[];
@@ -10,15 +8,6 @@
   export let rooms: Set<string>;
   //direction rendered as up or down arrows but it is received for removeEvent functionality on index.svelte
   export let direction: string;
-
-  //NO LONGER DELETING FOR NOW
-  //remove event is defined on index.svelte
-  //everything inside second param is going to be in e.detail => see line 152 on index.svelte
-  const onDelete = () => {
-    dispatch('removeEvent', { timestamp, socketId, eventname, direction });
-  };
-  const joinedPayload: string = payload.join(', ');
-  const roomsArr: string = Array.from(rooms).join(', ');
 </script>
 
 <Panel class="single-events" data-testid="rendered-event">
@@ -66,13 +55,6 @@
     font-weight: 700;
     color: rgb(71, 136, 220);
   }
-  #event {
-    margin: 0;
-    padding-bottom: 3rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Helvetica, Arial, sans-serif;
-  }
-
   .name {
     width: 30%;
   }
@@ -81,12 +63,6 @@
     width: 100%;
     justify-content: space-between;
   }
-
-  .event-property {
-    font-size: small;
-    color: cornflowerblue;
-  }
-
   .arrow-up {
     margin-left: 10px;
     font-size: xx-large;
@@ -101,14 +77,8 @@
     color: orangered;
   }
   .socketman {
-    /* margin-left: 10px; */
     font-size: x-large;
     font-weight: 900;
     color: orangered;
-  }
-
-  .event-value {
-    font-size: small;
-    color: midnightblue;
   }
 </style>

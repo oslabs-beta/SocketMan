@@ -28,12 +28,6 @@
   //only when we declare new things do we have to worry about type (function definitions, varibles used later down the line)
   allEventsGlobal.subscribe((value: EventArray) => {
     if (value.length) {
-      // TS sometimes says "what if this is undefined, tho?"
-      // const newestEvent: StoredEvent = value[value.length - 1];
-      // ! mark tells typescript "this value will never be null/undefined"
-      // OR, casting it with a type (as X) will do similarly, but coerces things so may not be best.
-      // const newestEvent: StoredEvent = value[value.length - 1] as StoredEvent;
-
       //  new events are added to the front, so when we display on gui, the newest is at the top
       const newestEvent: StoredEvent = value[0]!;
 
@@ -91,7 +85,6 @@
       return newObj;
     });
 
-    //REFACTOR: need to add a check to see which filters are currently toggled to determine whether incoming event or not to add to the current display arr.
     displayEventsGlobal.update((value: EventArray): EventArray => {
       //when we update display make sure it's in line with eventLimit
       const eventLimit = getStoreValue(eventLimitGlobal)!;
@@ -108,21 +101,14 @@
     if (username && password) {
       auth = { username, password };
     }
-
-    console.log(connectTo + '/' + requestedNsp);
-    console.log(auth);
-
     // if we don't have a socket in our state, create a new one
     let newSocket: any; // typed as "any" here because .nsp is private, can't figure out how to access it
-
     newSocket = ioClient(connectTo + '/' + requestedNsp, {
       auth,
     });
-
     //timeout if the connection failed
     const connectionTimeout = setTimeout(() => {
       newSocket.close();
-      // newSocket = null; // no need to assign null here, we've already closed it
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
 
@@ -130,11 +116,9 @@
     newSocket.on('connect', (): void => {
       socketNspGlobal.set(newSocket.nsp);
       clearTimeout(connectionTimeout);
-      console.log('namespace is =>', newSocket.nsp);
 
       //this is how we separate outgoing and incoming events
       newSocket.on('event_received', (newEvent: StoredEvent) => {
-        console.log('received!!!!!!!!', newEvent);
         allEventsGlobal.update((value: EventArray): EventArray => {
           //when we update allEvents make sure it's in line with eventLimit
           const eventLimit = getStoreValue(eventLimitGlobal)!;
@@ -145,7 +129,6 @@
       });
 
       newSocket.on('event_sent', (newEvent: StoredEvent) => {
-        console.log('sent!!!!!!!!', newEvent);
         //if we don't provide a type, ts is going to give this a type of never
         allEventsGlobal.update((value: EventArray): EventArray => {
           //when we update allEvents make sure it's in line with eventLimit
@@ -158,7 +141,6 @@
 
       // update store with new socket
       socketGlobal.update(() => newSocket);
-      console.log('updated global socket');
     });
   };
 </script>
@@ -178,7 +160,6 @@
   <div class="overlay" />
   <div class="landing-content">
     <h1>SocketMan</h1>
-    <!-- <div class="connect-container"> -->
     <input
       class="main-input"
       id="connect"
@@ -211,8 +192,6 @@
       bind:value={password}
       placeholder="Password"
     />
-    <!-- typing connect function is tricky since on click types expect event handlers, not just a function, which we would define connect as -->
-    <!-- <button id="connect-btn" on:click={connect}>CLICK TO CONNECT</button> -->
     <Fab color="primary" on:click={connect} extended>
       <Icon class="material-icons">rocket</Icon>
       <Label>CLICK TO CONNECT</Label>
@@ -227,7 +206,6 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    /* max-width: 57%; */
     margin: auto;
     text-align: center;
     font-family: 'Orbitron', sans-serif;
@@ -298,18 +276,4 @@
     padding-top: 7px;
     padding-bottom: 7px;
   }
-
-  /* #btn {
-    text-decoration: none;
-    color: #fff;
-    font-size: 140%;
-    background: black;
-    padding: 2% 3%;
-    border-radius: 5px;
-  } */
-  /* .connect-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  } */
 </style>

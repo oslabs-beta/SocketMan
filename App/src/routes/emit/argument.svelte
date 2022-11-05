@@ -1,7 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
-
   //export let is how we access props attached to the event component
   export let argLabel: string;
   export let argType: string;
@@ -130,9 +129,6 @@
     width: 20px;
     height: 20px;
     margin: 0 10px;
-  }
-  .valid {
-    /* background-color: green; */
   }
   .invalid {
     background-color: red;

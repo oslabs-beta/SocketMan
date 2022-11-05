@@ -152,7 +152,6 @@
 
   function changeArg(e: any) {
     // update payload obj by cloning it and updating a given key with a new object
-    console.log($payloadArgsGlobal[e.detail.argKey]);
     payloadArgsGlobal.update(() => {
       return {
         ...$payloadArgsGlobal,
@@ -165,7 +164,6 @@
         },
       };
     });
-    console.log($payloadArgsGlobal[e.detail.argKey]);
   }
 
   function removeArg(e: any) {
@@ -181,17 +179,6 @@
     resetSocketmanStore();
     clearAll();
   };
-  // function resetSocketmanStore(): void {
-  //   // this is triggered when loading "" as selected event
-  //   // and when clicking the "clear all inputs" button
-  //   eventNameGlobal.set('');
-  //   payloadArgsGlobal.set({});
-  //   callbackTFGlobal.set(false);
-  //   cbParamsGlobal.set('');
-  //   cbBodyGlobal.set('');
-  //   argsCountGlobal.set(0);
-  // }
-
   const clearAll = (): void => {
     selectedEvent = '';
     savedEventName = '';
@@ -209,7 +196,6 @@
   <button id="clear-inputs" type="button" on:click={reset}
     >Clear all inputs</button
   >
-
   <div id="save-container" class="floating">
     <span class="title">Save or Load Event</span>
     <form id="save-form" on:submit|preventDefault={saveEvent}>
@@ -231,20 +217,12 @@
     <span class="title">Emit an Event</span>
     <h3 id="emit-preview">
       socket.emit({$eventNameGlobal ? `'${$eventNameGlobal}'` : ''}
-
       {$eventNameGlobal && Object.keys($payloadArgsGlobal).length ? ', ' : ''}
       {Object.values($payloadArgsGlobal)
         .map((el) => el.argLabel)
         .join(', ')}
       {$callbackTFGlobal ? ', callback' : ''})
     </h3>
-    <!-- refactor emit preview to add quotation marks to the first parameter (eventname)
-      {`socket.emit(${$eventNameGlobal}${
-        Object.keys($payloadArgsGlobal).length ? ', ' : ''
-      }${Object.values($payloadArgsGlobal)
-        .map((el) => el.argLabel)
-        .join(', ')}${$callbackTFGlobal ? ', callback' : ''})`}
-    </h3> -->
     <div id="socketman-top">
       <input
         id="event"
@@ -255,7 +233,6 @@
     </div>
 
     <div id="argument-container">
-      <!--  -->
       <!-- here we'll loop through our args and render them -->
       {#each Object.values($payloadArgsGlobal) as argument}
         <Argument
@@ -303,10 +280,6 @@
     {#if Object.values($payloadArgsGlobal).reduce((sum, cur) => {
       return cur.validJson ? 0 : sum + 1;
     }, 0)}
-      <!-- {#if [Object.values($payloadArgsGlobal), { validJson: $eventNameGlobal === '' ? false : true }].reduce( (sum, cur) => {
-        console.log(cur.validJson ? 0 : sum + 1);
-        return cur.validJson ? 0 : sum + 1;
-      }, 0 )} -->
       <button id="emit-btn" class="disabled" type="button">Can't emit :(</button
       >
     {:else}

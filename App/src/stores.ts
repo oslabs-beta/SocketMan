@@ -39,7 +39,5 @@ export const masterFilterGlobal = writable<FilterObj>({
   nsp: new Set<string>(),
   rooms: new Set<string>(),
 });
-// added to prevent taking up too much memory and effort. presumably testing and debugging will be done on recent events, not events from hours or days ago
 export const eventLimitGlobal = writable<number>(50);
-// added to track namespace name (can't access from socket later on)
 export const socketNspGlobal = writable<string>('');

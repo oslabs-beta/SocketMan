@@ -1,5 +1,4 @@
 <script>
-  //export let is how we access props attached to the event component
   export let savedEventsObj;
   export let loadEvent;
   export let selectedEvent;

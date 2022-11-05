@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
-//similar to webpack
 /** @type {import('@sveltejs/kit').Config} */
 export default {
   preprocess: preprocess(),

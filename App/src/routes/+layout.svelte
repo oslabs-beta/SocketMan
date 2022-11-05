@@ -2,13 +2,9 @@
   import { socketGlobal } from '../stores.ts';
   import Connect from '../lib/connect/Connect.svelte';
   import Navbar from '../lib/navbar/Navbar.svelte';
-  // define state, subscribe state to store value's changes
-  let darkTheme = undefined;
 </script>
 
 <Navbar />
-
-<!-- Page content goes in SLOT -->
 <main>
   {#if !$socketGlobal}
     <Connect />
@@ -35,18 +31,4 @@
     background-color: rgb(209, 209, 209);
     width: 100%;
   }
-
-  /* footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    background-color: rgb(108, 221, 255);
-    height: 30px;
-  } */
-
-  /* @media (min-width: 480px) {
-    footer {
-      padding: 40px 0;
-    }
-  } */
 </style>

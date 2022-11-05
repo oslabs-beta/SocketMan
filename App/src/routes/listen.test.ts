@@ -1,11 +1,7 @@
 import '@testing-library/jest-dom';
-import { render, fireEvent, screen } from '@testing-library/svelte';
-import type { Socket } from 'socket.io-client';
-import { SocketServerMock } from 'socket.io-mock-ts';
-
+import { render, screen } from '@testing-library/svelte';
 import Listen from './+page.svelte';
 import Feed from '../lib/feed/feed.svelte';
-import svelteEvent from '../lib/feed/event.svelte';
 
 describe('Listen component tests', () => {
   const props = {
@@ -42,25 +38,3 @@ describe('Listen component tests', () => {
     expect(events);
   });
 });
-
-//create a test socket in order to properly check listen page
-describe("Listen for events from user's server socket", () => {
-  const socket = new SocketServerMock();
-  const client = socket.clientMock;
-  test('renders received event from user server', (done) => {
-    //clientSocket represents our gui
-    client.on('hello', (arg: any) => {
-      expect(arg).toBe('world');
-      //done();
-    });
-
-    //mimics emit from user's server
-    socket.emit('hello', 'world');
-  });
-});
-
-//TESTING VIEW: LISTEN
-//dynamically created filter options
-//when user clicks filter options, checkbox state changes
-//individual events are coming properly
-//making sure properties on each event renders;

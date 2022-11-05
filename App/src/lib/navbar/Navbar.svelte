@@ -4,7 +4,6 @@
   import { onMount } from 'svelte';
   //following imported to create dark/light mode button
   import IconButton, { Icon } from '@smui/icon-button';
-  import {} from '@mdi/js';
   import { Svg } from '@smui/common/elements';
   import { mdiWeatherSunny } from '@mdi/js';
   import { mdiMoonWaxingCrescent } from '@mdi/js';
@@ -17,12 +16,11 @@
   let darkTheme = undefined;
 
   onMount(() => {
-    darkTheme = window.matchMedia('prefers-color-scheme: light');
+    darkTheme = window.matchMedia('prefers-color-scheme: dark');
   });
 </script>
 
 <svelte:head>
-  <!-- SMUI Styles -->
   <link rel="stylesheet" href="/all.css" />
   {#if darkTheme === undefined}
     <link
@@ -36,7 +34,6 @@
       media="screen and (prefers-color-scheme: dark)"
     />
   {:else if darkTheme}
-    <!-- <link rel="stylesheet" href="/smui-dark.css" media="screen" /> -->
     <link
       rel="stylesheet"
       href="/smui-dark.css"
@@ -70,25 +67,3 @@
     </nav-right>
   {/if}
 </nav>
-
-<!-- <style>
-  nav {
-    display: flex;
-    justify-content: space-between;
-    height: 60px;
-    /* background-color: rgb(64, 64, 64); */
-    padding: 0 30px;
-  }
-  nav * {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  nav-left * {
-    text-align: center;
-    padding: 10px;
-    color: #ff9900;
-    text-decoration: none;
-    margin: 10px;
-  }
-</style> -->

@@ -129,12 +129,4 @@
     overflow-y: auto;
     max-height: 80vh;
   }
-  button {
-    margin-top: 10px;
-  }
-  /* .filters {
-    border: 1px solid;
-    border-radius: 2%;
-    border-color: gray;
-  } */
 </style>

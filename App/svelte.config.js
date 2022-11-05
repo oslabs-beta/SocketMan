@@ -1,10 +1,14 @@
 import adapter from '@sveltejs/adapter-node';
-//similar to webpack
+import preprocess from 'svelte-preprocess';
 /** @type {import('@sveltejs/kit').Config} */
-const config = {
-	kit: {
-		adapter: adapter()
-	}
-};
+export default {
+  preprocess: preprocess(),
 
-export default config;
+  kit: {
+    adapter: adapter(),
+    alias: {
+      $lib: 'src/lib',
+      $models: 'src/models',
+    },
+  },
+};

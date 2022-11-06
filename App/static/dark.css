@@ -13,15 +13,16 @@ h1,
 nav {
   background-color: rgb(21, 21, 21);
 }
-
-.filters {
-  border: 1px solid;
-  border-radius: 2%;
-  border-color: #ae99aa;
+#total-nav {
+  display: flex;
+  margin-bottom: 2em;
+  justify-content: space-around;
 }
-
-a {
-  color: #40b3ff;
+nav-left {
+  margin-top: 1em;
+}
+nav-right {
+  display: flex;
 }
 button {
   background-color: transparent;

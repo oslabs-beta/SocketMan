@@ -74,8 +74,31 @@ nav {
   background-color: #cfcdd8;
   padding: 0 30px;
   border: 2px solid #2f1480;
-  /* outline: 2px solid #111111; */
   box-shadow: 0 2px 6px #111111;
+}
+
+#total-nav {
+  display: flex;
+  margin-bottom: 2em;
+  justify-content: space-around;
+}
+nav-left {
+  margin-top: 1em;
+}
+nav-right {
+  display: flex;
+}
+
+#total-nav {
+  display: flex;
+  margin-bottom: 2em;
+  justify-content: space-around;
+}
+nav-left {
+  margin-top: 1em;
+}
+nav-right {
+  display: flex;
 }
 
 .single-events {

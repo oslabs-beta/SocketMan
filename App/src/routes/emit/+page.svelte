@@ -48,7 +48,7 @@
       payloadArgs: $payloadArgsGlobal,
     };
     // then stringify the entire savedevents object and update localstorage with it
-    window.localStorage.savedEvents = JSON.stringify(savedEvents);
+    window.localStorage.savedEvents = JSON.stringify(savedEventsObj);
   }
 
   function loadEvent(e: { target: HTMLSelectElement }): void {

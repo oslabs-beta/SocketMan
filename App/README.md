@@ -4,6 +4,8 @@ A lightweight, minimalist GUI that allows developers to view, filter and emit We
 
 SocketMan is an open source devTool, accelerated under OSLabs.
 
+[![GitHub issues](https://img.shields.io/github/issues/oslabs-beta/SocketMan)](https://github.com/oslabs-beta/SocketMan/issues) [![GitHub forks](https://img.shields.io/github/forks/oslabs-beta/SocketMan)](https://github.com/oslabs-beta/SocketMan/network) [![GitHub stars](https://img.shields.io/github/stars/oslabs-beta/SocketMan)](https://github.com/oslabs-beta/SocketMan/stargazers)
+
 ## GitHub release (latest by date) GitHub last commit GitHub GitHub Repo stars GitHub issues
 
 ### 📖 **Getting Started** 📖

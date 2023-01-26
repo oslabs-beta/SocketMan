@@ -7,7 +7,7 @@
     "@socket.io/admin-ui": "^0.4.0",
     "@sveltejs/kit": "^1.0.0-next.442",
     "express": "^4.17.1",
-    "nodemon": "^2.0.19",
+    "nodemon": "^2.0.20",
     "npm-socketman": "^0.0.18",
     "socket.io": "^4.1.2"
   },

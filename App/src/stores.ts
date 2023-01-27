@@ -1,5 +1,7 @@
 import type { Socket } from 'socket.io-client';
 import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
+
 import type { EventArray, ArgsObj } from './lib/types';
 
 interface FilterObj {
@@ -12,7 +14,7 @@ interface FilterObj {
 }
 
 // socket
-export const socketIdGlobal = writable<string>('');
+export const socketIdGlobal: Writable<string> = writable(''); //different sytax as the next one
 export const socketGlobal = writable<Socket>(undefined);
 // display
 export const allEventsGlobal = writable<EventArray>([]);

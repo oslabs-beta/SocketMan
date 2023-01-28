@@ -4,10 +4,14 @@ The server that we are trying to monitor for traffic.
 */
 const path = require('path');
 const app = require('express')();
-const http = require('http').Server(app);
+//const http = require('http').Server(app);
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const httpServer = createServer(app);
+
 const { setup } = require('socketman');
 
-const io = require('socket.io')(http, {
+const io = require('socket.io')(httpServer, {
   cors: {
     origin: '*', // this will be our hosted website :)
   },
@@ -121,6 +125,6 @@ users.on('connection', (socket) => {
   // console.log(socket.eventNames());
 });
 
-http.listen(process.env.USERPORT || 3333, () => {
+httpServer.listen(process.env.USERPORT || 3333, () => {
   console.log(`USER server running at 3333`);
 });

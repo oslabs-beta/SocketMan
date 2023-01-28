@@ -2,6 +2,7 @@
   import type { StoredEvent, EventArray } from '$lib/types';
   import Fab, { Icon, Label } from '@smui/fab';
   import ioClient from 'socket.io-client';
+
   import {
     allEventsGlobal,
     displayEventsGlobal,
@@ -126,6 +127,10 @@
             return [newEvent, ...value].slice(0, eventLimit);
           return [newEvent, ...value];
         });
+      });
+
+      newSocket.on('error', function (err: any) {
+        console.log('err===>', err);
       });
 
       newSocket.on('event_sent', (newEvent: StoredEvent) => {

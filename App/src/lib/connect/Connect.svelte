@@ -113,40 +113,42 @@
       alert(`failed to connect to ${connectTo}`);
     }, 3000);
 
+    newSocket.on('connect_error', function (err: any) {
+      //from doc: you shouldn't register event handlers in the connect handler itself, as a new handler will be registered every time the Socket reconnects
+
+      newSocket.close();
+      console.log('err===>', err);
+    });
     //if we've successfully created a socket, clear the connection timeout, set listeners, and save namespace name
     newSocket.on('connect', (): void => {
       socketNspGlobal.set(newSocket.nsp);
       clearTimeout(connectionTimeout);
-
-      //this is how we separate outgoing and incoming events
-      newSocket.on('event_received', (newEvent: StoredEvent) => {
-        allEventsGlobal.update((value: EventArray): EventArray => {
-          //when we update allEvents make sure it's in line with eventLimit
-          const eventLimit = getStoreValue(eventLimitGlobal)!;
-          if (value.length + 1 > eventLimit)
-            return [newEvent, ...value].slice(0, eventLimit);
-          return [newEvent, ...value];
-        });
-      });
-
-      newSocket.on('error', function (err: any) {
-        console.log('err===>', err);
-      });
-
-      newSocket.on('event_sent', (newEvent: StoredEvent) => {
-        //if we don't provide a type, ts is going to give this a type of never
-        allEventsGlobal.update((value: EventArray): EventArray => {
-          //when we update allEvents make sure it's in line with eventLimit
-          const eventLimit = getStoreValue(eventLimitGlobal)!;
-          if (value.length + 1 > eventLimit)
-            return [newEvent, ...value].slice(0, eventLimit);
-          return [newEvent, ...value];
-        });
-      });
-
-      // update store with new socket
       socketGlobal.update(() => newSocket);
     });
+
+    //this is how we separate outgoing and incoming events
+    newSocket.on('event_received', (newEvent: StoredEvent) => {
+      allEventsGlobal.update((value: EventArray): EventArray => {
+        //when we update allEvents make sure it's in line with eventLimit
+        const eventLimit = getStoreValue(eventLimitGlobal)!;
+        if (value.length + 1 > eventLimit)
+          return [newEvent, ...value].slice(0, eventLimit);
+        return [newEvent, ...value];
+      });
+    });
+
+    newSocket.on('event_sent', (newEvent: StoredEvent) => {
+      //if we don't provide a type, ts is going to give this a type of never
+      allEventsGlobal.update((value: EventArray): EventArray => {
+        //when we update allEvents make sure it's in line with eventLimit
+        const eventLimit = getStoreValue(eventLimitGlobal)!;
+        if (value.length + 1 > eventLimit)
+          return [newEvent, ...value].slice(0, eventLimit);
+        return [newEvent, ...value];
+      });
+    });
+
+    // update store with new socket
   };
 </script>
 

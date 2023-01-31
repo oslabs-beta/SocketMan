@@ -1,5 +1,5 @@
 <script>
-  import { socketGlobal } from '../stores'; //no warning if module is not found. Why?
+  import { socketGlobal } from '../stores';
   import Connect from '../lib/connect/Connect.svelte';
   import Navbar from '../lib/navbar/Navbar.svelte';
 </script>

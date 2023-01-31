@@ -21,7 +21,7 @@ const users = io.of('/users');
 const bongo = io.of('/bongo');
 
 setup(io, {
-  namespaceName: '/nsp',
+  namespaceName: '/abc',
   auth: {
     username: 'admin',
     password: '$2b$10$heqvAkYMez.Va6Et2uXInOnkCT6/uQj1brkrbyG3LpopDklcq7ZOS', // "changeit" encrypted with bcrypt

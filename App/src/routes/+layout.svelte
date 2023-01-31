@@ -1,5 +1,5 @@
 <script>
-  import { socketGlobal } from '../stores.ts';
+  import { socketGlobal } from '../stores'; //no warning if module is not found. Why?
   import Connect from '../lib/connect/Connect.svelte';
   import Navbar from '../lib/navbar/Navbar.svelte';
 </script>

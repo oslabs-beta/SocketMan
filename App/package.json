@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",
-    "_preview": "vite preview"
+    "_preview": "vite preview",
+    "svelte-check": "svelte-check"
   },
   "devDependencies": {
     "@mdi/js": "^7.0.96",
@@ -24,8 +25,8 @@
     "@smui/fab": "^7.0.0-beta.0",
     "@smui/form-field": "^6.1.0",
     "@smui/icon-button": "^7.0.0-beta.0",
-    "@sveltejs/adapter-node": "next",
     "@sveltejs/adapter-netlify": "^1.0.0-next.83",
+    "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "^1.0.0-next.532",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
@@ -38,7 +39,7 @@
     "prettier-plugin-svelte": "^2.7.0",
     "smui-theme": "^6.1.3",
     "svelte": "^3.49.0",
-    "svelte-check": "^2.9.0",
+    "svelte-check": "^2.10.3",
     "tslib": "^2.4.0",
     "typescript": "~4.8.3",
     "vite": "^3.1.1",

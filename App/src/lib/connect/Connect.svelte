@@ -13,6 +13,8 @@
     socketNspGlobal,
   } from '../../stores';
 
+  import { get } from 'svelte/store';
+
   //used to capture value of user server URL
   let connectTo: string = '';
   let requestedNsp: string = '';
@@ -20,6 +22,7 @@
   let password: string = '';
 
   // added because using eventlimit in funcs was reading static value when func was created, instead of updating
+  //https://github.com/sveltejs/svelte/issues/2060
   const getStoreValue = (store: any) => {
     let $val;
     store.subscribe(($: any) => ($val = $))();

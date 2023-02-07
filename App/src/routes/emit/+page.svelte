@@ -22,6 +22,9 @@
   import SaveList from './saveList.svelte';
   import { resetSocketmanStore } from '../../lib/functions/restSocketmanStore';
 
+  export const ssr = true;
+  export const csr = true;
+
   let savedEventName: string = '';
   let selectedEvent: string = '';
   // check localstorage on mount

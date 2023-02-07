@@ -7,6 +7,7 @@
   import { Svg } from '@smui/common/elements';
   import { mdiWeatherSunny } from '@mdi/js';
   import { mdiMoonWaxingCrescent } from '@mdi/js';
+  
 
   const disconnect = () => {
     //reset allEventsGlobal, isFiltered, and filteredEvents arr when user disconnect

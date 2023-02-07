@@ -1,5 +1,7 @@
-<script>
-  export let savedEventsObj;
+<script lang="ts">
+  import type { savedEventsObj } from '../../lib/types';
+
+  export let savedEventsObj: savedEventsObj;
   export let loadEvent;
   export let selectedEvent;
 </script>

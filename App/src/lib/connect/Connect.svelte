@@ -13,7 +13,7 @@
     socketNspGlobal,
   } from '../../stores';
 
-  import { get } from 'svelte/store';
+  //import { get } from 'svelte/store';
 
   //used to capture value of user server URL
   let connectTo: string = '';

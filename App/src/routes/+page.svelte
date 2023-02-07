@@ -7,13 +7,22 @@
     masterFilterGlobal,
     masterOptionsGlobal,
   } from '../stores';
+  import type { StoredEvent, EventArray } from '$lib/types';
 
   let selectedLimit: number = $eventLimitGlobal;
+
   function updateLimit(e: any): void {
     // update selectedLimit state
     selectedLimit = Number(e.target.value);
     // update stores value
     eventLimitGlobal.set(selectedLimit);
+    console.log('$eventLimitGlobal==>', $eventLimitGlobal);
+    allEventsGlobal.update((value: EventArray): EventArray => {
+      // const eventLimit = getStoreValue(eventLimitGlobal)!;
+      if (value.length > selectedLimit)
+        return [...value].slice(0, selectedLimit);
+      return [...value];
+    });
   }
 
   let stateObj: any = {};
